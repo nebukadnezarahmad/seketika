@@ -9,6 +9,14 @@ Dibuat untuk **App Development Competition IT FEST 2026** yang diselenggarakan H
 Informatika UIN K.H. Abdurrahman Wahid Pekalongan.
 Subtema: **Digitalisasi UMKM dan Ekonomi Kreatif**.
 
+| | |
+|---|---|
+| Aplikasi | <https://seketika-puce.vercel.app> |
+| Repositori | <https://github.com/nebukadnezarahmad/seketika> |
+
+> Buka dari ponsel, atau perkecil jendela peramban. Tata letaknya dirancang
+> untuk lebar 390px.
+
 ## Masalah yang dijawab
 
 Pedagang keliling adalah UMKM yang paling tidak tersentuh digitalisasi. Mereka
