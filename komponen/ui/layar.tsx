@@ -26,7 +26,7 @@ export function Layar({
   return (
     <div className={`flex h-[100dvh] flex-col overflow-hidden ${latar}`}>
       <BilahStatus gelap={statusGelap} />
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain">
+      <div className="isi-layar flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain">
         {children}
       </div>
       {nav && <NavBawah peran={peran} />}

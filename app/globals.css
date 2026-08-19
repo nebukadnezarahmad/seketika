@@ -105,6 +105,18 @@
     display: none;
   }
 
+  /* Isi layar yang bergulir.
+
+     Anak langsungnya dikunci agar tidak menyusut. Tanpa ini, wadah lentur
+     yang bergulir akan memeras anak-anaknya sampai muat sehingga halaman
+     tidak pernah benar-benar bergulir dan barisnya gepeng. Anak dengan
+     `flex-1` tetap bisa memanjang karena yang dimatikan hanya penyusutan.
+     Ini yang membuat layar peta bisa memenuhi sisa ruang sementara daftar
+     panjang tetap tergulung utuh. */
+  .isi-layar > * {
+    flex-shrink: 0;
+  }
+
   /* Menyembunyikan isi dari mata tapi tetap terbaca pembaca layar. */
   .khusus-pembaca-layar {
     position: absolute;

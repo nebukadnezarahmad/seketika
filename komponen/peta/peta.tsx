@@ -43,7 +43,7 @@ export function Peta({
 }) {
   return (
     <div
-      className={`relative overflow-hidden bg-[#eceae4] ${penuh ? "absolute inset-0" : ""} ${className}`}
+      className={`overflow-hidden bg-[#eceae4] ${penuh ? "absolute inset-0" : "relative"} ${className}`}
       style={penuh ? undefined : { height: tinggi }}
     >
       <Image

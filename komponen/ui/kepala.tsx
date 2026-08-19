@@ -33,7 +33,11 @@ export function Kepala({
       </button>
 
       <div className="min-w-0 flex-1 text-center">
-        <p className="truncate text-[15px] font-bold leading-tight text-hijau">{judul}</p>
+        {/* Judul layar adalah judul halaman, jadi harus berupa heading.
+            Sebagai paragraf biasa, layar-layar ini tidak punya penanda
+            struktur sama sekali dan pembaca layar kehilangan titik
+            masuk untuk melompat ke isinya. */}
+        <h1 className="truncate text-[15px] font-bold leading-tight text-hijau">{judul}</h1>
         {subjudul && (
           <p className="truncate text-[11px] leading-tight text-tinta-4">{subjudul}</p>
         )}

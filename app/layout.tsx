@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { PemulihData } from "@/komponen/pemulih-data";
 import "./globals.css";
 
 /* Inter, huruf yang dipakai di seluruh berkas desain. Bobot 400 sampai
@@ -45,7 +46,7 @@ export default function TataLetakAkar({
             supaya juri yang membuka dari laptop melihat proporsi yang
             sama dengan rancangannya, bukan versi yang melar. */}
         <div className="mx-auto flex min-h-[100dvh] w-full max-w-[390px] flex-col bg-krem shadow-[0_0_60px_rgb(0_0_0/0.12)] sm:min-h-[100dvh]">
-          {children}
+          <PemulihData>{children}</PemulihData>
         </div>
       </body>
     </html>

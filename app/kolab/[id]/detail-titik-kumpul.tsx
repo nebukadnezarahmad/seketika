@@ -10,12 +10,14 @@ import { BatangKemajuan, TumpukanPeserta } from "@/komponen/kolab/kemajuan";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { sisaWaktu } from "@/lib/format";
 import { useToko } from "@/lib/toko";
+import { useSekarang } from "@/lib/waktu";
 
 export function DetailTitikKumpul({ id }: { id: string }) {
   const router = useRouter();
   const titik = useToko((s) => s.titikKumpul.find((t) => t.id === id));
   const gabung = useToko((s) => s.gabungTitikKumpul);
   const namaSaya = useToko((s) => s.profil?.nama) ?? "Anda";
+  const sekarang = useSekarang();
 
   if (!titik) {
     return (
@@ -32,7 +34,10 @@ export function DetailTitikKumpul({ id }: { id: string }) {
   const ikut = titik.peserta.some((p) => p.id === "saya");
   const kurang = Math.max(0, titik.target - titik.peserta.length);
   const penuh = kurang === 0;
-  const habis = new Date(titik.kedaluwarsa).getTime() <= Date.now();
+  /* Sebelum peramban menghidupkan komponennya, waktu belum diketahui.
+     Dalam keadaan itu titik kumpul dianggap belum habis supaya peringatan
+     tidak berkedip muncul lalu hilang. */
+  const habis = sekarang !== null && new Date(titik.kedaluwarsa).getTime() <= sekarang;
 
   return (
     <Layar nav>
