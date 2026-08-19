@@ -7,8 +7,14 @@ import { useRouter } from "next/navigation";
 import { Bell, ChevronDown, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
+import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
+
+/** Perkiraan sisa waktu tempuh dari lama pesanan sudah berjalan. */
+function sisaMenit(menitLalu: number): number {
+  return Math.max(1, 10 - Math.floor(menitLalu / 4));
+}
 
 /** Gerobak yang dipakai peran pedagang pada purwarupa ini. */
 const GEROBAK = "bakso-pak-anton";
@@ -29,11 +35,28 @@ export function BerandaPedagang() {
 
   const baru = pesananMasuk.filter((p) => p.status === "baru");
   const diproses = pesananMasuk.filter((p) => p.status === "diproses");
+  /* Satu gerobak hanya bisa menuju satu tujuan, jadi yang melayang cukup
+     pesanan tertua yang sedang dikerjakan. */
+  const sedangDiantar = diproses[0];
   const selesai = pesananMasuk.filter((p) => p.status === "selesai");
   const permintaan = titikKumpul.filter((t) => t.pedagangSlug === GEROBAK).length;
 
   return (
-    <Layar nav peran="pedagang">
+    <Layar
+      nav
+      peran="pedagang"
+      melayang={
+        sedangDiantar && (
+          <PilMelayang
+            judul={`Menuju Lokasi ${sedangDiantar.warga}`}
+            keterangan={`Sedang menuju · ${sisaMenit(sedangDiantar.menitLalu)} mnt lagi`}
+            menit={sisaMenit(sedangDiantar.menitLalu)}
+            href={`/d/antar/${sedangDiantar.id}`}
+            aksi={() => ubahStatusMasuk(sedangDiantar.id, "selesai")}
+          />
+        )
+      }
+    >
       {/* Kepala toko */}
       <header className="flex items-center gap-3 px-4 pb-3 pt-2">
         <Image
@@ -58,7 +81,7 @@ export function BerandaPedagang() {
         </button>
       </header>
 
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 data-[melayang]:pb-32" data-melayang={sedangDiantar ? "" : undefined}>
         {/* Status gerobak */}
         <section
           className={`relative overflow-hidden rounded-[18px] p-4 ${
@@ -204,32 +227,6 @@ export function BerandaPedagang() {
           )}
         </ul>
 
-        {/* Pesanan sedang diantar */}
-        {diproses.map((p) => (
-          <Link
-            key={p.id}
-            href={`/d/antar/${p.id}`}
-            className="mt-2.5 flex items-center gap-3 rounded-[14px] bg-hijau p-3 shadow-[0_4px_14px_rgb(26_77_46/0.25)]"
-          >
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/15 text-white">
-              <Navigation size={16} strokeWidth={2.3} />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-[13px] font-bold text-white">
-                Menuju Lokasi {p.warga}
-              </span>
-              <span className="mt-0.5 block text-[11px] text-white/65">
-                Sedang menuju · {Math.max(1, 10 - Math.floor(p.menitLalu / 4))} mnt lagi
-              </span>
-            </span>
-            <span className="grid shrink-0 place-items-center rounded-[10px] bg-white/15 px-2 py-1 text-center">
-              <span className="text-[13px] font-extrabold leading-none text-white">
-                {Math.max(1, 10 - Math.floor(p.menitLalu / 4))}
-              </span>
-              <span className="mt-0.5 text-[9px] leading-none text-white/65">menit</span>
-            </span>
-          </Link>
-        ))}
 
         {/* Permintaan titik kumpul */}
         <div className="mt-4 flex items-center justify-between">

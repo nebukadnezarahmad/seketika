@@ -16,7 +16,6 @@ const pilihan = [
     judul: "Saya Ingin Membeli",
     isi: "Temukan jajanan keliling di sekitar lokasiku sekarang",
     Ikon: ShoppingBag,
-    cap: [] as string[],
   },
   {
     peran: "pedagang" as const,
@@ -24,9 +23,14 @@ const pilihan = [
     judul: "Saya Ingin Berdagang",
     isi: "Kumpulkan warga dan mulai berjualan hari ini",
     Ikon: House,
-    cap: ["Gratis daftar", "Tanpa komisi"],
   },
 ];
+
+/* Kedua peran sama-sama gratis dan tanpa komisi, jadi janji ini muncul
+   pada kartu mana pun yang sedang dipilih, bukan menempel pada salah
+   satunya. Begitu pula di rancangan: bingkai varian "Langkah 1 - Membeli"
+   menampilkannya pada kartu pembeli. */
+const janji = ["Gratis daftar", "Tanpa komisi"];
 
 export function PilihPeran() {
   const router = useRouter();
@@ -66,15 +70,15 @@ export function PilihPeran() {
           </legend>
 
           <div className="flex flex-col gap-3">
-            {pilihan.map(({ peran, tag, judul, isi, Ikon, cap }) => {
+            {pilihan.map(({ peran, tag, judul, isi, Ikon }) => {
               const aktif = dipilih === peran;
               return (
                 <label
                   key={peran}
-                  className={`relative flex cursor-pointer gap-3.5 rounded-[16px] border bg-white p-4 transition-[border-color,box-shadow] ${
+                  className={`relative flex cursor-pointer gap-3.5 rounded-[16px] border p-4 transition-[border-color,box-shadow,background-color,opacity] duration-300 ease-out ${
                     aktif
-                      ? "border-hijau shadow-[0_0_0_1px_var(--color-hijau)]"
-                      : "border-garis"
+                      ? "border-hijau bg-white shadow-[0_0_0_1px_var(--color-hijau),0_6px_18px_rgb(26_77_46/0.10)]"
+                      : "border-garis bg-white/55 opacity-80"
                   }`}
                 >
                   <input
@@ -97,27 +101,43 @@ export function PilihPeran() {
                     <span className="mt-1.5 block text-[14.5px] font-bold text-tinta">{judul}</span>
                     <span className="mt-1 block text-[12px] leading-[1.45] text-tinta-3">{isi}</span>
 
-                    {cap.length > 0 && (
-                      <span className="mt-2.5 flex flex-wrap gap-1.5 border-t border-garis pt-2.5">
-                        {cap.map((c) => (
-                          <span
-                            key={c}
-                            className="rounded-[7px] bg-hijau-lembut px-2 py-1 text-[10px] font-medium text-hijau"
-                          >
-                            {c}
-                          </span>
-                        ))}
+                    {/* Baris janji tumbuh dari tinggi nol, bukan muncul
+                        seketika, supaya kartunya terasa memuai saat dipilih.
+                        `grid-rows` dianimasikan karena `height: auto` tidak
+                        bisa ditransisikan. */}
+                    <span
+                      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                        aktif ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <span className="overflow-hidden">
+                        <span className="mt-2.5 flex flex-wrap gap-1.5 border-t border-garis pt-2.5">
+                          {janji.map((j) => (
+                            <span
+                              key={j}
+                              className="rounded-[7px] bg-hijau-lembut px-2 py-1 text-[10px] font-medium text-hijau"
+                            >
+                              {j}
+                            </span>
+                          ))}
+                        </span>
                       </span>
-                    )}
+                    </span>
                   </span>
 
                   <span
                     aria-hidden
-                    className={`grid size-[19px] shrink-0 place-items-center self-start rounded-full border transition-colors ${
-                      aktif ? "border-hijau bg-hijau text-white" : "border-tinta-5 bg-white"
+                    className={`grid size-[19px] shrink-0 place-items-center self-start rounded-full border transition-all duration-200 ${
+                      aktif
+                        ? "scale-110 border-hijau bg-hijau text-white"
+                        : "border-tinta-5 bg-white"
                     }`}
                   >
-                    {aktif && <Check size={12} strokeWidth={3.2} />}
+                    <Check
+                      size={12}
+                      strokeWidth={3.2}
+                      className={`transition-opacity duration-200 ${aktif ? "opacity-100" : "opacity-0"}`}
+                    />
                   </span>
                 </label>
               );

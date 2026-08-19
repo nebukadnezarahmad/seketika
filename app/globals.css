@@ -171,6 +171,34 @@
   }
 }
 
+/* Titik berjalan pada kartu navigasi melayang.
+
+   Empat titik bergiliran memanjang dan menyala hijau, memberi kesan
+   perjalanan yang sedang berlangsung. Rancangannya membekukan keadaan
+   ini pada titik kedua; di sini giliran itu berputar. */
+@keyframes titik-jalan {
+  0%, 100% {
+    width: 4px;
+    background-color: rgb(255 255 255 / 0.35);
+  }
+  25% {
+    width: 8px;
+    background-color: #4ade80;
+  }
+}
+
+/* Kartu melayang naik dari balik navigasi saat pertama muncul. */
+@keyframes pil-naik {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Gerak dikurangi: hormati setelan sistem pengguna. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
