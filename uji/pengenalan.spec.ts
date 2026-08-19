@@ -2,11 +2,12 @@ import { test, expect } from "@playwright/test";
 import { lewatiPengenalan, pilihPeran } from "./bantu";
 
 test.describe("Pengenalan", () => {
-  test("layar pembuka mengarahkan pengguna baru ke pemilihan peran", async ({ page }) => {
+  test("pembuka menampilkan lambang lalu mengantar ke layar sambutan", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("SEKETIKA", { exact: true })).toBeVisible();
-    await page.waitForURL("**/mulai", { timeout: 10_000 });
-    await expect(page.getByRole("heading", { name: "Selamat Datang!" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "SEKETIKA" })).toBeVisible();
+    await page.waitForURL("**/sambutan", { timeout: 10_000 });
+    await expect(page.getByRole("button", { name: "Masuk" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Buat Akun" })).toBeVisible();
   });
 
   test("tombol Lanjut terkunci sampai peran dipilih", async ({ page }) => {

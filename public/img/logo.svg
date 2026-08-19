@@ -1,8 +1,22 @@
-<svg width="142" height="137" viewBox="0 0 142 137" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="142" height="137" fill="#363535"/>
-<g id="Design System">
-<path d="M-1029 -688C-1029 -689.105 -1028.1 -690 -1027 -690H1284C1285.1 -690 1286 -689.105 1286 -688V642C1286 643.105 1285.1 644 1284 644H-1027C-1028.1 644 -1029 643.105 -1029 642V-688Z" fill="#444444"/>
-<path d="M-1027 -690V-689H1284V-690V-691H-1027V-690ZM1286 -688H1285V642H1286H1287V-688H1286ZM1284 644V643H-1027V644V645H1284V644ZM-1029 642H-1028V-688H-1029H-1030V642H-1029ZM-1027 644V643C-1027.55 643 -1028 642.552 -1028 642H-1029H-1030C-1030 643.657 -1028.66 645 -1027 645V644ZM1286 642H1285C1285 642.552 1284.55 643 1284 643V644V645C1285.66 645 1287 643.657 1287 642H1286ZM1284 -690V-689C1284.55 -689 1285 -688.552 1285 -688H1286H1287C1287 -689.657 1285.66 -691 1284 -691V-690ZM-1027 -690V-691C-1028.66 -691 -1030 -689.657 -1030 -688H-1029H-1028C-1028 -688.552 -1027.55 -689 -1027 -689V-690Z" fill="white" fill-opacity="0.1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 142 137" fill="none" role="img" aria-label="Logo SEKETIKA">
+<defs>
+<linearGradient id="paint0_linear_0_1" x1="10.883" y1="0" x2="10.883" y2="7.81247" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_1" x1="10.8569" y1="0" x2="10.8569" y2="7.83126" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_1" x1="10.8489" y1="0" x2="10.8489" y2="7.837" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+<linearGradient id="paint3_linear_0_1" x1="63.7502" y1="30" x2="63.7502" y2="60" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+</defs>
 <g id="Logo">
 <g id="Group 96">
 <ellipse id="Ellipse 48" cx="63.7503" cy="45.4099" rx="44.3773" ry="45.4099" fill="#1A4D2E"/>
@@ -22,23 +36,4 @@
 <ellipse id="Ellipse 53" cx="48.8096" cy="127" rx="4.98053" ry="5" fill="#FDFBF7"/>
 <ellipse id="Ellipse 55" cx="96.6231" cy="127" rx="4.98053" ry="5" fill="#FDFBF7"/>
 </g>
-</g>
-<defs>
-<linearGradient id="paint0_linear_0_1" x1="10.883" y1="0" x2="10.883" y2="7.81247" gradientUnits="userSpaceOnUse">
-<stop stop-color="#D97706"/>
-<stop offset="1" stop-color="#F59E0B"/>
-</linearGradient>
-<linearGradient id="paint1_linear_0_1" x1="10.8569" y1="0" x2="10.8569" y2="7.83126" gradientUnits="userSpaceOnUse">
-<stop stop-color="#D97706"/>
-<stop offset="1" stop-color="#F59E0B"/>
-</linearGradient>
-<linearGradient id="paint2_linear_0_1" x1="10.8489" y1="0" x2="10.8489" y2="7.837" gradientUnits="userSpaceOnUse">
-<stop stop-color="#D97706"/>
-<stop offset="1" stop-color="#F59E0B"/>
-</linearGradient>
-<linearGradient id="paint3_linear_0_1" x1="63.7502" y1="30" x2="63.7502" y2="60" gradientUnits="userSpaceOnUse">
-<stop stop-color="#D97706"/>
-<stop offset="1" stop-color="#F59E0B"/>
-</linearGradient>
-</defs>
 </svg>

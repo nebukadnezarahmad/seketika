@@ -34,6 +34,8 @@
   --radius-pil: 99px;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-lambang: var(--font-poppins), var(--font-inter), sans-serif;
+  --font-tangan: var(--font-caveat), ui-serif, cursive;
 }
 
 @layer base {
@@ -82,6 +84,16 @@
     box-shadow: 0 -8px 32px rgb(0 0 0 / 0.14);
   }
 
+  /* Tulisan bergradasi. Warnanya dipotong mengikuti bentuk huruf, jadi
+     latarnya harus transparan; tanpa `text-transparent` yang terlihat
+     hanya blok warna. */
+  .tulisan-gradasi {
+    background-image: linear-gradient(to bottom, #2d6b45 0%, #1a4d2e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
   /* Gradasi kartu hijau. Dua arah berbeda dipakai di desain: kartu
      status gerobak menyapu diagonal, kartu titik kumpul lebih datar. */
   .gradasi-gerobak {
@@ -128,6 +140,34 @@
     clip-path: inset(50%);
     white-space: nowrap;
     border: 0;
+  }
+}
+
+/* Kemunculan bertahap pada layar pembuka.
+
+   Tahapannya diatur murni lewat penundaan animasi CSS, bukan lewat
+   penghitung di React. Dengan begitu tidak ada satu pun render tambahan
+   selama pembukaan berjalan, dan urutannya tidak bisa meleset karena
+   pewaktu yang tereksekusi terlambat. */
+@keyframes muncul {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ilustrasi-masuk {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 

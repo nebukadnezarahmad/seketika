@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Caveat, Inter, Poppins } from "next/font/google";
 import { PemulihData } from "@/komponen/pemulih-data";
 import "./globals.css";
 
@@ -8,7 +8,27 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+/* Poppins hanya dipakai untuk lambang kata "SEKETIKA" dan taglinenya di
+   layar sambutan. Bentuk geometrisnya yang bulat membedakannya dari Inter
+   yang menangani seluruh teks lain. */
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["700"],
+  display: "swap",
+});
+
+/* Caveat, tulisan tangan, khusus untuk satu kalimat sapaan di layar
+   sambutan. Dipakai sekali saja; itu yang membuatnya terasa seperti
+   coretan, bukan gaya tulisan aplikasi. */
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["700"],
   display: "swap",
 });
 
@@ -39,7 +59,7 @@ export default function TataLetakAkar({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={inter.variable}>
+    <html lang="id" className={`${inter.variable} ${poppins.variable} ${caveat.variable}`}>
       <body className="bg-[#e9e5dd] antialiased">
         {/* Di ponsel bingkai ini memenuhi layar. Di layar lebar ia
             menyusut jadi kolom selebar 390px persis seperti papan Figma,

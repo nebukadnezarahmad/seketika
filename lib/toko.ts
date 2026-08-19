@@ -32,6 +32,8 @@ import {
 type Keadaan = {
   /** null berarti pengguna belum melewati proses pengenalan. */
   profil: Profil | null;
+  /** Nama dan surel dari layar pembuatan akun, sebelum peran dipilih. */
+  draf: { nama: string; email: string } | null;
   izin: { lokasi: boolean; notifikasi: boolean; suara: boolean };
   pesanan: Pesanan[];
   /** Pesanan yang masuk ke gerobak, dilihat dari sisi pedagang. */
@@ -45,6 +47,7 @@ type Keadaan = {
 };
 
 type Tindakan = {
+  simpanDraf: (d: { nama: string; email: string }) => void;
   simpanProfil: (p: Profil) => void;
   gantiPeran: (peran: Peran) => void;
   setIzin: (i: Partial<Keadaan["izin"]>) => void;
@@ -70,6 +73,7 @@ type Tindakan = {
 
 const awal: Keadaan = {
   profil: null,
+  draf: null,
   izin: { lokasi: false, notifikasi: false, suara: false },
   pesanan: pesananAwal,
   pesananMasuk: pesananMasukAwal,
@@ -89,7 +93,11 @@ export const useToko = create<Keadaan & Tindakan>()(
     (set, get) => ({
       ...awal,
 
-      simpanProfil: (profil) => set({ profil }),
+      simpanDraf: (draf) => set({ draf }),
+
+      /* Draf dibuang begitu profil jadi; menyimpan dua sumber untuk nama
+         yang sama hanya mengundang keduanya menyimpang. */
+      simpanProfil: (profil) => set({ profil, draf: null }),
 
       gantiPeran: (peran) =>
         set((s) => (s.profil ? { profil: { ...s.profil, peran } } : {})),
