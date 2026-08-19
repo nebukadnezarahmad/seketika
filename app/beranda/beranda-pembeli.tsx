@@ -104,8 +104,8 @@ export function BerandaPembeli() {
 
         {terlihat.length > 0 ? (
           <div className="rel-gulir rentet mt-3 flex gap-3 px-4 pb-1">
-            {terlihat.map((p) => (
-              <KartuPedagang key={p.id} pedagang={p} />
+            {terlihat.map((p, i) => (
+              <KartuPedagang key={p.id} pedagang={p} utama={i === 0} />
             ))}
           </div>
         ) : (

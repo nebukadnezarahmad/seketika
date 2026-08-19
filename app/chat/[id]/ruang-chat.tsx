@@ -1,17 +1,21 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Paperclip, SendHorizontal } from "lucide-react";
+import { ChevronLeft, Info, Paperclip, SendHorizontal } from "lucide-react";
 import { BilahStatus } from "@/komponen/ui/bilah-status";
 import { NavBawah } from "@/komponen/nav/nav-bawah";
-import { rupaPercakapan } from "@/lib/data/awal";
+import { AvatarLawan } from "@/komponen/chat/avatar-lawan";
+import { rupaLawan, salinan } from "@/komponen/chat/rupa";
+import { balasanCepat } from "@/lib/data/awal";
 import { useToko } from "@/lib/toko";
+import type { Peran } from "@/lib/tipe";
 
-export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pembeli" | "pedagang" }) {
+export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran }) {
   const router = useRouter();
-  const percakapan = useToko((s) => s.percakapan.find((c) => c.id === id));
+  const percakapan = useToko((s) =>
+    (peran === "pedagang" ? s.percakapanPedagang : s.percakapan).find((c) => c.id === id),
+  );
   const kirimPesan = useToko((s) => s.kirimPesan);
   const [teks, setTeks] = React.useState("");
   const bawah = React.useRef<HTMLDivElement>(null);
@@ -35,13 +39,13 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pemb
     );
   }
 
-  const rupa = rupaPercakapan[percakapan.id];
+  const rupa = rupaLawan(percakapan.id, peran);
+  const kata = salinan[peran];
 
-  const kirim = (e: React.FormEvent) => {
-    e.preventDefault();
-    const isi = teks.trim();
-    if (!isi) return;
-    kirimPesan(percakapan.id, isi);
+  const kirim = (isi: string) => {
+    const bersih = isi.trim();
+    if (!bersih) return;
+    kirimPesan(percakapan.id, bersih, peran);
     setTeks("");
   };
 
@@ -60,23 +64,30 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pemb
         >
           <ChevronLeft size={18} strokeWidth={2.4} />
         </button>
-        <Image
-          src={rupa?.foto ?? "/img/foto-bakso.jpg"}
-          alt=""
-          width={36}
-          height={36}
-          className="size-9 shrink-0 rounded-[11px] object-cover"
-        />
-        <div className="min-w-0">
-          <p className="truncate text-[14px] font-bold leading-tight text-hijau">
+
+        <AvatarLawan rupa={rupa} nama={percakapan.nama} size={36} titikDaring={false} />
+
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-[14px] font-bold leading-tight text-hijau">
             {percakapan.nama}
-          </p>
+          </h1>
           <p
-            className={`text-[11px] leading-tight ${rupa?.daring ? "text-[#22c55e]" : "text-tinta-4"}`}
+            className={`text-[11px] leading-tight ${rupa.daring ? "text-[#22c55e]" : "text-tinta-4"}`}
           >
-            {rupa?.daring ? "Online" : "Offline"}
+            {rupa.daring ? kata.daring : kata.luring}
           </p>
         </div>
+
+        {/* Tombol keterangan hanya ada di sisi pedagang pada rancangan. */}
+        {peran === "pedagang" && (
+          <button
+            type="button"
+            aria-label={`Keterangan tentang ${percakapan.nama}`}
+            className="grid size-9 shrink-0 place-items-center rounded-full text-tinta-3 transition-transform active:scale-90"
+          >
+            <Info size={19} strokeWidth={2} />
+          </button>
+        )}
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
@@ -84,15 +95,11 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pemb
           {percakapan.pesan.map((p) => (
             <li key={p.id} className={p.saya ? "flex justify-end" : "flex gap-2"}>
               {!p.saya && (
-                <Image
-                  src={rupa?.foto ?? "/img/foto-bakso.jpg"}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="mt-auto size-6 shrink-0 rounded-[7px] object-cover"
-                />
+                <span className="mt-auto">
+                  <AvatarLawan rupa={rupa} nama={percakapan.nama} size={24} titikDaring={false} />
+                </span>
               )}
-              <div className={`max-w-[76%] ${p.saya ? "items-end" : "items-start"} flex flex-col`}>
+              <div className={`flex max-w-[76%] flex-col ${p.saya ? "items-end" : "items-start"}`}>
                 <p
                   className={`rounded-[18px] px-3.5 py-2.5 text-[13px] leading-snug ${
                     p.saya
@@ -102,7 +109,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pemb
                 >
                   {p.isi}
                 </p>
-                <span className="mt-1 px-1 text-[10px] text-tinta-5">{p.waktu}</span>
+                <span className="mt-1 px-1 text-[10px] text-tinta-4">{p.waktu}</span>
               </div>
             </li>
           ))}
@@ -110,29 +117,51 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pemb
         <div ref={bawah} />
       </div>
 
+      {/* Balasan cepat, hanya untuk pedagang. Jawaban yang sama diketik
+          berulang kali sepanjang hari, jadi disediakan sebagai ketukan. */}
+      {peran === "pedagang" && (
+        <div className="rel-gulir flex shrink-0 gap-2 border-t border-garis bg-krem px-3 pt-2.5">
+          {balasanCepat.map((b) => (
+            <button
+              key={b}
+              type="button"
+              onClick={() => kirim(b)}
+              className="shrink-0 rounded-pil border border-garis bg-white px-3.5 py-2 text-[12px] font-medium text-tinta-2 transition-transform active:scale-95"
+            >
+              {b}
+            </button>
+          ))}
+        </div>
+      )}
+
       <form
-        onSubmit={kirim}
-        className="flex shrink-0 items-center gap-2 border-t border-garis bg-krem px-3 py-2.5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          kirim(teks);
+        }}
+        className={`flex shrink-0 items-center gap-2 bg-krem px-3 py-2.5 ${
+          peran === "pedagang" ? "" : "border-t border-garis"
+        }`}
       >
         <button
           type="button"
           aria-label="Lampirkan berkas"
-          className="grid size-10 shrink-0 place-items-center rounded-[13px] bg-white text-tinta-4 transition-transform active:scale-90"
+          className="grid size-10 shrink-0 place-items-center rounded-[13px] bg-white text-tinta-3 transition-transform active:scale-90"
         >
           <Paperclip size={17} strokeWidth={2} />
         </button>
         <input
           value={teks}
           onChange={(e) => setTeks(e.target.value)}
-          placeholder="Ketik pesan..."
-          aria-label="Ketik pesan"
+          placeholder={kata.ketik}
+          aria-label={kata.ketik}
           className="min-w-0 flex-1 rounded-[13px] bg-white px-3.5 py-3 text-[13px] text-tinta placeholder:text-tinta-3 focus:outline-none"
         />
         <button
           type="submit"
           aria-label="Kirim pesan"
           disabled={!teks.trim()}
-          className="grid size-10 shrink-0 place-items-center rounded-[13px] bg-hijau text-white transition-[transform,opacity] active:scale-90 disabled:bg-tinta-5/30 disabled:text-tinta-4"
+          className="grid size-10 shrink-0 place-items-center rounded-[13px] bg-hijau text-white transition-[transform,opacity] active:scale-90 disabled:bg-tinta-5/30 disabled:text-tinta-3"
         >
           <SendHorizontal size={17} strokeWidth={2.2} />
         </button>

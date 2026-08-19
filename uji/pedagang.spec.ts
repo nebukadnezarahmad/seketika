@@ -94,3 +94,42 @@ test.describe("Berpindah peran", () => {
     await expect(page.getByText("3/5 warga")).toBeVisible();
   });
 });
+
+test.describe("Kotak masuk pedagang", () => {
+  test.beforeEach(async ({ page }) => {
+    await lewatiPengenalan(page, "pedagang", "Pak Anton");
+    await page.goto("/d/chat");
+  });
+
+  test("berisi warga, bukan sesama pedagang", async ({ page }) => {
+    await expect(page.getByRole("heading", { name: /Pesan Masuk/ })).toBeVisible();
+    await expect(page.getByText("Pesan dari calon pembeli Anda")).toBeVisible();
+
+    for (const warga of ["Pak Dedi", "Bu Rahma", "Rizki Pratama", "Sinta Maharani"]) {
+      await expect(page.getByText(warga, { exact: true })).toBeVisible();
+    }
+    /* Nama pedagang lain tidak boleh muncul di kotak masuk pedagang. */
+    for (const pedagang of ["Bakso Pak Anton", "Sayur Kang Ucup", "Donat Bu Jasmin"]) {
+      await expect(page.getByText(pedagang, { exact: true })).toHaveCount(0);
+    }
+  });
+
+  test("kotak masuk kedua peran tidak tercampur", async ({ page }) => {
+    await page.goto("/d/chat/cp-01");
+    await page.getByLabel("Balas pesan...").fill("Baik pak, meluncur");
+    await page.getByRole("button", { name: "Kirim pesan" }).click();
+    await expect(page.getByText("Baik pak, meluncur")).toBeVisible();
+
+    /* Pesan pedagang tidak boleh bocor ke kotak masuk warga. */
+    await page.goto("/chat/ch-01");
+    await expect(page.getByText("Baik pak, meluncur")).toHaveCount(0);
+  });
+
+  test("balasan cepat langsung terkirim sebagai pesan", async ({ page }) => {
+    await page.goto("/d/chat/cp-03");
+    await page.getByRole("button", { name: "Sudah habis hari ini" }).click();
+    await expect(
+      page.locator("li").filter({ hasText: "Sudah habis hari ini" }).last(),
+    ).toBeVisible();
+  });
+});
