@@ -54,9 +54,18 @@ export function kapan(iso: string): string {
   return `${selisih} hari lalu · ${jam}`;
 }
 
-/** Sisa waktu menuju sebuah tenggat, misalnya "22 jam lagi". */
-export function sisaWaktu(iso: string): string {
-  const selisih = new Date(iso).getTime() - Date.now();
+/**
+ * Sisa waktu menuju sebuah tenggat, misalnya "22 jam lagi".
+ *
+ * `sekarang` sengaja jadi parameter, bukan dibaca dari `Date.now()` di
+ * dalam. Komponen yang menampilkannya harus menyuplai waktu dari
+ * `useSekarang()` supaya angkanya benar-benar berdetak; kalau waktunya
+ * dibaca diam-diam di sini, hitung mundurnya membeku sampai kebetulan
+ * ada render ulang karena sebab lain.
+ */
+export function sisaWaktu(iso: string, sekarang: number | null): string {
+  if (sekarang === null) return "";
+  const selisih = new Date(iso).getTime() - sekarang;
   if (selisih <= 0) return "Sudah lewat";
   const jam = Math.floor(selisih / 3_600_000);
   if (jam >= 1) return `${jam} jam lagi`;

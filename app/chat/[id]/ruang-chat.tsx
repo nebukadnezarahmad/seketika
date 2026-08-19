@@ -126,7 +126,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: "pemb
           onChange={(e) => setTeks(e.target.value)}
           placeholder="Ketik pesan..."
           aria-label="Ketik pesan"
-          className="min-w-0 flex-1 rounded-[13px] bg-white px-3.5 py-3 text-[13px] text-tinta placeholder:text-tinta-5 focus:outline-none"
+          className="min-w-0 flex-1 rounded-[13px] bg-white px-3.5 py-3 text-[13px] text-tinta placeholder:text-tinta-3 focus:outline-none"
         />
         <button
           type="submit"

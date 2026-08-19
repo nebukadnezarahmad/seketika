@@ -51,7 +51,10 @@ export function PilMelayang({
           ))}
         </div>
 
-        <Link href={href} className="relative flex items-center gap-2.5 px-3.5 py-3">
+        <Link
+          href={href}
+          className="relative flex items-center gap-2.5 px-3.5 py-3 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+        >
           <span className="grid size-[38px] shrink-0 place-items-center rounded-[13px] bg-white/12 text-white">
             <Navigation size={18} strokeWidth={2.2} className="fill-white" />
           </span>
@@ -74,7 +77,7 @@ export function PilMelayang({
                   />
                 ))}
               </span>
-              <span className="truncate text-[11px] font-medium leading-[16.5px] text-white/65">
+              <span className="truncate text-[11px] font-medium leading-[16.5px] text-white/85">
                 {keterangan}
               </span>
             </span>
@@ -82,7 +85,7 @@ export function PilMelayang({
 
           <span className="flex shrink-0 flex-col items-center rounded-[12px] bg-white/15 px-2.5 py-1.5">
             <span className="text-[16px] font-extrabold leading-4 text-[#4ade80]">{menit}</span>
-            <span className="pt-px text-[9px] font-semibold leading-[13.5px] text-white/55">
+            <span className="pt-px text-[9px] font-semibold leading-[13.5px] text-white/85">
               menit
             </span>
           </span>
@@ -93,14 +96,14 @@ export function PilMelayang({
         </Link>
 
         <div className="flex items-center justify-between border-t border-white/10 px-3.5 py-2">
-          <p className="text-[10px] font-medium leading-[15px] text-white/45">
+          <p className="text-[10px] font-medium leading-[15px] text-white/85">
             Ketuk untuk buka navigasi
           </p>
           {aksi && (
             <button
               type="button"
               onClick={aksi}
-              className="rounded-[8px] bg-white/12 px-2.5 py-1 text-[10px] font-bold leading-[15px] text-white/70 transition-transform active:scale-95"
+              className="rounded-[8px] bg-white/12 px-2.5 py-1.5 text-[10px] font-bold leading-[15px] text-white/90 transition-transform active:scale-95"
             >
               {labelAksi}
             </button>

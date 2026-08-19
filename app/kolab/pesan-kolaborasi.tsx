@@ -9,6 +9,7 @@ import { BatangKemajuan, TumpukanPeserta } from "@/komponen/kolab/kemajuan";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { sisaWaktu } from "@/lib/format";
 import { useToko } from "@/lib/toko";
+import { useSekarang } from "@/lib/waktu";
 import { salinTeks, tautTitik } from "@/lib/berbagi";
 
 export function PesanKolaborasi() {
@@ -18,6 +19,7 @@ export function PesanKolaborasi() {
 
   const titikKumpul = useToko((s) => s.titikKumpul);
   const namaSaya = useToko((s) => s.profil?.nama);
+  const sekarang = useSekarang();
 
   const aktif = titikKumpul.filter((t) => t.status !== "selesai");
 
@@ -80,7 +82,7 @@ export function PesanKolaborasi() {
                   </div>
 
                   <p className="mt-1 text-[11px] text-tinta-4">
-                    Dibuat oleh {punyaSaya ? "Anda" : pembuat} · {sisaWaktu(t.kedaluwarsa)}
+                    Dibuat oleh {punyaSaya ? "Anda" : pembuat} · {sisaWaktu(t.kedaluwarsa, sekarang)}
                   </p>
 
                   <div className="mt-3 flex items-baseline justify-between gap-2">

@@ -1,7 +1,16 @@
 import type { Peserta } from "@/lib/tipe";
 
 /** Batang kemajuan titik kumpul. */
-export function BatangKemajuan({ nilai, target }: { nilai: number; target: number }) {
+export function BatangKemajuan({
+  nilai,
+  target,
+  label,
+}: {
+  nilai: number;
+  target: number;
+  /** Ganti keterangan bawaan kalau satuannya bukan jumlah warga. */
+  label?: string;
+}) {
   const persen = Math.min(100, Math.round((nilai / Math.max(1, target)) * 100));
   return (
     <div
@@ -9,7 +18,7 @@ export function BatangKemajuan({ nilai, target }: { nilai: number; target: numbe
       aria-valuenow={nilai}
       aria-valuemin={0}
       aria-valuemax={target}
-      aria-label={`${nilai} dari ${target} warga bergabung`}
+      aria-label={label ?? `${nilai} dari ${target} warga bergabung`}
       className="h-[7px] w-full overflow-hidden rounded-pil bg-hijau/12"
     >
       <span

@@ -25,7 +25,7 @@ export function DaftarChat({ peran = "pembeli" }: { peran?: "pembeli" | "pedagan
           onChange={(e) => setKata(e.target.value)}
           placeholder="Cari pedagang..."
           aria-label="Cari percakapan"
-          className="w-full rounded-[14px] border border-garis bg-white px-4 py-3 text-center text-[13px] text-tinta placeholder:text-tinta-5 focus:border-hijau/40 focus:outline-none"
+          className="w-full rounded-[14px] border border-garis bg-white px-4 py-3 text-center text-[13px] text-tinta placeholder:text-tinta-3 focus:border-hijau/40 focus:outline-none"
         />
       </div>
 

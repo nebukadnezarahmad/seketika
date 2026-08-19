@@ -20,7 +20,7 @@ export function KolomIsian({
   batas?: boolean;
 }) {
   const isi =
-    "w-full bg-transparent text-[13px] text-tinta placeholder:text-tinta-5 focus:outline-none";
+    "w-full bg-transparent text-[13px] text-tinta placeholder:text-tinta-3 focus:outline-none";
 
   return (
     <label className={`block ${batas ? "border-t border-garis pt-3.5" : ""}`}>

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Logo } from "@/komponen/ui/logo";
@@ -43,10 +44,18 @@ export function Daftar() {
 
   return (
     <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#fcf9f0]">
-      <div
+      {/* Lewat next/image, bukan latar CSS. Sebagai latar CSS berkasnya
+          dikirim mentah 79 KB; lewat pengoptimal Next ia jadi WebP 16 KB
+          pada lebar yang benar-benar dipakai. Ini gambar terbesar di layar
+          pertama, jadi selisihnya terasa pada pemuatan dingin. */}
+      <Image
+        src="/img/ilustrasi-sambutan.jpg"
+        alt=""
         aria-hidden
-        className="absolute inset-0 bg-cover bg-top"
-        style={{ backgroundImage: "url(/img/ilustrasi-sambutan.jpg)" }}
+        fill
+        sizes="390px"
+        priority
+        className="object-cover object-top"
       />
 
       <button
@@ -72,7 +81,7 @@ export function Daftar() {
         className="relative mt-auto max-h-[76%] overflow-y-auto rounded-t-[39px] bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-[29px] shadow-[0_-3px_7px_rgb(0_0_0/0.15)]"
       >
         <h1 className="text-[20px] font-semibold text-black">Perjalanan Anda dimulai di sini.</h1>
-        <p className="mt-[9px] text-[16px] font-light text-black">Masukkan Detail Anda di bawah</p>
+        <p className="mt-[9px] text-[16px] font-normal text-black">Masukkan Detail Anda di bawah</p>
 
         <div className="mt-[15px]">
           <label className={label}>

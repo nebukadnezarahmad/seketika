@@ -37,17 +37,35 @@ export function BilahStatus({ gelap = false }: { gelap?: boolean }) {
     /* API baterai hanya ada di sebagian peramban. Kalau tidak ada,
        ikonnya tetap tampil penuh alih-alih hilang atau menampilkan
        angka karangan. */
-    type Baterai = { level: number; addEventListener: (e: string, f: () => void) => void };
+    type Baterai = {
+      level: number;
+      addEventListener: (e: string, f: () => void) => void;
+      removeEventListener: (e: string, f: () => void) => void;
+    };
     const nav = navigator as Navigator & { getBattery?: () => Promise<Baterai> };
     if (!nav.getBattery) return;
+
     let batal = false;
-    nav.getBattery().then((b) => {
-      if (batal) return;
-      setDaya(b.level);
-      b.addEventListener("levelchange", () => setDaya(b.level));
-    }).catch(() => {});
+    /* Peramban mengembalikan objek BatteryManager yang sama sepanjang umur
+       tab. Karena bilah ini dipasang ulang pada setiap perpindahan
+       halaman, pendengar yang tidak dilepas akan menumpuk tanpa batas
+       pada objek yang sama, lengkap dengan closure dari komponen yang
+       sudah lama dilepas. Karena itu rujukannya disimpan dan dilepas. */
+    let lepas: (() => void) | undefined;
+    nav
+      .getBattery()
+      .then((b) => {
+        if (batal) return;
+        setDaya(b.level);
+        const saatBerubah = () => setDaya(b.level);
+        b.addEventListener("levelchange", saatBerubah);
+        lepas = () => b.removeEventListener("levelchange", saatBerubah);
+      })
+      .catch(() => {});
+
     return () => {
       batal = true;
+      lepas?.();
     };
   }, []);
 

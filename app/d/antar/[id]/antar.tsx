@@ -8,6 +8,7 @@ import { Layar } from "@/komponen/ui/layar";
 import { Peta } from "@/komponen/peta/peta";
 import { Pin } from "@/komponen/peta/pin";
 import { Tombol } from "@/komponen/ui/tombol";
+import { BatangKemajuan } from "@/komponen/kolab/kemajuan";
 import { useToko } from "@/lib/toko";
 
 /**
@@ -42,7 +43,7 @@ export function Antar({ id }: { id: string }) {
   return (
     <Layar nav peran="pedagang">
       <div className="relative flex-1">
-        <Peta penuh skala={false} saya={{ x: 62, y: 38 }}>
+        <Peta penuh utama skala={false} saya={{ x: 62, y: 38 }}>
           {/* Garis rute dari posisi gerobak menuju titik tujuan */}
           <svg
             aria-hidden
@@ -151,11 +152,8 @@ export function Antar({ id }: { id: string }) {
             <p className="text-[11.5px] text-tinta-3">Progres perjalanan</p>
             <p className="text-[12px] font-bold tabular-nums text-tinta">{maju}%</p>
           </div>
-          <div className="mt-1.5 h-1.5 overflow-hidden rounded-pil bg-hijau/12">
-            <span
-              className="block h-full rounded-pil bg-hijau transition-[width] duration-700 ease-out"
-              style={{ width: `${maju}%` }}
-            />
+          <div className="mt-1.5">
+            <BatangKemajuan nilai={maju} target={100} label={`Progres perjalanan ${maju} persen`} />
           </div>
 
           {maju >= 100 && (

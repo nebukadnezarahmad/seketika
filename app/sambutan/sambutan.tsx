@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GarisTanya, Logo } from "@/komponen/ui/logo";
 import { useToko } from "@/lib/toko";
@@ -26,10 +27,18 @@ export function Sambutan() {
 
   return (
     <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#fcf9f0]">
-      <div
+      {/* Lewat next/image, bukan latar CSS. Sebagai latar CSS berkasnya
+          dikirim mentah 79 KB; lewat pengoptimal Next ia jadi WebP 16 KB
+          pada lebar yang benar-benar dipakai. Ini gambar terbesar di layar
+          pertama, jadi selisihnya terasa pada pemuatan dingin. */}
+      <Image
+        src="/img/ilustrasi-sambutan.jpg"
+        alt=""
         aria-hidden
-        className="absolute inset-0 bg-cover bg-bottom"
-        style={{ backgroundImage: "url(/img/ilustrasi-sambutan.jpg)" }}
+        fill
+        sizes="390px"
+        priority
+        className="object-cover object-bottom"
       />
 
       <div className="relative flex flex-col items-center pt-[6.2%]">
