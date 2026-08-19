@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Alat bantu pengembangan
+/.bidik/keluaran
+/.bidik/acuan
+/.assets-raw

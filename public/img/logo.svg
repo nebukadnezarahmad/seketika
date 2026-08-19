@@ -1,0 +1,44 @@
+<svg width="142" height="137" viewBox="0 0 142 137" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="142" height="137" fill="#363535"/>
+<g id="Design System">
+<path d="M-1029 -688C-1029 -689.105 -1028.1 -690 -1027 -690H1284C1285.1 -690 1286 -689.105 1286 -688V642C1286 643.105 1285.1 644 1284 644H-1027C-1028.1 644 -1029 643.105 -1029 642V-688Z" fill="#444444"/>
+<path d="M-1027 -690V-689H1284V-690V-691H-1027V-690ZM1286 -688H1285V642H1286H1287V-688H1286ZM1284 644V643H-1027V644V645H1284V644ZM-1029 642H-1028V-688H-1029H-1030V642H-1029ZM-1027 644V643C-1027.55 643 -1028 642.552 -1028 642H-1029H-1030C-1030 643.657 -1028.66 645 -1027 645V644ZM1286 642H1285C1285 642.552 1284.55 643 1284 643V644V645C1285.66 645 1287 643.657 1287 642H1286ZM1284 -690V-689C1284.55 -689 1285 -688.552 1285 -688H1286H1287C1287 -689.657 1285.66 -691 1284 -691V-690ZM-1027 -690V-691C-1028.66 -691 -1030 -689.657 -1030 -688H-1029H-1028C-1028 -688.552 -1027.55 -689 -1027 -689V-690Z" fill="white" fill-opacity="0.1"/>
+<g id="Logo">
+<g id="Group 96">
+<ellipse id="Ellipse 48" cx="63.7503" cy="45.4099" rx="44.3773" ry="45.4099" fill="#1A4D2E"/>
+<path id="Polygon 2" d="M76.2492 106.455C70.3156 115.396 57.1868 115.396 51.2532 106.455L29.1773 73.1919C22.5603 63.2215 29.709 49.8973 41.6753 49.8973L85.8272 49.8973C97.7935 49.8973 104.942 63.2215 98.3251 73.1919L76.2492 106.455Z" fill="#1A4D2E"/>
+</g>
+<rect id="Rectangle 148" width="21.7661" height="7.81247" rx="3.90624" transform="matrix(0.663953 -0.747774 0.745771 0.666202 107.92 16.8931)" fill="url(#paint0_linear_0_1)"/>
+<rect id="Rectangle 149" width="21.7139" height="7.83126" rx="3.91563" transform="matrix(0.983566 -0.180548 0.177464 0.984127 113.898 27.5701)" fill="url(#paint1_linear_0_1)"/>
+<rect id="Rectangle 150" width="21.6979" height="7.837" rx="3.9185" transform="matrix(0.918963 0.394344 -0.393503 0.919323 116.523 40.2947)" fill="url(#paint2_linear_0_1)"/>
+<g id="Group 97">
+<ellipse id="Ellipse 49" cx="64.2484" cy="44.5" rx="27.3929" ry="27.5" fill="#FDFBF7"/>
+<ellipse id="Ellipse 50" cx="63.7502" cy="45" rx="14.9416" ry="15" fill="url(#paint3_linear_0_1)"/>
+</g>
+<rect id="Rectangle 151" y="95" width="128.498" height="6" rx="3" fill="#1A4D2E"/>
+<ellipse id="Ellipse 51" cx="48.8087" cy="127" rx="9.96106" ry="10" fill="#1A4D2E"/>
+<ellipse id="Ellipse 52" cx="96.6232" cy="127" rx="9.96106" ry="10" fill="#1A4D2E"/>
+<rect id="Rectangle 152" x="53.79" y="124" width="34.8637" height="5" fill="#1A4D2E"/>
+<ellipse id="Ellipse 53" cx="48.8096" cy="127" rx="4.98053" ry="5" fill="#FDFBF7"/>
+<ellipse id="Ellipse 55" cx="96.6231" cy="127" rx="4.98053" ry="5" fill="#FDFBF7"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_1" x1="10.883" y1="0" x2="10.883" y2="7.81247" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_1" x1="10.8569" y1="0" x2="10.8569" y2="7.83126" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_1" x1="10.8489" y1="0" x2="10.8489" y2="7.837" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+<linearGradient id="paint3_linear_0_1" x1="63.7502" y1="30" x2="63.7502" y2="60" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D97706"/>
+<stop offset="1" stop-color="#F59E0B"/>
+</linearGradient>
+</defs>
+</svg>
