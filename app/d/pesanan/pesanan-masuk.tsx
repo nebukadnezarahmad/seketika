@@ -10,8 +10,12 @@ import type { PesananMasuk } from "@/lib/tipe";
 const rupaStatus: Record<PesananMasuk["status"], { label: string; kelas: string }> = {
   baru: { label: "Pesanan Baru", kelas: "bg-[#e8f0fe] text-[#2563eb]" },
   diproses: { label: "Diproses", kelas: "bg-amber/15 text-amber-tua" },
+  diantar: { label: "Sedang Diantar", kelas: "bg-hijau/12 text-hijau" },
   selesai: { label: "Selesai", kelas: "bg-hijau-lembut text-hijau" },
 };
+
+/** Yang masih berjalan, dilihat dari sisi penyaring. */
+const berjalan = (s: PesananMasuk["status"]) => s === "diproses" || s === "diantar";
 
 export function PesananMasukLayar() {
   const pesananMasuk = useToko((s) => s.pesananMasuk);
@@ -19,10 +23,13 @@ export function PesananMasukLayar() {
   const [aktif, setAktif] = React.useState<"semua" | PesananMasuk["status"]>("semua");
   const [terbuka, setTerbuka] = React.useState<string | null>(null);
 
+  /* Tab "Diproses" menghitung pesanan yang sudah diterima maupun yang
+     sedang diantar. Bagi pedagang keduanya sama-sama belum kelar, dan
+     memecahnya jadi dua tab hanya menambah tab yang jarang berisi. */
   const hitung = {
     semua: pesananMasuk.length,
     baru: pesananMasuk.filter((p) => p.status === "baru").length,
-    diproses: pesananMasuk.filter((p) => p.status === "diproses").length,
+    diproses: pesananMasuk.filter((p) => berjalan(p.status)).length,
     selesai: pesananMasuk.filter((p) => p.status === "selesai").length,
   };
 
@@ -33,7 +40,11 @@ export function PesananMasukLayar() {
     { kunci: "selesai", label: "Selesai" },
   ] as const;
 
-  const terlihat = pesananMasuk.filter((p) => aktif === "semua" || p.status === aktif);
+  const terlihat = pesananMasuk.filter((p) => {
+    if (aktif === "semua") return true;
+    if (aktif === "diproses") return berjalan(p.status);
+    return p.status === aktif;
+  });
 
   return (
     <Layar nav peran="pedagang">

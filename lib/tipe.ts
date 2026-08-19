@@ -109,7 +109,18 @@ export type PesananMasuk = {
   /** Titik antar, misalnya "RT 05 Blok C · Pos Ronda". */
   titik: string;
   baris: BarisPesanan[];
-  status: "baru" | "diproses" | "selesai";
+  /**
+   * `baru`     belum disentuh pedagang
+   * `diproses` sudah diterima, sedang disiapkan
+   * `diantar`  pedagang sudah berangkat menuju pembeli
+   * `selesai`  sudah sampai
+   *
+   * `diantar` sengaja dipisah dari `diproses`. Hanya satu pesanan yang
+   * bisa berstatus `diantar`, karena satu gerobak hanya bisa menuju satu
+   * tempat, dan hanya status itu yang memunculkan kartu navigasi
+   * melayang.
+   */
+  status: "baru" | "diproses" | "diantar" | "selesai";
   /** Menit sejak pesanan masuk, dipakai untuk teks "5 mnt lalu". */
   menitLalu: number;
 };
