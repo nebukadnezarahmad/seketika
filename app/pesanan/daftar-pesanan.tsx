@@ -9,7 +9,6 @@ import { LencanaStatus, TahapPesanan } from "@/komponen/pesanan/lencana";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { kapan } from "@/lib/format";
 import { useToko } from "@/lib/toko";
-import type { StatusPesanan } from "@/lib/tipe";
 
 const tab = [
   { kunci: "semua", label: "Semua" },
@@ -27,7 +26,7 @@ export function DaftarPesanan() {
     /* Pesanan yang masih menunggu konfirmasi tetap masuk kelompok
        "Diproses" karena bagi warga keduanya sama-sama belum kelar. */
     if (aktif === "diproses") return p.status === "diproses" || p.status === "menunggu";
-    return p.status === (aktif as StatusPesanan);
+    return p.status === aktif;
   });
 
   return (
@@ -55,7 +54,7 @@ export function DaftarPesanan() {
         })}
       </div>
 
-      <ul className="flex flex-col gap-3 px-4 pb-4">
+      <ul className="rentet flex flex-col gap-3 px-4 pb-4">
         {terlihat.map((p) => {
           const pedagang = cariPedagang(p.pedagangSlug);
           return (

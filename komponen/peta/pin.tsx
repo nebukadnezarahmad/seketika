@@ -8,29 +8,48 @@
  * (0, 0), lingkaran putih 20x20 di (5, 7), dan seterusnya.
  */
 
-export function PinPedagang({ size = 30 }: { size?: number }) {
+/**
+ * Pin peta. Warnanya parameter karena bentuknya selalu sama.
+ *
+ * `mata` mengatur isi lingkaran dalamnya: pin pedagang memakai titik
+ * berlapis, pin tujuan pada layar rute hanya lingkaran putih polos.
+ */
+export function Pin({
+  size = 30,
+  warna = "#1A4D2E",
+  mata = "berlapis",
+}: {
+  size?: number;
+  warna?: string;
+  mata?: "berlapis" | "polos";
+}) {
   return (
     <svg width={size} height={(size * 44) / 30} viewBox="0 0 30 44" fill="none" aria-hidden>
       <ellipse cx="15" cy="40" rx="10" ry="4" fill="black" fillOpacity="0.18" />
-      <path d="M15 40C7 31 0 24 0 18C0 8 7 0 15 0C23 0 30 8 30 18C30 24 23 31 15 40Z" fill="#1A4D2E" />
-      <circle cx="15" cy="17" r="10" fill="white" />
-      <circle cx="15" cy="17" r="5" fill="#1A4D2E" opacity="0.85" />
-      <circle cx="15" cy="17" r="2" fill="white" />
+      <path
+        d="M15 40C7 31 0 24 0 18C0 8 7 0 15 0C23 0 30 8 30 18C30 24 23 31 15 40Z"
+        fill={warna}
+      />
+      {mata === "polos" ? (
+        <circle cx="15" cy="17" r="6" fill="white" />
+      ) : (
+        <>
+          <circle cx="15" cy="17" r="10" fill="white" />
+          <circle cx="15" cy="17" r="5" fill={warna} opacity="0.85" />
+          <circle cx="15" cy="17" r="2" fill="white" />
+        </>
+      )}
     </svg>
   );
 }
 
+export function PinPedagang({ size = 30 }: { size?: number }) {
+  return <Pin size={size} warna="#1A4D2E" />;
+}
+
 /** Pin permintaan titik kumpul. Bentuknya sama, warnanya amber. */
 export function PinKumpul({ size = 30 }: { size?: number }) {
-  return (
-    <svg width={size} height={(size * 44) / 30} viewBox="0 0 30 44" fill="none" aria-hidden>
-      <ellipse cx="15" cy="40" rx="10" ry="4" fill="black" fillOpacity="0.18" />
-      <path d="M15 40C7 31 0 24 0 18C0 8 7 0 15 0C23 0 30 8 30 18C30 24 23 31 15 40Z" fill="#D97706" />
-      <circle cx="15" cy="17" r="10" fill="white" />
-      <circle cx="15" cy="17" r="5" fill="#D97706" opacity="0.85" />
-      <circle cx="15" cy="17" r="2" fill="white" />
-    </svg>
-  );
+  return <Pin size={size} warna="#D97706" />;
 }
 
 /** Titik biru penanda posisi pengguna, dengan lingkaran denyut. */

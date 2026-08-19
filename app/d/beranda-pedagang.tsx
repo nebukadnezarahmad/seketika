@@ -8,7 +8,7 @@ import { Bell, ChevronDown, ChevronUp, MapPin, Navigation, Users, Zap } from "lu
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
-import { cariPedagang } from "@/lib/data/pedagang";
+import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
 
 /** Perkiraan sisa waktu tempuh dari lama pesanan sudah berjalan. */
@@ -16,12 +16,10 @@ function sisaMenit(menitLalu: number): number {
   return Math.max(1, 10 - Math.floor(menitLalu / 4));
 }
 
-/** Gerobak yang dipakai peran pedagang pada purwarupa ini. */
-const GEROBAK = "bakso-pak-anton";
 
 export function BerandaPedagang() {
   const router = useRouter();
-  const gerobak = cariPedagang(GEROBAK)!;
+  const gerobak = gerobakSaya();
 
   const buka = useToko((s) => s.gerobakBuka);
   const setGerobak = useToko((s) => s.setGerobak);
@@ -39,7 +37,7 @@ export function BerandaPedagang() {
      pesanan tertua yang sedang dikerjakan. */
   const sedangDiantar = diproses[0];
   const selesai = pesananMasuk.filter((p) => p.status === "selesai");
-  const permintaan = titikKumpul.filter((t) => t.pedagangSlug === GEROBAK).length;
+  const permintaan = titikKumpul.filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA).length;
 
   return (
     <Layar
@@ -242,7 +240,7 @@ export function BerandaPedagang() {
 
         <ul className="mt-2.5 flex flex-col gap-2.5">
           {titikKumpul
-            .filter((t) => t.pedagangSlug === GEROBAK)
+            .filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA)
             .map((t) => (
               <li key={t.id} className="bayang-kartu rounded-[14px] border border-garis bg-white p-3">
                 <p className="flex items-center gap-1.5 text-[13.5px] font-bold text-tinta">

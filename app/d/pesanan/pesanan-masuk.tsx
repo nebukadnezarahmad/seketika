@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ChevronDown, MapPin } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
-import { rp } from "@/lib/format";
+import { rp, totalBaris } from "@/lib/format";
 import { useToko } from "@/lib/toko";
 import type { PesananMasuk } from "@/lib/tipe";
 
@@ -84,10 +84,10 @@ export function PesananMasukLayar() {
         })}
       </div>
 
-      <ul className="flex flex-col gap-2.5 px-4 py-3">
+      <ul className="rentet flex flex-col gap-2.5 px-4 py-3">
         {terlihat.map((p) => {
           const buka = terbuka === p.id;
-          const total = p.baris.reduce((n, b) => n + b.harga * b.jumlah, 0);
+          const total = totalBaris(p.baris);
           const butir = p.baris.reduce((n, b) => n + b.jumlah, 0);
           const { label, kelas } = rupaStatus[p.status];
 

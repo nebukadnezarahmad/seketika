@@ -6,7 +6,7 @@ import { Check, Circle, MapPin, MessageSquare } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { cariPedagang } from "@/lib/data/pedagang";
-import { jarakSingkat, rp } from "@/lib/format";
+import { jarakSingkat, rp, totalBaris } from "@/lib/format";
 import { useToko } from "@/lib/toko";
 import type { StatusPesanan } from "@/lib/tipe";
 
@@ -43,7 +43,7 @@ export function DetailPesanan({ id }: { id: string }) {
 
   const pedagang = cariPedagang(pesanan.pedagangSlug);
   const batas = sampaiTahap(pesanan.status);
-  const total = pesanan.baris.reduce((n, b) => n + b.harga * b.jumlah, 0);
+  const total = totalBaris(pesanan.baris);
   const obrolan = percakapan.find((c) => c.pedagangSlug === pesanan.pedagangSlug);
 
   return (

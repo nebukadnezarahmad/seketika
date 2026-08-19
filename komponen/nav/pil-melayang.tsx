@@ -61,11 +61,15 @@ export function PilMelayang({
               {judul}
             </span>
             <span className="flex items-center gap-1.5 pt-0.5">
-              <span aria-hidden className="flex items-center gap-[3px]">
+              <span aria-hidden className="flex items-center gap-[7px]">
                 {[0, 1, 2, 3].map((i) => (
                   <span
                     key={i}
-                    className="h-1 w-1 animate-[titik-jalan_1.6s_ease-in-out_infinite] rounded-pil bg-white/35"
+                    /* Titiknya memanjang lewat skala, bukan lebar. Animasi
+                       ini berputar terus, jadi menganimasikan lebar berarti
+                       memaksa peramban menghitung ulang tata letak pada
+                       setiap bingkai selama kartunya terlihat. */
+                    className="h-1 w-1 origin-left animate-[titik-jalan_1.6s_ease-in-out_infinite] rounded-pil bg-white/35"
                     style={{ animationDelay: `${i * 0.4}s` }}
                   />
                 ))}

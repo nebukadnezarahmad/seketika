@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronUp, Crosshair, MapPin, MessageSquare, Navigation, Volume2 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Peta } from "@/komponen/peta/peta";
+import { Pin } from "@/komponen/peta/pin";
 import { Tombol } from "@/komponen/ui/tombol";
 import { useToko } from "@/lib/toko";
 
@@ -66,12 +67,7 @@ export function Antar({ id }: { id: string }) {
               <span className="absolute left-[30px] top-2 whitespace-nowrap rounded-[8px] bg-hijau px-2 py-1 text-[9.5px] font-bold text-white">
                 Titik Tujuan
               </span>
-              <svg width="30" height="44" viewBox="0 0 30 44" fill="none">
-                <ellipse cx="15" cy="40" rx="10" ry="4" fill="black" fillOpacity="0.18" />
-                <path d="M15 40C7 31 0 24 0 18C0 8 7 0 15 0C23 0 30 8 30 18C30 24 23 31 15 40Z" fill="#1A4D2E" />
-                <circle cx="15" cy="17" r="10" fill="white" />
-                <circle cx="15" cy="17" r="5" fill="#1A4D2E" opacity="0.85" />
-              </svg>
+              <Pin size={30} />
             </span>
           </div>
         </Peta>

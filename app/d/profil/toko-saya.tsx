@@ -7,14 +7,13 @@ import {
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
-import { cariPedagang } from "@/lib/data/pedagang";
+import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
 
-const GEROBAK = "bakso-pak-anton";
 
 export function TokoSaya() {
   const router = useRouter();
-  const gerobak = cariPedagang(GEROBAK)!;
+  const gerobak = gerobakSaya();
   const profil = useToko((s) => s.profil);
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const gantiPeran = useToko((s) => s.gantiPeran);
@@ -105,7 +104,7 @@ export function TokoSaya() {
             nada="hijau"
             judul="Kelola Menu"
             isi={`${gerobak.menu.length} item aktif`}
-            href={`/pedagang/${GEROBAK}/menu`}
+            href={`/pedagang/${SLUG_GEROBAK_SAYA}/menu`}
           />
           <BarisMenu
             Ikon={MapPin}

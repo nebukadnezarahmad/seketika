@@ -125,5 +125,21 @@ export function cariPedagang(slug: string): Pedagang | undefined {
   return daftarPedagang.find((p) => p.slug === slug);
 }
 
+/**
+ * Gerobak yang dipegang peran pedagang pada purwarupa ini.
+ *
+ * Aplikasi belum punya autentikasi, jadi peran pedagang selalu masuk
+ * sebagai gerobak yang sama. Slugnya disimpan di sini, satu tempat,
+ * karena sebelumnya ditulis ulang di dua layar dan keduanya memaksa
+ * hasil pencariannya bukan-null. Kalau slug itu diganti saat menyunting
+ * data contoh, keduanya akan gagal saat render tanpa peringatan apa pun.
+ */
+export const SLUG_GEROBAK_SAYA = "bakso-pak-anton";
+
+/** Gerobak peran pedagang. Jatuh ke pedagang pertama kalau slugnya hilang. */
+export function gerobakSaya(): Pedagang {
+  return cariPedagang(SLUG_GEROBAK_SAYA) ?? daftarPedagang[0];
+}
+
 /** Kategori penyaring di beranda. "Dekat Anda" berarti tanpa penyaringan. */
 export const kategoriPenyaring = ["Dekat Anda", "Makanan", "Minuman", "Jajanan", "Cemilan"] as const;

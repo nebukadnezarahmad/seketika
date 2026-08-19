@@ -4,6 +4,7 @@ import { Clock, Footprints, House, MapPin, Navigation } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { Peta } from "@/komponen/peta/peta";
+import { Pin } from "@/komponen/peta/pin";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
 
@@ -101,10 +102,7 @@ export function RuteTitik({ id }: { id: string }) {
               className="absolute -translate-x-1/2 -translate-y-full"
               style={{ left: "74%", top: "20%" }}
             >
-              <svg width="24" height="34" viewBox="0 0 30 44" fill="none">
-                <path d="M15 40C7 31 0 24 0 18C0 8 7 0 15 0C23 0 30 8 30 18C30 24 23 31 15 40Z" fill="#ef4444" />
-                <circle cx="15" cy="17" r="6" fill="white" />
-              </svg>
+              <Pin size={24} warna="#ef4444" mata="polos" />
             </span>
             <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 items-center gap-2 rounded-pil bg-white px-3 py-1.5 shadow-[0_2px_8px_rgb(0_0_0/0.16)]">
               <span aria-hidden className="size-2 rounded-full bg-[#2563eb]" />

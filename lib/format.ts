@@ -1,4 +1,18 @@
+import type { BarisPesanan } from "@/lib/tipe";
+
 /** Pemformat yang dipakai berulang di seluruh layar. */
+
+/**
+ * Total satu pesanan.
+ *
+ * Dikumpulkan di sini karena ini logika uang, bukan tampilan. Sebelumnya
+ * rumus yang sama diketik ulang di tiga layar, dan begitu perhitungannya
+ * berubah, satu layar yang terlewat akan menampilkan total berbeda dari
+ * dua lainnya.
+ */
+export function totalBaris(baris: BarisPesanan[]): number {
+  return baris.reduce((jumlah, b) => jumlah + b.harga * b.jumlah, 0);
+}
 
 const rupiah = new Intl.NumberFormat("id-ID", {
   style: "currency",
