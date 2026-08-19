@@ -85,7 +85,9 @@ test.describe("Berpindah peran", () => {
 
     await page.goto("/profil");
     await page.getByRole("button", { name: /Setel Ulang Data/ }).click();
-    await page.waitForURL("**/mulai", { timeout: 10_000 });
+    /* Setelah data dihapus aplikasi kembali ke pintu masuk, bukan langsung
+       ke pemilihan peran. */
+    await page.waitForURL("**/sambutan", { timeout: 10_000 });
 
     await lewatiPengenalan(page, "pembeli", "Dewi");
     await page.goto("/kolab/tk-01");

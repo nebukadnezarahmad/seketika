@@ -43,6 +43,8 @@ harus berjalan.
 
 | Fitur | Keterangan |
 |---|---|
+| Pembuka bertahap | Ilustrasi, lambang, lalu tagline muncul berurutan |
+| Sambutan & daftar akun | Masuk atau buat akun, termasuk pintasan Google dan Facebook |
 | Peta pedagang | Gerobak aktif di sekitar, dengan jarak dan estimasi waktu |
 | Pencarian | Cari menu atau pedagang, dengan penyaring estimasi harga |
 | Daftar menu & keranjang | Keranjang terkunci pada satu pedagang |
@@ -67,6 +69,9 @@ harus berjalan.
 - **TypeScript** dengan mode ketat
 - **Tailwind CSS v4** dengan token warna, jarak, dan radius yang diambil langsung
   dari berkas rancangan
+- **Inter, Poppins, dan Caveat** lewat `next/font`, sesuai penggunaannya di
+  rancangan: Inter untuk seluruh isi, Poppins khusus lambang kata, Caveat untuk
+  satu kalimat sapaan
 - **Zustand** dengan penyimpanan lokal peramban
 - **Playwright** untuk uji ujung-ke-ujung
 
@@ -113,6 +118,7 @@ contoh.
 
 ```
 app/                    rute dan layar
+  sambutan/ daftar/     pintu masuk dan pembuatan akun
   mulai/                pengenalan tiga langkah
   beranda/ peta/ cari/  penjelajahan
   pedagang/[slug]/      detail pedagang dan menunya
@@ -134,6 +140,9 @@ uji/                    uji ujung-ke-ujung
 Antarmuka dibuat lebih dulu di Figma, lalu diterjemahkan ke kode. Nilai warna,
 ukuran huruf, jarak, radius, dan bayangan tidak dikira-kira: semuanya diambil
 dari berkas rancangan, dan ikon serta ilustrasinya adalah aset ekspor yang sama.
+
+Urutan layarnya mengikuti prototipe: pembuka bertahap, sambutan, pembuatan akun,
+lalu tiga langkah pengenalan sebelum masuk ke beranda sesuai peran.
 
 ## Tim
 

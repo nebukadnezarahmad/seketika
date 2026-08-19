@@ -29,16 +29,20 @@ const jenisUsaha = [
 export function IsiData({ peran }: { peran: Peran }) {
   const router = useRouter();
   const simpanProfil = useToko((s) => s.simpanProfil);
+  const draf = useToko((s) => s.draf);
 
-  const [isi, setIsi] = React.useState({
-    nama: "",
-    email: "",
+  /* Nilai awal dibaca sekali lewat penginisialisasi malas. Menyalinnya
+     dari draf lewat efek akan menimpa apa yang sedang diketik pengguna
+     setiap kali komponennya render ulang. */
+  const [isi, setIsi] = React.useState(() => ({
+    nama: draf?.nama ?? "",
+    email: draf?.email ?? "",
     telepon: "",
     alamat: "",
     patokan: "",
     namaUsaha: "",
     deskripsiUsaha: "",
-  });
+  }));
   const [jenis, setJenis] = React.useState<string | null>(null);
   const ubah = (k: keyof typeof isi) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setIsi((s) => ({ ...s, [k]: e.target.value }));
