@@ -33,11 +33,49 @@ export function Lembar({
   const [tampil, setTampil] = React.useState(buka);
   if (buka && !tampil) setTampil(true);
 
+  const panelRef = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
     if (!buka) return;
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && tutup();
-    window.addEventListener("keydown", esc);
-    return () => window.removeEventListener("keydown", esc);
+
+    /* Lembar ini mengaku `aria-modal`, dan janji itu harus ditepati:
+       teknologi bantu menganggap isi di luarnya tidak terjangkau. Tanpa
+       pengurungan fokus, tombol di balik lapisan gelap tetap bisa
+       dicapai lewat Tab, sehingga pengguna papan ketik bisa tersesat
+       menekan sesuatu yang bahkan tidak terlihat. */
+    const dibukaOleh = document.activeElement as HTMLElement | null;
+    const bisaDifokus = () =>
+      Array.from(
+        panelRef.current?.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((el) => !el.hasAttribute("disabled"));
+
+    bisaDifokus()[0]?.focus();
+
+    const saatTekan = (e: KeyboardEvent) => {
+      if (e.key === "Escape") return tutup();
+      if (e.key !== "Tab") return;
+      const daftar = bisaDifokus();
+      if (daftar.length === 0) return;
+      const pertama = daftar[0];
+      const terakhir = daftar[daftar.length - 1];
+      if (e.shiftKey && document.activeElement === pertama) {
+        e.preventDefault();
+        terakhir.focus();
+      } else if (!e.shiftKey && document.activeElement === terakhir) {
+        e.preventDefault();
+        pertama.focus();
+      }
+    };
+
+    window.addEventListener("keydown", saatTekan);
+    return () => {
+      window.removeEventListener("keydown", saatTekan);
+      /* Fokus dikembalikan ke tombol yang membuka lembar ini, supaya
+         pengguna papan ketik tidak terlempar ke awal halaman. */
+      dibukaOleh?.focus();
+    };
   }, [buka, tutup]);
 
   if (!tampil) return null;
@@ -54,6 +92,7 @@ export function Lembar({
         }`}
       />
       <div
+        ref={panelRef}
         onTransitionEnd={(e) => {
           /* Peristiwa transisi menggelembung dari isi lembar, jadi hanya
              transisi milik panel ini yang boleh melepasnya. */

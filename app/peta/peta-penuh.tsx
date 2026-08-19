@@ -25,6 +25,7 @@ export function PetaPenuh() {
       <div className="relative flex-1">
         <Peta
           penuh
+          utama
           skala={false}
           saya={{ x: 50.11, y: 42.72 }}
           tanda={daftarPedagang.map((p) => ({

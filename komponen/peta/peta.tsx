@@ -24,6 +24,7 @@ export function Peta({
   saya,
   tinggi = 300,
   penuh,
+  utama,
   jumlahAktif,
   skala = true,
   className = "",
@@ -35,6 +36,13 @@ export function Peta({
   tinggi?: number;
   /** Memenuhi seluruh induknya alih-alih memakai tinggi tetap. */
   penuh?: boolean;
+  /**
+   * Tandai kalau peta ini gambar terbesar di layarnya, sehingga layak
+   * dimuat lebih awal. Jangan dinyalakan pada peta kecil yang muncul di
+   * tengah halaman: preload-nya justru berebut jalur dengan gambar lain
+   * yang lebih dulu terlihat.
+   */
+  utama?: boolean;
   /** Menampilkan lencana "N pedagang aktif" di kiri atas. */
   jumlahAktif?: number;
   skala?: boolean;
@@ -52,7 +60,7 @@ export function Peta({
         fill
         sizes="390px"
         className="object-cover"
-        priority
+        priority={utama}
       />
 
       {tanda.map((t) => (

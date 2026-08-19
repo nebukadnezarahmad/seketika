@@ -26,6 +26,7 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
       <div className="relative flex-1">
         <Peta
           penuh
+          utama
           skala={false}
           saya={{ x: 50.11, y: 42.72 }}
           tanda={daftarPedagang.map((p) => ({ id: p.id, x: p.posisi.x, y: p.posisi.y }))}

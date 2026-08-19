@@ -75,7 +75,7 @@ export function BuatTitikKumpul() {
                 onChange={(e) => setLokasi(e.target.value)}
                 placeholder="Misal: RT 03 Perumahan Indah"
                 required
-                className="w-full bg-transparent text-[13.5px] text-tinta placeholder:text-tinta-5 focus:outline-none"
+                className="w-full bg-transparent text-[13.5px] text-tinta placeholder:text-tinta-3 focus:outline-none"
               />
             </span>
           </label>
@@ -124,7 +124,7 @@ export function BuatTitikKumpul() {
               onChange={(e) => setCatatan(e.target.value)}
               rows={3}
               placeholder="Misal: Datang jam 9 pagi ya biar bareng..."
-              className="w-full resize-none rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2.5 text-[13.5px] leading-snug text-tinta placeholder:text-tinta-5 focus:outline-none"
+              className="w-full resize-none rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2.5 text-[13.5px] leading-snug text-tinta placeholder:text-tinta-3 focus:outline-none"
             />
           </label>
         </div>

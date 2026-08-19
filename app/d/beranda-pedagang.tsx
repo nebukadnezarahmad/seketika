@@ -65,9 +65,9 @@ export function BerandaPedagang() {
           className="size-10 shrink-0 rounded-full object-cover"
         />
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[15px] font-extrabold leading-tight text-hijau">
+          <h1 className="truncate text-[15px] font-extrabold leading-tight text-hijau">
             {profil?.namaUsaha || gerobak.nama}
-          </p>
+          </h1>
           <p className="text-[11px] text-tinta-4">{gerobak.jenis}</p>
         </div>
         <button

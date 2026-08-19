@@ -22,7 +22,12 @@
   --color-tinta: #1c1916;
   --color-tinta-2: #2c2924;
   --color-tinta-3: #7a746c;
-  --color-tinta-4: #a09890;
+  /* Desain aslinya #a09890, tapi di atas krem rasionya hanya 2,75:1,
+     sedangkan hampir semua pemakaiannya teks 10-12px. #78726c adalah
+     nilai paling terang pada rona yang sama yang masih lulus 4.5:1
+     (4,59:1 di krem, 4,75:1 di putih), jadi hierarki visualnya utuh
+     sementara teksnya benar-benar terbaca. */
+  --color-tinta-4: #78726c;
   --color-tinta-5: #c0bab3;
   --color-tinta-6: #6e6860;
 

@@ -65,7 +65,7 @@ export function Cari() {
                 value={kata}
                 onChange={(e) => setKata(e.target.value)}
                 placeholder="Ketik yang Anda cari..."
-                className="w-full bg-transparent text-[13px] text-tinta placeholder:text-tinta-5 focus:outline-none"
+                className="w-full bg-transparent text-[13px] text-tinta placeholder:text-tinta-3 focus:outline-none"
               />
             </span>
           </label>

@@ -26,6 +26,10 @@ export function BerandaPembeli() {
 
   return (
     <Layar nav>
+      {/* Beranda tidak punya judul yang terlihat, tapi tetap butuh titik
+          masuk bagi pengguna yang menjelajah lewat daftar heading. */}
+      <h1 className="khusus-pembaca-layar">Beranda</h1>
+
       {/* Lokasi dan penyaring */}
       <section className="bg-krem px-4 pb-2.5 pt-3">
         <Link

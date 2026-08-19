@@ -78,7 +78,7 @@ export function DetailTitikKumpul({ id }: { id: string }) {
             <p className="min-w-0 truncate text-[13px] font-semibold text-white">
               {pedagang?.nama}
               <span className="ml-2 font-normal text-white/55">
-                · Berakhir dalam {sisaWaktu(titik.kedaluwarsa).replace(" lagi", "")}
+                · Berakhir dalam {sisaWaktu(titik.kedaluwarsa, sekarang).replace(" lagi", "")}
               </span>
             </p>
           </div>

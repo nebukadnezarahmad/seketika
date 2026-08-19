@@ -56,10 +56,10 @@ export function NavBawah({ peran = "pembeli" }: { peran?: "pembeli" | "pedagang"
             aria-current={aktif ? "page" : undefined}
             className="flex h-[60px] flex-col items-center gap-[3px] pt-3 transition-colors"
           >
-            <Ikon size={22} className={aktif ? "text-hijau" : "text-tinta-5"} />
+            <Ikon size={22} className={aktif ? "text-hijau" : "text-tinta-3"} />
             <span
               className={`text-[10px] leading-[15px] tracking-[0.1px] ${
-                aktif ? "font-bold text-hijau" : "font-normal text-tinta-5"
+                aktif ? "font-bold text-hijau" : "font-normal text-tinta-3"
               }`}
             >
               {label}
