@@ -52,7 +52,7 @@ export function PesanKolaborasi() {
 
         <h2 className="mb-2.5 mt-5 text-[14px] font-bold text-tinta">Titik Kumpul Aktif</h2>
 
-        <ul className="flex flex-col gap-3">
+        <ul className="rentet flex flex-col gap-3">
           {aktif.map((t) => {
             const punyaSaya = t.peserta.some((p) => p.id === "saya");
             const kurang = Math.max(0, t.target - t.peserta.length);

@@ -29,7 +29,7 @@ export function DaftarChat({ peran = "pembeli" }: { peran?: "pembeli" | "pedagan
         />
       </div>
 
-      <ul className="px-4">
+      <ul className="rentet px-4">
         {terlihat.map((c) => {
           const rupa = rupaPercakapan[c.id];
           const akhir = c.pesan.at(-1);

@@ -7,7 +7,7 @@ import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { Tombol } from "@/komponen/ui/tombol";
 import { fotoMenu } from "@/lib/data/pedagang";
-import { jarakSingkat, rp } from "@/lib/format";
+import { jarakSingkat, rp, totalBaris } from "@/lib/format";
 import { useToko } from "@/lib/toko";
 import type { Pedagang } from "@/lib/tipe";
 
@@ -20,7 +20,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
 
   /* Keranjang milik pedagang lain tidak boleh ikut terhitung di layar ini. */
   const baris = keranjang.pedagangSlug === pedagang.slug ? keranjang.baris : [];
-  const total = baris.reduce((n, b) => n + b.harga * b.jumlah, 0);
+  const total = totalBaris(baris);
   const butir = baris.reduce((n, b) => n + b.jumlah, 0);
 
   const jumlahDari = (menuId: string) => baris.find((b) => b.menuId === menuId)?.jumlah ?? 0;
@@ -37,7 +37,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
           Menu
         </p>
 
-        <ul className="flex flex-col gap-2.5">
+        <ul className="rentet flex flex-col gap-2.5">
           {pedagang.menu.map((m) => {
             const n = jumlahDari(m.id);
             return (

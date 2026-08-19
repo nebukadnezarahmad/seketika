@@ -61,7 +61,7 @@ export function HasilCari() {
             </Link>
           </div>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <ul className="rentet flex flex-col gap-3">
             {hasil.map(({ pedagang, menu }) => (
               <li
                 key={pedagang.id}
