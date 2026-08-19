@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { X } from "lucide-react";
 
 /**
  * Lembar yang naik dari bawah layar.
@@ -21,14 +22,16 @@ export function Lembar({
   children: React.ReactNode;
   judul?: string;
 }) {
-  /* Tunda pelepasan dari pohon sampai animasi turun selesai, kalau tidak
-     lembarnya hilang begitu saja tanpa gerak keluar. */
+  /* Pelepasan dari pohon ditunda sampai animasi turun benar-benar
+     selesai, kalau tidak lembarnya hilang seketika tanpa gerak keluar.
+
+     Penandanya disetel saat render, bukan di dalam efek. Ini pola resmi
+     React untuk state yang diturunkan dari prop, dan hasilnya satu
+     render lebih sedikit dibanding menyetelnya dari efek. Penutupannya
+     sendiri dipicu `transitionend`, jadi durasinya selalu mengikuti
+     animasi yang sebenarnya, bukan angka tebakan. */
   const [tampil, setTampil] = React.useState(buka);
-  React.useEffect(() => {
-    if (buka) return setTampil(true);
-    const t = setTimeout(() => setTampil(false), 220);
-    return () => clearTimeout(t);
-  }, [buka]);
+  if (buka && !tampil) setTampil(true);
 
   React.useEffect(() => {
     if (!buka) return;
@@ -43,19 +46,36 @@ export function Lembar({
     <div className="absolute inset-0 z-50 flex flex-col justify-end" role="dialog" aria-modal="true" aria-label={judul}>
       <button
         type="button"
-        aria-label="Tutup"
+        aria-hidden
+        tabIndex={-1}
         onClick={tutup}
         className={`absolute inset-0 bg-black/35 transition-opacity duration-200 ${
           buka ? "opacity-100" : "opacity-0"
         }`}
       />
       <div
+        onTransitionEnd={(e) => {
+          /* Peristiwa transisi menggelembung dari isi lembar, jadi hanya
+             transisi milik panel ini yang boleh melepasnya. */
+          if (e.target === e.currentTarget && !buka) setTampil(false);
+        }}
         className={`bayang-lembar relative max-h-[86%] overflow-y-auto rounded-t-[24px] bg-krem transition-transform duration-200 ease-out ${
           buka ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div className="sticky top-0 flex justify-center bg-krem pb-1 pt-2.5">
-          <span aria-hidden className="h-1 w-9 rounded-pil bg-tinta-5/60" />
+        {/* Pegangan di tengah dan tombol tutup di kanan. Tanpa tombol ini
+            satu-satunya cara menutup adalah mengetuk pita gelap tipis di
+            atas lembar, dan itu terlalu sempit untuk ditemukan. */}
+        <div className="sticky top-0 z-10 flex items-center bg-krem pb-1 pt-2.5">
+          <span aria-hidden className="mx-auto h-1 w-9 rounded-pil bg-tinta-5/60" />
+          <button
+            type="button"
+            onClick={tutup}
+            aria-label="Tutup"
+            className="absolute right-3 top-2 grid size-8 place-items-center rounded-full bg-tinta-5/15 text-tinta-3 transition-transform active:scale-90"
+          >
+            <X size={16} strokeWidth={2.4} />
+          </button>
         </div>
         {children}
       </div>

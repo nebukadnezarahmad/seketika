@@ -44,3 +44,8 @@ next-env.d.ts
 /.bidik/keluaran
 /.bidik/acuan
 /.assets-raw
+
+# Hasil uji
+/test-results
+/playwright-report
+/blob-report
