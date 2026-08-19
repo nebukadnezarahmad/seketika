@@ -30,6 +30,20 @@ export function Antar({ id }: { id: string }) {
     return () => clearInterval(t);
   }, []);
 
+  /* Membuka alamat navigasi untuk pesanan yang sudah selesai, atau yang
+     belum diberangkatkan, tidak ada artinya. */
+  if (pesanan && pesanan.status !== "diantar") {
+    return (
+      <Layar nav peran="pedagang">
+        <p className="px-6 py-16 text-center text-[13px] leading-relaxed text-tinta-4">
+          {pesanan.status === "selesai"
+            ? `Pengantaran ke ${pesanan.warga} sudah selesai.`
+            : `Pesanan ${pesanan.warga} belum diberangkatkan.`}
+        </p>
+      </Layar>
+    );
+  }
+
   if (!pesanan) {
     return (
       <Layar nav peran="pedagang">
@@ -156,19 +170,21 @@ export function Antar({ id }: { id: string }) {
             <BatangKemajuan nilai={maju} target={100} label={`Progres perjalanan ${maju} persen`} />
           </div>
 
-          {maju >= 100 && (
-            <div className="mt-3.5">
-              <Tombol
-                penuh
-                onClick={() => {
-                  ubahStatusMasuk(pesanan.id, "selesai");
-                  router.push("/d");
-                }}
-              >
-                Tandai Selesai
-              </Tombol>
-            </div>
-          )}
+          {/* Selalu tersedia, tidak menunggu bilah kemajuan penuh. Yang
+              tahu gerobaknya sudah sampai adalah pedagangnya, bukan
+              simulasi perjalanan di layar ini. */}
+          <div className="mt-3.5">
+            <Tombol
+              penuh
+              rupa={maju >= 100 ? "utama" : "garis"}
+              onClick={() => {
+                ubahStatusMasuk(pesanan.id, "selesai");
+                router.push("/d");
+              }}
+            >
+              {maju >= 100 ? "Tandai Selesai" : "Sudah Sampai, Tandai Selesai"}
+            </Tombol>
+          </div>
         </div>
       </div>
     </Layar>

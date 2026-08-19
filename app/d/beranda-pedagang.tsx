@@ -32,10 +32,11 @@ export function BerandaPedagang() {
   const [ringkasTerbuka, setRingkasTerbuka] = React.useState(false);
 
   const baru = pesananMasuk.filter((p) => p.status === "baru");
-  const diproses = pesananMasuk.filter((p) => p.status === "diproses");
-  /* Satu gerobak hanya bisa menuju satu tujuan, jadi yang melayang cukup
-     pesanan tertua yang sedang dikerjakan. */
-  const sedangDiantar = diproses[0];
+  /* Kartu navigasi melayang hanya muncul untuk pesanan yang benar-benar
+     sedang diantar, yaitu setelah pedagang menekan "Terima & Berangkat".
+     Pesanan yang baru diterima tapi masih disiapkan tidak menampilkannya:
+     tidak ada yang perlu dinavigasikan kalau gerobaknya belum jalan. */
+  const sedangDiantar = pesananMasuk.find((p) => p.status === "diantar");
   const selesai = pesananMasuk.filter((p) => p.status === "selesai");
   const permintaan = titikKumpul.filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA).length;
 
@@ -206,7 +207,7 @@ export function BerandaPedagang() {
                 <button
                   type="button"
                   onClick={() => {
-                    ubahStatusMasuk(p.id, "diproses");
+                    ubahStatusMasuk(p.id, "diantar");
                     router.push(`/d/antar/${p.id}`);
                   }}
                   className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-[12px] bg-hijau text-[12.5px] font-bold text-white transition-transform active:scale-[0.98]"
