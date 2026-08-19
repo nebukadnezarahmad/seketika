@@ -236,3 +236,79 @@ export const pesananMasukAwal: PesananMasuk[] = [
     menitLalu: 62,
   },
 ];
+
+/**
+ * Percakapan dari sisi pedagang: lawan bicaranya warga, bukan sesama
+ * pedagang. Isinya mengikuti empat bingkai "Chat - Pedagang" di berkas
+ * rancangan.
+ *
+ * Nama di bingkai ruang obrolan rancangan berbeda dengan nama di daftar
+ * (Ahmad Fauzi dan Dewi Rahayu di ruang, Pak Dedi dan Bu Rahma di
+ * daftar). Yang dipakai di sini nama dari daftar, karena nama itulah
+ * yang cocok dengan cuplikan pesan terakhirnya, sekaligus sama dengan
+ * nama pemesan di layar pesanan masuk.
+ */
+export const percakapanPedagangAwal: Percakapan[] = [
+  {
+    id: "cp-01",
+    nama: "Pak Dedi",
+    pesan: [
+      { id: "p1", saya: false, isi: "Pak, baksonya masih ada ga? Mau pesan 3 porsi nih", waktu: "09:35" },
+      { id: "p2", saya: true, isi: "Masih ada Mas! Lagi di sekitar Jl. Melati. 10 menit lagi sampai ya", waktu: "09:37" },
+      { id: "p3", saya: false, isi: "Siap pak, saya tunggu di depan pos satpam", waktu: "09:40" },
+      { id: "p4", saya: true, isi: "Oke, saya menuju ke sana sekarang!", waktu: "09:41" },
+      { id: "p5", saya: false, isi: "Oke, saya tunggu di depan gerbang ya pak", waktu: "09:43" },
+    ],
+  },
+  {
+    id: "cp-02",
+    nama: "Bu Rahma",
+    pesan: [
+      { id: "p1", saya: false, isi: "Pak, minta tolong berhenti sebentar di gang Mangga ya", waktu: "14:05" },
+      { id: "p2", saya: true, isi: "Bisa bu, sekitar 5 menit lagi sampai", waktu: "14:06" },
+      { id: "p3", saya: false, isi: "Mau beli 2 bakso urat sama 2 bakso tahu", waktu: "14:08" },
+      { id: "p4", saya: true, isi: "Siap bu! Sudah sampai di gang Mangga", waktu: "14:11" },
+      { id: "p5", saya: false, isi: "Makasih banyak pak, bungkusannya rapi!", waktu: "14:20" },
+    ],
+  },
+  {
+    id: "cp-03",
+    nama: "Rizki Pratama",
+    pesan: [
+      { id: "p1", saya: false, isi: "Pak, hari ini lewat kompleks Permai ga?", waktu: "11:00" },
+      { id: "p2", saya: true, isi: "Iya mas, biasanya jam 11 saya lewat sana", waktu: "11:01" },
+      { id: "p3", saya: false, isi: "Wah sudah lewat belum? Saya mau beli nih", waktu: "11:30" },
+      { id: "p4", saya: true, isi: "Aduh, tadi sudah lewat mas. Besok saya lewat lagi", waktu: "11:32" },
+      { id: "p5", saya: false, isi: "Besok jualan lagi jam berapa pak?", waktu: "11:33" },
+    ],
+  },
+  {
+    id: "cp-04",
+    nama: "Sinta Maharani",
+    pesan: [
+      { id: "p1", saya: false, isi: "Pak, mau tanya, bakso isi ayam ada ga?", waktu: "10:10" },
+      { id: "p2", saya: true, isi: "Ada mbak! Bakso ayam, sapi, dan campuran. Mau yang mana?", waktu: "10:12" },
+      { id: "p3", saya: false, isi: "Campur aja pak, 2 porsi. Saya di blok B12", waktu: "10:14" },
+      { id: "p4", saya: true, isi: "Siap, hari ini sudah habis mbak. Besok ya saya lewat blok B", waktu: "10:20" },
+      { id: "p5", saya: false, isi: "Oke pak, ditunggu besok ya!", waktu: "10:21" },
+    ],
+  },
+];
+
+/**
+ * Rupa lawan bicara di sisi pedagang. Warga tidak punya foto profil di
+ * aplikasi ini, jadi avatarnya lingkaran berinisial, sama seperti di
+ * layar pesanan masuk dan titik kumpul.
+ */
+export const rupaPercakapanPedagang: Record<
+  string,
+  { inisial: string; daring: boolean; kapan: string; belumDibaca?: number }
+> = {
+  "cp-01": { inisial: "D", daring: true, kapan: "09:43", belumDibaca: 2 },
+  "cp-02": { inisial: "R", daring: true, kapan: "Kemarin" },
+  "cp-03": { inisial: "R", daring: false, kapan: "Sen" },
+  "cp-04": { inisial: "S", daring: false, kapan: "Ming" },
+};
+
+/** Balasan cepat yang tersedia di ruang obrolan pedagang. */
+export const balasanCepat = ["Oke, segera!", "Sudah habis hari ini", "Sekitar 10 menit lagi"];

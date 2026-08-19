@@ -9,7 +9,20 @@ import { Peta } from "@/komponen/peta/peta";
 import { Pin } from "@/komponen/peta/pin";
 import { Tombol } from "@/komponen/ui/tombol";
 import { BatangKemajuan } from "@/komponen/kolab/kemajuan";
+import { percakapanPedagangAwal } from "@/lib/data/awal";
 import { useToko } from "@/lib/toko";
+
+/**
+ * Percakapan dengan warga tertentu, dicari lewat namanya.
+ *
+ * Pesanan dan percakapan belum saling menyimpan rujukan, jadi namanya
+ * yang jadi jembatan. Kalau warga itu belum pernah mengirim pesan,
+ * tombolnya mengantar ke kotak masuk alih-alih ke ruang yang tidak ada.
+ */
+function tautChatWarga(nama: string): string {
+  const cocok = percakapanPedagangAwal.find((c) => c.nama === nama);
+  return cocok ? `/d/chat/${cocok.id}` : "/d/chat";
+}
 
 /**
  * Layar navigasi pengantaran.
@@ -154,7 +167,7 @@ export function Antar({ id }: { id: string }) {
               </p>
             </div>
             <Link
-              href="/d/chat/ch-01"
+              href={tautChatWarga(pesanan.warga)}
               aria-label={`Chat ${pesanan.warga}`}
               className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-hijau-lembut text-hijau transition-transform active:scale-90"
             >

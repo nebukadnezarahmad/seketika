@@ -11,7 +11,14 @@ import type { Pedagang } from "@/lib/tipe";
  * selalu terlihat mengintip di tepi kanan. Potongan itu yang memberi
  * tahu pengguna bahwa deretnya masih bisa digeser.
  */
-export function KartuPedagang({ pedagang }: { pedagang: Pedagang }) {
+export function KartuPedagang({
+  pedagang,
+  utama,
+}: {
+  pedagang: Pedagang;
+  /** Kartu pertama pada rel; fotonya biasanya jadi elemen LCP. */
+  utama?: boolean;
+}) {
   const { slug, nama, jenis, rating, jarak, buka, foto } = pedagang;
 
   return (
@@ -20,7 +27,7 @@ export function KartuPedagang({ pedagang }: { pedagang: Pedagang }) {
       className="bayang-kartu block w-[148px] shrink-0 overflow-hidden rounded-[20px] border border-garis bg-white transition-transform active:scale-[0.98]"
     >
       <div className="relative h-[100px] w-full">
-        <Image src={foto} alt={nama} fill sizes="148px" className="object-cover" />
+        <Image src={foto} alt={nama} fill sizes="148px" priority={utama} className="object-cover" />
         <span
           className={`absolute right-2 top-2 rounded-[8px] px-[7px] py-[3px] text-[9px] font-bold leading-[13.5px] tracking-[0.36px] text-white ${
             buka ? "bg-hijau/88" : "bg-black/55"

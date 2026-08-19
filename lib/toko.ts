@@ -14,6 +14,7 @@ import type {
 } from "@/lib/tipe";
 import {
   percakapanAwal,
+  percakapanPedagangAwal,
   pesananAwal,
   pesananMasukAwal,
   titikKumpulAwal,
@@ -42,6 +43,8 @@ type Keadaan = {
   gerobakBuka: boolean;
   titikKumpul: TitikKumpul[];
   percakapan: Percakapan[];
+  /** Percakapan dari sisi pedagang; lawan bicaranya warga. */
+  percakapanPedagang: Percakapan[];
   /** Keranjang sementara, dikunci pada satu pedagang. */
   keranjang: { pedagangSlug: string | null; baris: BarisPesanan[] };
 };
@@ -65,7 +68,7 @@ type Tindakan = {
   gabungTitikKumpul: (id: string, nama: string) => void;
   ubahStatusTitik: (id: string, status: TitikKumpul["status"]) => void;
 
-  kirimPesan: (percakapanId: string, isi: string) => void;
+  kirimPesan: (percakapanId: string, isi: string, peran?: Peran) => void;
 
   /** Kembalikan semuanya ke keadaan contoh. Dipakai tombol di profil. */
   setelUlang: () => void;
@@ -80,6 +83,7 @@ const awal: Keadaan = {
   gerobakBuka: true,
   titikKumpul: titikKumpulAwal,
   percakapan: percakapanAwal,
+  percakapanPedagang: percakapanPedagangAwal,
   keranjang: { pedagangSlug: null, baris: [] },
 };
 
@@ -186,20 +190,27 @@ export const useToko = create<Keadaan & Tindakan>()(
           titikKumpul: s.titikKumpul.map((t) => (t.id === id ? { ...t, status } : t)),
         })),
 
-      kirimPesan: (percakapanId, isi) =>
-        set((s) => ({
-          percakapan: s.percakapan.map((p) =>
-            p.id === percakapanId
-              ? {
-                  ...p,
-                  pesan: [
-                    ...p.pesan,
-                    { id: `ps-${Date.now()}`, saya: true, isi, waktu: jam() },
-                  ],
-                }
-              : p,
-          ),
-        })),
+      /* Kedua peran punya kotak masuknya sendiri. Menyatukannya berarti
+         pedagang melihat percakapannya dengan sesama pedagang, yang tidak
+         masuk akal untuk aplikasi ini. */
+      kirimPesan: (percakapanId, isi, peran = "pembeli") =>
+        set((s) => {
+          const tambah = (daftar: Percakapan[]) =>
+            daftar.map((p) =>
+              p.id === percakapanId
+                ? {
+                    ...p,
+                    pesan: [
+                      ...p.pesan,
+                      { id: `ps-${Date.now()}`, saya: true, isi, waktu: jam() },
+                    ],
+                  }
+                : p,
+            );
+          return peran === "pedagang"
+            ? { percakapanPedagang: tambah(s.percakapanPedagang) }
+            : { percakapan: tambah(s.percakapan) };
+        }),
 
       setelUlang: () => set(awal),
     }),
