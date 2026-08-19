@@ -54,14 +54,14 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
               className="size-12 rounded-[14px] object-cover"
             />
             <div className="min-w-0">
-              <p className="truncate text-[17px] font-extrabold text-hijau">{pedagang.nama}</p>
+              <p className="tulisan-judul truncate text-[17px] font-extrabold text-hijau">{pedagang.nama}</p>
               <p className="text-[12px] text-tinta-4">{jarakSingkat(pedagang.jarak)}</p>
             </div>
           </div>
 
           <Link
             href={`/pedagang/${pedagang.slug}/menu`}
-            className="mt-4 inline-flex items-center rounded-[12px] border-[1.5px] border-tinta px-3.5 py-2 text-[15px] font-extrabold text-tinta transition-transform active:scale-[0.98]"
+            className="mt-4 inline-flex items-center rounded-full border-[1.5px] border-tinta px-3.5 py-2 text-[15px] font-extrabold text-tinta transition-transform active:scale-[0.98]"
           >
             Lihat Daftar Menu?
           </Link>
@@ -71,7 +71,7 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
           <div className="mt-3 flex flex-col gap-3">
             <Link
               href={`/pedagang/${pedagang.slug}/menu`}
-              className="bayang-kartu flex items-center gap-3 rounded-[16px] border border-garis bg-white p-3.5 transition-transform active:scale-[0.99]"
+              className="bayang-kartu flex items-center gap-3 rounded-[20px] border border-garis bg-white p-3.5 transition-transform active:scale-[0.99]"
             >
               <span className="grid size-11 shrink-0 place-items-center rounded-full bg-hijau-lembut text-hijau">
                 <User size={19} strokeWidth={1.9} />
@@ -89,7 +89,7 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
 
             <Link
               href={`/kolab?pedagang=${pedagang.slug}`}
-              className="flex items-center gap-3 rounded-[16px] bg-hijau p-3.5 shadow-[0_4px_14px_rgb(26_77_46/0.28)] transition-transform active:scale-[0.99]"
+              className="flex items-center gap-3 rounded-[20px] bg-hijau p-3.5 shadow-[0_4px_14px_rgb(0_134_15/0.28)] transition-transform active:scale-[0.99]"
             >
               <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white/15 text-white">
                 <Users size={19} strokeWidth={1.9} />
@@ -97,7 +97,7 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
               <span className="min-w-0 flex-1">
                 <span className="flex items-center gap-2">
                   <span className="text-[14px] font-bold text-white">Pesan dengan Kolaborasi</span>
-                  <span className="rounded-[6px] bg-hijau-neon px-1.5 py-0.5 text-[9px] font-extrabold tracking-[0.06em] text-hijau">
+                  <span className="rounded-pil bg-hijau-neon px-1.5 py-0.5 text-[9px] font-extrabold tracking-[0.06em] text-hijau">
                     BARU
                   </span>
                 </span>

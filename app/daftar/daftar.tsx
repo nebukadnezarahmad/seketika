@@ -36,14 +36,14 @@ export function Daftar() {
     router.push("/mulai");
   };
 
-  const label = "block text-[16px] font-medium text-black";
+  const label = "block text-[16px] font-medium text-tinta";
   const kotak =
-    "mt-[6px] h-[40px] w-full rounded-[31px] bg-[#efefef] px-[18px] text-[14px] text-black placeholder:text-black/50 focus:outline-none focus:ring-2 focus:ring-hijau/35";
+    "mt-[6px] h-[40px] w-full rounded-full border border-garis bg-krem px-[18px] text-[14px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau/35";
   const sosial =
-    "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-[31px] bg-[#efefef] text-[14px] font-medium text-black transition-transform active:scale-[0.98]";
+    "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-full border border-garis bg-krem text-[14px] font-medium text-tinta transition-transform active:scale-[0.98]";
 
   return (
-    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#fcf9f0]">
+    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-krem">
       {/* Lewat next/image, bukan latar CSS. Sebagai latar CSS berkasnya
           dikirim mentah 79 KB; lewat pengoptimal Next ia jadi WebP 16 KB
           pada lebar yang benar-benar dipakai. Ini gambar terbesar di layar
@@ -62,7 +62,7 @@ export function Daftar() {
         type="button"
         onClick={() => router.back()}
         aria-label="Kembali"
-        className="absolute left-4 top-[62px] z-10 grid size-9 place-items-center rounded-full text-black transition-transform active:scale-90"
+        className="absolute left-4 top-[62px] z-10 grid size-9 place-items-center rounded-full text-tinta transition-transform active:scale-90"
       >
         <ArrowLeft size={22} strokeWidth={2.2} />
       </button>
@@ -80,8 +80,8 @@ export function Daftar() {
         onSubmit={kirim}
         className="relative mt-auto max-h-[76%] overflow-y-auto rounded-t-[39px] bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-[29px] shadow-[0_-3px_7px_rgb(0_0_0/0.15)]"
       >
-        <h1 className="text-[20px] font-semibold text-black">Perjalanan Anda dimulai di sini.</h1>
-        <p className="mt-[9px] text-[16px] font-normal text-black">Masukkan Detail Anda di bawah</p>
+        <h1 className="tulisan-judul text-[20px] font-bold text-tinta">Perjalanan Anda dimulai di sini.</h1>
+        <p className="mt-[9px] text-[16px] font-normal text-tinta">Masukkan Detail Anda di bawah</p>
 
         <div className="mt-[15px]">
           <label className={label}>
@@ -129,27 +129,27 @@ export function Daftar() {
                 type="button"
                 onClick={() => setLihatSandi((v) => !v)}
                 aria-label={lihatSandi ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-                className="absolute bottom-0 right-[14px] top-[6px] grid w-6 place-items-center text-black/45"
+                className="absolute bottom-0 right-[14px] top-[6px] grid w-6 place-items-center text-tinta-4"
               >
                 {lihatSandi ? <Eye size={17} /> : <EyeOff size={17} />}
               </button>
             </span>
           </label>
-          <p className="mt-1.5 text-[11px] text-black/45">Minimal 6 karakter.</p>
+          <p className="mt-1.5 text-[11px] text-tinta-4">Minimal 6 karakter.</p>
         </div>
 
         <button
           type="submit"
           disabled={!boleh}
-          className="mt-[18px] h-[45px] w-full rounded-[18px] bg-gradient-to-r from-[#2d6b45] to-[#1a4d2e] text-[16px] font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-45"
+          className="mt-[18px] h-[45px] w-full rounded-full bg-hijau text-[16px] font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-45"
         >
           Buat Akun
         </button>
 
         <div className="my-[18px] flex items-center gap-3">
-          <span aria-hidden className="h-px flex-1 bg-black/25" />
-          <span className="text-[16px] font-medium text-black/50">Atau</span>
-          <span aria-hidden className="h-px flex-1 bg-black/25" />
+          <span aria-hidden className="h-px flex-1 bg-garis" />
+          <span className="text-[16px] font-medium text-tinta-4">Atau</span>
+          <span aria-hidden className="h-px flex-1 bg-garis" />
         </div>
 
         <button type="button" className={sosial}>

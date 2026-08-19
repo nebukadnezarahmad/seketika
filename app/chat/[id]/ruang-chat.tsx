@@ -50,7 +50,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
   };
 
   return (
-    <div className="flex h-[100dvh] flex-col overflow-hidden bg-[#efece6]">
+    <div className="flex h-[100dvh] flex-col overflow-hidden bg-garis">
       <div className="bg-krem">
         <BilahStatus />
       </div>
@@ -72,7 +72,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
             {percakapan.nama}
           </h1>
           <p
-            className={`text-[11px] leading-tight ${rupa.daring ? "text-[#22c55e]" : "text-tinta-4"}`}
+            className={`text-[11px] leading-tight ${rupa.daring ? "text-hijau" : "text-tinta-4"}`}
           >
             {rupa.daring ? kata.daring : kata.luring}
           </p>

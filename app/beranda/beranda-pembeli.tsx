@@ -2,17 +2,39 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { Map, Receipt, Users, UtensilsCrossed } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { IkonCari, IkonPin } from "@/komponen/ui/ikon";
+import { AksiCepat, type Pintasan } from "@/komponen/ui/aksi-cepat";
 import { Peta } from "@/komponen/peta/peta";
 import { KartuPedagang } from "@/komponen/pedagang/kartu-pedagang";
 import { daftarPedagang, kategoriPenyaring } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
 
+/* Empat jalur yang paling sering dituju warga. Semuanya rute yang memang
+   sudah ada; tidak ada pintasan ke halaman yang belum dibangun. */
+const PINTASAN: readonly Pintasan[] = [
+  { label: "Titik Kumpul", href: "/kolab", Ikon: Users, warna: "bg-hijau-lembut text-hijau" },
+  {
+    label: "Peta Gerobak",
+    href: "/peta",
+    Ikon: Map,
+    warna: "bg-biru-lembut text-biru",
+  },
+  {
+    label: "Jajanan",
+    href: "/hasil",
+    Ikon: UtensilsCrossed,
+    warna: "bg-amber-lembut text-amber-tua",
+  },
+  { label: "Pesanan", href: "/pesanan", Ikon: Receipt, warna: "bg-ungu-lembut text-ungu" },
+];
+
 export function BerandaPembeli() {
   const [saring, setSaring] = React.useState<string>("Dekat Anda");
   const profil = useToko((s) => s.profil);
   const alamat = profil?.alamat ?? "Bumi Marina Emas Selatan No.12";
+  const nama = profil?.nama?.split(" ")[0] ?? "Warga";
 
   /* "Dekat Anda" bukan kategori, melainkan keadaan tanpa penyaringan.
      Sisanya dicocokkan pada kategori pedagang. */
@@ -30,11 +52,31 @@ export function BerandaPembeli() {
           masuk bagi pengguna yang menjelajah lewat daftar heading. */}
       <h1 className="khusus-pembaca-layar">Beranda</h1>
 
-      {/* Lokasi dan penyaring */}
-      <section className="bg-krem px-4 pb-2.5 pt-3">
+      {/* Sapaan. Sisi pedagang sudah punya kepala bernama sejak awal;
+          sisi warga langsung menjatuhkan pengguna ke kolom lokasi tanpa
+          menyebut siapa yang sedang masuk. Avatarnya menuju profil, bukan
+          tombol mati: setiap sasaran ketuk di sini harus punya tujuan. */}
+      <header className="flex items-center gap-3 px-4 pb-1 pt-2.5">
+        <div className="min-w-0 flex-1">
+          <p className="text-[11.5px] leading-tight text-tinta-4">Selamat datang,</p>
+          <p className="tulisan-judul truncate text-[17px] font-bold leading-tight text-hijau">
+            {nama}
+          </p>
+        </div>
+        <Link
+          href="/profil"
+          aria-label="Buka profil saya"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-hijau-lembut text-[14px] font-extrabold text-hijau transition-transform active:scale-90"
+        >
+          {nama.slice(0, 1).toUpperCase()}
+        </Link>
+      </header>
+
+      {/* Kolom lokasi, sekaligus pintu ke pencarian. */}
+      <section className="bg-krem px-4 pb-2.5 pt-2">
         <Link
           href="/cari"
-          className="bayang-kendali flex h-[50px] items-center gap-2.5 rounded-[16px] border border-garis bg-white px-[15px]"
+          className="bayang-kendali flex h-[50px] items-center gap-2.5 rounded-[20px] border border-garis bg-white px-[15px]"
         >
           <IkonPin size={18} className="shrink-0 text-hijau" />
           <span className="min-w-0 flex-1">
@@ -47,8 +89,15 @@ export function BerandaPembeli() {
             <IkonCari size={16} />
           </span>
         </Link>
+      </section>
 
-        <div className="rel-gulir mt-2.5 flex gap-[7px] pb-0.5">
+      <AksiCepat pintasan={PINTASAN} />
+
+      {/* Penyaring kategori. Berada tepat di atas peta karena yang
+          disaringnya memang peta dan daftar rekomendasi di bawahnya,
+          bukan pintasan layanan di atasnya. */}
+      <section className="bg-krem px-4 pb-2.5 pt-3.5">
+        <div className="rel-gulir flex gap-[7px] pb-0.5">
           {kategoriPenyaring.map((k) => {
             const on = saring === k;
             return (
@@ -72,7 +121,7 @@ export function BerandaPembeli() {
       </section>
 
       {/* Peta */}
-      <section className="bg-white px-4">
+      <section className="bg-krem px-4">
         <Link href="/peta" className="bayang-peta block overflow-hidden rounded-[24px]">
           <Peta
             tinggi={300}
@@ -87,7 +136,7 @@ export function BerandaPembeli() {
       <section className="pb-2 pt-[18px]">
         <div className="flex items-center justify-between px-4">
           <div className="min-w-0">
-            <h2 className="text-[16px] font-extrabold leading-6 tracking-[-0.16px] text-hijau">
+            <h2 className="tulisan-judul text-[16px] font-extrabold leading-6 tracking-[-0.16px] text-hijau">
               Rekomendasi Terdekat
             </h2>
             <p className="mt-0.5 text-[12px] leading-[18px] text-tinta-4">
@@ -109,7 +158,7 @@ export function BerandaPembeli() {
             ))}
           </div>
         ) : (
-          <p className="mx-4 mt-3 rounded-[16px] border border-dashed border-garis bg-white px-4 py-8 text-center text-[12.5px] leading-relaxed text-tinta-4">
+          <p className="mx-4 mt-3 rounded-[20px] border border-dashed border-garis bg-white px-4 py-8 text-center text-[12.5px] leading-relaxed text-tinta-4">
             Belum ada pedagang {saring.toLowerCase()} di sekitarmu.
             <br />
             Coba pilih kategori lain.

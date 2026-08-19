@@ -16,7 +16,7 @@
  */
 export function Pin({
   size = 30,
-  warna = "#1A4D2E",
+  warna = "var(--color-hijau)",
   mata = "berlapis",
 }: {
   size?: number;
@@ -44,12 +44,12 @@ export function Pin({
 }
 
 export function PinPedagang({ size = 30 }: { size?: number }) {
-  return <Pin size={size} warna="#1A4D2E" />;
+  return <Pin size={size} warna="var(--color-hijau)" />;
 }
 
-/** Pin permintaan titik kumpul. Bentuknya sama, warnanya amber. */
+/** Pin permintaan titik kumpul. Bentuknya sama, warnanya amber tua. */
 export function PinKumpul({ size = 30 }: { size?: number }) {
-  return <Pin size={size} warna="#D97706" />;
+  return <Pin size={size} warna="var(--color-amber-tua)" />;
 }
 
 /** Titik biru penanda posisi pengguna, dengan lingkaran denyut. */

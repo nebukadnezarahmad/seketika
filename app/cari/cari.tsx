@@ -46,7 +46,7 @@ export function Cari() {
           <span className="grid size-[88px] place-items-center rounded-[26px] bg-hijau-lembut text-hijau">
             <IkonCari size={34} />
           </span>
-          <h1 className="mt-6 text-[24px] font-extrabold tracking-[-0.02em] text-hijau">
+          <h1 className="tulisan-judul mt-6 text-[24px] font-extrabold tracking-[-0.02em] text-hijau">
             Apa yang Anda cari?
           </h1>
           <p className="mt-1.5 text-[13px] text-tinta-4">
@@ -54,12 +54,12 @@ export function Cari() {
           </p>
         </div>
 
-        <div className="bayang-kartu mt-8 rounded-[18px] border border-garis bg-white p-4">
+        <div className="bayang-kartu mt-8 rounded-2xl border border-garis bg-white p-4">
           <label className="block">
             <span className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
               Pencarian
             </span>
-            <span className="flex items-center gap-2.5 rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2.5">
+            <span className="flex items-center gap-2.5 rounded-[12px] border border-garis bg-krem px-3 py-2.5">
               <Search size={15} className="shrink-0 text-tinta-5" />
               <input
                 value={kata}
@@ -74,7 +74,7 @@ export function Cari() {
             <span className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
               Estimasi Harga
             </span>
-            <span className="relative flex items-center gap-2.5 rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2.5">
+            <span className="relative flex items-center gap-2.5 rounded-[12px] border border-garis bg-krem px-3 py-2.5">
               <Tag size={15} className="shrink-0 text-tinta-5" />
               <select
                 value={budget}

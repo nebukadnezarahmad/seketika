@@ -27,7 +27,7 @@ export function KolomIsian({
       <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
         {label}
       </span>
-      <span className="flex items-start gap-2.5 rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2 transition-colors focus-within:border-hijau/50">
+      <span className="flex items-start gap-2.5 rounded-[12px] border border-garis bg-krem px-3 py-2 transition-colors focus-within:border-hijau/50">
         <Ikon size={15} className="mt-px shrink-0 text-tinta-5" />
         {panjang ? (
           <textarea

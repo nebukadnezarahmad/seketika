@@ -52,7 +52,7 @@ export function DetailPesanan({ id }: { id: string }) {
 
       <div className="px-4 pb-4 pt-3">
         {/* Identitas pedagang */}
-        <div className="bayang-kartu flex items-center gap-3 rounded-[16px] border border-garis bg-white p-3.5">
+        <div className="bayang-kartu flex items-center gap-3 rounded-2xl border border-garis bg-white p-3.5">
           {pedagang && (
             <Image
               src={pedagang.foto}
@@ -65,10 +65,10 @@ export function DetailPesanan({ id }: { id: string }) {
           <div className="min-w-0">
             <p className="truncate text-[15px] font-extrabold text-hijau">{pedagang?.nama}</p>
             <p className="mt-1 flex flex-wrap items-center gap-1.5">
-              <span className="rounded-[7px] bg-hijau-lembut px-2 py-0.5 text-[10.5px] font-semibold text-hijau">
+              <span className="rounded-pil bg-hijau-lembut px-2 py-0.5 text-[10.5px] font-semibold text-hijau">
                 {pedagang?.jenis}
               </span>
-              <span className="flex items-center gap-1 rounded-[7px] bg-krem px-2 py-0.5 text-[10.5px] font-semibold text-tinta-3">
+              <span className="flex items-center gap-1 rounded-pil bg-krem px-2 py-0.5 text-[10.5px] font-semibold text-tinta-3">
                 <MapPin size={10} strokeWidth={2.4} className="text-merah" />
                 {pedagang ? jarakSingkat(pedagang.jarak) : ""}
               </span>
@@ -77,7 +77,7 @@ export function DetailPesanan({ id }: { id: string }) {
         </div>
 
         {/* Rincian belanja */}
-        <div className="bayang-kartu mt-3 rounded-[16px] border border-garis bg-white p-4">
+        <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
             Rincian Pesanan
           </p>
@@ -100,7 +100,7 @@ export function DetailPesanan({ id }: { id: string }) {
         </div>
 
         {/* Pelacakan */}
-        <div className="bayang-kartu mt-3 rounded-[16px] border border-garis bg-white p-4">
+        <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
             Tracking Pesanan
           </p>
@@ -150,7 +150,7 @@ export function DetailPesanan({ id }: { id: string }) {
         </div>
 
         {/* Bantuan */}
-        <div className="bayang-kartu mt-3 flex items-center gap-3 rounded-[16px] border border-garis bg-white p-3.5">
+        <div className="bayang-kartu mt-3 flex items-center gap-3 rounded-2xl border border-garis bg-white p-3.5">
           <div className="min-w-0 flex-1">
             <p className="text-[13px] font-bold text-tinta">Butuh bantuan?</p>
             <p className="text-[11px] text-tinta-4">Hubungi penjual langsung</p>

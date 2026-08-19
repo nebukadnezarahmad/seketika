@@ -24,7 +24,7 @@ export function Kicker({ anak }: { anak: string }) {
 
 export function JudulLangkah({ anak }: { anak: React.ReactNode }) {
   return (
-    <h1 className="mt-1.5 text-[26px] font-extrabold leading-[1.15] tracking-[-0.02em] text-hijau">
+    <h1 className="tulisan-judul mt-1.5 text-[26px] font-extrabold leading-[1.15] tracking-[-0.02em] text-hijau">
       {anak}
     </h1>
   );

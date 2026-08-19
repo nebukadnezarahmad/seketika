@@ -31,7 +31,7 @@ export function DaftarPesanan() {
 
   return (
     <Layar nav>
-      <h1 className="px-4 pb-3 pt-3 text-center text-[19px] font-extrabold text-hijau">Pesanan</h1>
+      <h1 className="tulisan-judul px-4 pb-3 pt-3 text-center text-[19px] font-extrabold text-hijau">Pesanan</h1>
 
       <div className="rel-gulir flex gap-2 px-4 pb-3">
         {tab.map((t) => {
@@ -60,7 +60,7 @@ export function DaftarPesanan() {
           return (
             <li
               key={p.id}
-              className="bayang-kartu rounded-[16px] border border-garis bg-white p-3.5"
+              className="bayang-kartu rounded-2xl border border-garis bg-white p-3.5"
             >
               <div className="flex items-center gap-2.5">
                 {pedagang && (
@@ -86,7 +86,7 @@ export function DaftarPesanan() {
               <div className="mt-3 flex justify-end">
                 <Link
                   href={`/pesanan/${p.id}`}
-                  className={`flex items-center gap-1.5 rounded-[11px] px-3 py-2 text-[12px] font-bold transition-transform active:scale-95 ${
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-bold transition-transform active:scale-95 ${
                     p.status === "diproses" || p.status === "menunggu"
                       ? "bg-hijau text-white"
                       : "bg-hijau-lembut text-hijau"
@@ -101,7 +101,7 @@ export function DaftarPesanan() {
         })}
 
         {terlihat.length === 0 && (
-          <li className="rounded-[16px] border border-dashed border-garis bg-white px-4 py-10 text-center text-[12.5px] leading-relaxed text-tinta-4">
+          <li className="rounded-2xl border border-dashed border-garis bg-white px-4 py-10 text-center text-[12.5px] leading-relaxed text-tinta-4">
             Belum ada pesanan di kelompok ini.
           </li>
         )}

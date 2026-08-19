@@ -3,15 +3,17 @@ import type { ComponentProps } from "react";
 
 type Rupa = "utama" | "garis" | "amber" | "halus" | "bahaya";
 
+/* Bentuk pil (rounded-full), bukan sudut 14px seperti versi lama —
+   tombol utama ala Gojek nyaris selalu berbentuk kapsul penuh. */
 const dasar =
-  "inline-flex items-center justify-center gap-2 rounded-[14px] font-bold transition-[transform,background-color,border-color,opacity] duration-150 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-45";
+  "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-[transform,background-color,border-color,opacity] duration-150 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-45";
 
 const rupa: Record<Rupa, string> = {
-  utama: "bg-hijau text-white hover:bg-[#164227]",
+  utama: "bg-hijau text-white hover:bg-hijau-gelap",
   garis: "border border-garis bg-white text-hijau hover:border-hijau/40",
   amber: "gradasi-amber text-white",
-  halus: "bg-hijau-lembut text-hijau hover:bg-[#e2ece4]",
-  bahaya: "border border-merah/30 bg-white text-merah hover:bg-merah/5",
+  halus: "bg-hijau-lembut text-hijau hover:bg-[#d9f2db]",
+  bahaya: "border border-merah/30 bg-white text-merah hover:bg-merah-lembut",
 };
 
 const ukuran = {

@@ -10,7 +10,7 @@ const rupa: Record<StatusPesanan, { label: string; kelas: string }> = {
 export function LencanaStatus({ status }: { status: StatusPesanan }) {
   const { label, kelas } = rupa[status];
   return (
-    <span className={`shrink-0 rounded-[8px] px-2 py-1 text-[10.5px] font-bold ${kelas}`}>
+    <span className={`shrink-0 rounded-pil px-2.5 py-1 text-[10.5px] font-bold ${kelas}`}>
       {label}
     </span>
   );

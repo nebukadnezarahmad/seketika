@@ -101,7 +101,7 @@ export function IkonBintang({ size = 11, ...p }: Props) {
   return (
     <svg width={size} height={size} viewBox="0 0 10.996 10.996" {...p}>
       <path
-        fill="#f59e0b"
+        className="fill-amber"
         d="M5.498 0.916333L6.91374 3.78446L10.0797 4.24721L7.78883 6.47848L8.32947 9.63066L5.498 8.14162L2.66653 9.63066L3.20717 6.47848L0.916333 4.24721L4.08226 3.78446L5.498 0.916333Z"
       />
     </svg>

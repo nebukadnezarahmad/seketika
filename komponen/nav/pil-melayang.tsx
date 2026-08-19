@@ -34,10 +34,10 @@ export function PilMelayang({
   return (
     <div className="pointer-events-none absolute inset-x-3 bottom-3 z-30">
       <div
-        className="pointer-events-auto animate-[pil-naik_400ms_ease-out_both] overflow-hidden rounded-[20px] shadow-[0_8px_32px_rgb(26_77_46/0.45),0_2px_8px_rgb(0_0_0/0.2)]"
+        className="pointer-events-auto animate-[pil-naik_400ms_ease-out_both] overflow-hidden rounded-[20px] shadow-[0_8px_32px_rgb(0_92_10/0.45),0_2px_8px_rgb(0_0_0/0.2)]"
         style={{
           backgroundImage:
-            "linear-gradient(163.78deg, #12392a 0%, #1a4d2e 60%, #2d6b45 100%)",
+            "linear-gradient(163.78deg, var(--color-hijau-gelap) 0%, var(--color-hijau) 60%, var(--color-hijau-terang) 100%)",
         }}
       >
         {/* Enam titik samar di tepi atas, tekstur dari rancangan. */}
@@ -84,7 +84,7 @@ export function PilMelayang({
           </span>
 
           <span className="flex shrink-0 flex-col items-center rounded-[12px] bg-white/15 px-2.5 py-1.5">
-            <span className="text-[16px] font-extrabold leading-4 text-[#4ade80]">{menit}</span>
+            <span className="text-[16px] font-extrabold leading-4 text-hijau-neon">{menit}</span>
             <span className="pt-px text-[9px] font-semibold leading-[13.5px] text-white/85">
               menit
             </span>
@@ -103,7 +103,7 @@ export function PilMelayang({
             <button
               type="button"
               onClick={aksi}
-              className="rounded-[8px] bg-white/12 px-2.5 py-1.5 text-[10px] font-bold leading-[15px] text-white/90 transition-transform active:scale-95"
+              className="rounded-full bg-white/12 px-2.5 py-1.5 text-[10px] font-bold leading-[15px] text-white/90 transition-transform active:scale-95"
             >
               {labelAksi}
             </button>

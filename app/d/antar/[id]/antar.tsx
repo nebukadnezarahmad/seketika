@@ -81,7 +81,7 @@ export function Antar({ id }: { id: string }) {
             <path
               d="M62 38 L 40 55 L 22 72"
               fill="none"
-              stroke="#1A4D2E"
+              stroke="var(--color-hijau)"
               strokeWidth="0.9"
               strokeLinecap="round"
               strokeDasharray="3 2.4"
