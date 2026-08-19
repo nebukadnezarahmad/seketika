@@ -101,6 +101,21 @@ export const titikKumpulAwal: TitikKumpul[] = [
     kedaluwarsa: jamDepan(4),
     jarak: 610,
   },
+  {
+    id: "tk-04",
+    nama: "RT 02 Taman Bermain",
+    patokan: "Taman Bermain RT 02",
+    pedagangSlug: "bakso-pak-anton",
+    target: 6,
+    peserta: [
+      { id: "w-10", nama: "Bu Tuti", inisial: "T" },
+      { id: "w-11", nama: "Pak Har", inisial: "H" },
+      { id: "w-12", nama: "Mbak Ayu", inisial: "A" },
+    ],
+    status: "mengumpulkan",
+    kedaluwarsa: jamDepan(15),
+    jarak: 210,
+  },
 ];
 
 export const percakapanAwal: Percakapan[] = [
