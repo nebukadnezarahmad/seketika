@@ -1,26 +1,129 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------
+   Token diambil langsung dari berkas Figma SEKETIKA, bukan dikira-kira.
+   Nilai heksadesimalnya hasil baca get_design_context dan pencuplikan
+   piksel pada ekspor bingkai, jadi angkanya sama persis dengan desain.
+   ------------------------------------------------------------------ */
+@theme {
+  /* Hijau, warna utama merek */
+  --color-hijau: #1a4d2e;
+  --color-hijau-terang: #2d6b45;
+  --color-hijau-lembut: #ebf2ec;
+  --color-hijau-neon: #7af0a0;
+
+  /* Netral hangat. Latarnya krem, bukan putih; ini yang membuat
+     antarmukanya terasa hangat alih-alih steril. */
+  --color-krem: #fdfbf7;
+  --color-garis: #ede8e0;
+  --color-garis-pil: #e8e3dc;
+
+  /* Tinta, dari paling pekat ke paling pudar */
+  --color-tinta: #1c1916;
+  --color-tinta-2: #2c2924;
+  --color-tinta-3: #7a746c;
+  --color-tinta-4: #a09890;
+  --color-tinta-5: #c0bab3;
+  --color-tinta-6: #6e6860;
+
+  /* Aksen */
+  --color-amber: #f59e0b;
+  --color-amber-tua: #d97706;
+  --color-merah: #ef4444;
+
+  --radius-pil: 99px;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background: var(--color-krem);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    /* Layar aplikasi dirancang setinggi persis satu layar ponsel dan
+       menggulung di dalam wadahnya sendiri, jadi halaman luar tidak
+       boleh ikut bergulir. */
+    overscroll-behavior-y: none;
+  }
+
+  /* Tombol dan tautan di aplikasi ini tidak pernah memakai serif
+     bawaan peramban untuk elemen form. */
+  button, input, textarea, select {
+    font: inherit;
+    color: inherit;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Bayangan berulang dari desain, disimpan sebagai utilitas supaya
+     nilainya tidak tersalin-salin dan menyimpang satu sama lain. */
+  .bayang-kartu {
+    box-shadow: 0 2px 14px rgb(0 0 0 / 0.07), 0 1px 3px rgb(0 0 0 / 0.04);
+  }
+  .bayang-kendali {
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.07), 0 1px 2px rgb(0 0 0 / 0.04);
+  }
+  .bayang-peta {
+    box-shadow: 0 4px 24px rgb(0 0 0 / 0.1), 0 1px 6px rgb(0 0 0 / 0.05);
+  }
+  .bayang-nav {
+    box-shadow: 0 -6px 12px rgb(0 0 0 / 0.06);
+  }
+  .bayang-pil-aktif {
+    box-shadow: 0 2px 6px rgb(26 77 46 / 0.19);
+  }
+  .bayang-lembar {
+    box-shadow: 0 -8px 32px rgb(0 0 0 / 0.14);
+  }
+
+  /* Gradasi kartu hijau. Dua arah berbeda dipakai di desain: kartu
+     status gerobak menyapu diagonal, kartu titik kumpul lebih datar. */
+  .gradasi-gerobak {
+    background-image: linear-gradient(135deg, #133d2a 0%, #27603d 100%);
+  }
+  .gradasi-kumpul {
+    background-image: linear-gradient(140deg, #1e5a34 0%, #194c2c 100%);
+  }
+  .gradasi-amber {
+    background-image: linear-gradient(135deg, #f0970a 0%, #d97706 100%);
+  }
+
+  /* Deret bergulir mendatar tanpa batang gulir yang terlihat. Dipakai
+     untuk pil penyaring dan rel kartu pedagang. */
+  .rel-gulir {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rel-gulir::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Menyembunyikan isi dari mata tapi tetap terbaca pembaca layar. */
+  .khusus-pembaca-layar {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Gerak dikurangi: hormati setelan sistem pengguna. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
