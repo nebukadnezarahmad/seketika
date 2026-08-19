@@ -23,6 +23,23 @@ test.describe("Pengenalan", () => {
     await expect(lanjut).toBeEnabled();
   });
 
+  test("janji gratis dan tanpa komisi mengikuti kartu yang dipilih", async ({ page }) => {
+    await page.goto("/mulai");
+    const kartuPembeli = page.getByRole("radio", { name: /Saya Ingin Membeli/ });
+    const kartuPedagang = page.getByRole("radio", { name: /Saya Ingin Berdagang/ });
+
+    /* Nama tergabung radio mencakup isi kartunya, jadi kehadiran janji
+       di dalamnya bisa diperiksa lewat nama itu. Kartu yang tidak dipilih
+       harus bersih, termasuk bagi pembaca layar. */
+    await pilihPeran(page, "pembeli");
+    await expect(kartuPembeli).toHaveAccessibleName(/Gratis daftar/);
+    await expect(kartuPedagang).not.toHaveAccessibleName(/Gratis daftar/);
+
+    await pilihPeran(page, "pedagang");
+    await expect(kartuPedagang).toHaveAccessibleName(/Gratis daftar/);
+    await expect(kartuPembeli).not.toHaveAccessibleName(/Gratis daftar/);
+  });
+
   test("pembeli menyelesaikan tiga langkah lalu mendarat di beranda", async ({ page }) => {
     await page.goto("/mulai");
     await pilihPeran(page, "pembeli");

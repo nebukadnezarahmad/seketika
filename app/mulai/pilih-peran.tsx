@@ -106,6 +106,11 @@ export function PilihPeran() {
                         `grid-rows` dianimasikan karena `height: auto` tidak
                         bisa ditransisikan. */}
                     <span
+                      /* Saat mengerut, barisnya juga disembunyikan dari
+                         pembaca layar. Tanpa ini kedua kartu sama-sama
+                         membacakan "Gratis daftar, Tanpa komisi" walau
+                         hanya satu yang terlihat. */
+                      aria-hidden={!aktif}
                       className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
                         aktif ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                       }`}
