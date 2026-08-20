@@ -35,9 +35,15 @@ export function Daftar() {
     router.push("/mulai");
   };
 
+  /* Cincinnya hijau pekat, bukan hijau 35%. Karena `outline-none`
+     membuang indikator bawaan peramban, cincin inilah satu-satunya
+     penanda fokus, dan pada opasitas 35% ia membaur jadi #A6D5AB yang
+     cuma 1,65:1 di atas putih — di bawah ambang 3:1 untuk penanda
+     keadaan (WCAG 1.4.11 dan 2.4.11). Hijau pekat mencapai 4,75:1.
+     Jaraknya 2px supaya cincin tidak menyatu dengan tepi kotaknya. */
   const label = "block text-[16px] font-medium text-tinta";
   const kotak =
-    "mt-[6px] h-[40px] w-full rounded-full border border-garis-tegas bg-white px-[18px] text-[14px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau/35";
+    "mt-[6px] h-[40px] w-full rounded-full border border-garis-tegas bg-white px-[18px] text-[14px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau focus:ring-offset-2";
   const sosial =
     "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-full border border-garis-tegas bg-white text-[14px] font-medium text-tinta transition-transform active:scale-[0.98]";
 
@@ -105,19 +111,22 @@ export function Daftar() {
                 autoComplete="new-password"
                 minLength={6}
                 required
+                aria-describedby="bantuan-sandi"
                 className={`${kotak} pr-12`}
               />
               <button
                 type="button"
                 onClick={() => setLihatSandi((v) => !v)}
                 aria-label={lihatSandi ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-                className="absolute bottom-0 right-[14px] top-[6px] grid w-6 place-items-center text-tinta-4"
+                className="absolute bottom-0 right-[10px] top-[6px] grid w-8 place-items-center text-tinta-4"
               >
                 {lihatSandi ? <Eye size={17} /> : <EyeOff size={17} />}
               </button>
             </span>
           </label>
-          <p className="mt-1.5 text-[11px] text-tinta-4">Minimal 6 karakter.</p>
+          <p id="bantuan-sandi" className="mt-1.5 text-[11px] text-tinta-4">
+            Minimal 6 karakter.
+          </p>
         </div>
 
         <button

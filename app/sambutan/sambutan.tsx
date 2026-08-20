@@ -45,7 +45,12 @@ export function Sambutan() {
       <div className="flex min-h-[160px] flex-1 shrink-0 items-center justify-center py-4">
         <Image
           src="/img/ilustrasi-warung.svg"
-          alt="Warung jajanan keliling bertenda hijau, tiga mangkuk panas di atas meja, dan dua orang sedang jajan di bawah pohon"
+          /* Sengaja kosong. Judul di bawahnya dan dua baris cara memesan
+             sudah menyampaikan seluruh isi gambar ini; menaruh narasi
+             panjang di sini membuat pembaca layar mengeja pemandangan
+             selama beberapa detik sebelum sampai ke judul dan tombol,
+             tanpa satu pun keterangan baru. */
+          alt=""
           width={261}
           height={183}
           priority
