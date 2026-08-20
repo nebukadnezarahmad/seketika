@@ -165,9 +165,11 @@ test.describe("Kedaluwarsa titik kumpul", () => {
 });
 
 test.describe("Pusat notifikasi", () => {
-  test("lonceng warga membawa ke kabar pesanan dan memadamkan lencananya", async ({ page }) => {
+  test("lonceng warga ada di beranda dan memadamkan lencananya", async ({ page }) => {
+    /* Loncengnya di beranda, bukan di dalam profil: kabar pesanan perlu
+       terlihat begitu aplikasi dibuka, bukan setelah orang punya alasan
+       lain untuk membuka profilnya. */
     await lewatiPengenalan(page, "pembeli", "Dewi");
-    await page.goto("/profil");
 
     const lonceng = page.getByRole("link", { name: /^Notifikasi, \d+ belum dibaca/ });
     await expect(lonceng).toBeVisible();
@@ -177,9 +179,15 @@ test.describe("Pusat notifikasi", () => {
     await expect(page.getByRole("heading", { name: "Notifikasi" })).toBeVisible();
     await expect(page.getByText("Pesanan selesai").first()).toBeVisible();
 
-    /* Membuka layarnya berarti membacanya; lenceng kembali polos. */
-    await page.goto("/profil");
+    /* Membuka layarnya berarti membacanya; loncengnya kembali polos. */
+    await page.goto("/beranda");
     await expect(page.getByRole("link", { name: "Notifikasi", exact: true })).toBeVisible();
+
+    /* Kepala profil tidak lagi memuat lonceng; jalur cadangannya berupa
+       satu baris di daftar menu. */
+    await page.goto("/profil");
+    await expect(page.getByRole("link", { name: /^Notifikasi, \d+ belum dibaca/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /Kabar pesanan dan titik kumpul/ })).toBeVisible();
   });
 
   test("pedagang melihat kabar yang berbeda dari warga", async ({ page }) => {

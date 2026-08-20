@@ -5,7 +5,6 @@ import {
   Bell, CircleHelp, Info, MapPin, RotateCcw, ShieldCheck, Store, History,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
-import { Lonceng } from "@/komponen/ui/lonceng";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
 import { useToko } from "@/lib/toko";
 
@@ -22,13 +21,10 @@ export function ProfilPembeli() {
   return (
     <Layar nav latar="bg-krem">
       {/* Kepala hijau */}
-      <header className="gradasi-kumpul relative overflow-hidden px-4 pb-3 pt-3">
+      <header className="gradasi-kumpul relative overflow-hidden rounded-b-[24px] px-4 pb-5 pt-3">
         <span aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]" />
 
-        <div className="relative flex items-center justify-between">
-          <h1 className="text-[19px] font-extrabold text-white">Profil Saya</h1>
-          <Lonceng nada="putih" />
-        </div>
+        <h1 className="relative text-[19px] font-extrabold text-white">Profil Saya</h1>
 
         <div className="relative mt-4 flex items-start gap-3.5">
           <span className="relative shrink-0">
@@ -56,7 +52,7 @@ export function ProfilPembeli() {
 
           <button
             type="button"
-            className="shrink-0 rounded-[11px] bg-white/15 px-3.5 py-2 text-[12px] font-bold text-white transition-transform active:scale-95"
+            className="shrink-0 rounded-full bg-white/15 px-4 py-2 text-[12px] font-bold text-white transition-transform active:scale-95"
           >
             Edit
           </button>
@@ -73,12 +69,17 @@ export function ProfilPembeli() {
           </div>
         </dl>
 
-        <p className="relative mb-1 mt-5 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/80">
-          Akun &amp; Transaksi
-        </p>
       </header>
 
       <div className="px-4 pb-5">
+        {/* Judul bagian berada di luar kepala hijau, sejajar dengan judul
+            "Lainnya" di bawahnya. Sebelumnya ia terjepit di tepi bawah
+            kepala: ia menerangkan kartu-kartu putih di bawahnya, tapi
+            tergambar di atas latar hijau milik bagian yang lain, sehingga
+            terbaca seperti ekor kepala yang terpotong. */}
+        <p className="mb-2 mt-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
+          Akun &amp; Transaksi
+        </p>
         <div className="bayang-kartu overflow-hidden rounded-[16px] border border-garis bg-white">
           <BarisMenu
             Ikon={MapPin}
