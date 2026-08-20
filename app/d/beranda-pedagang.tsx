@@ -55,6 +55,50 @@ export function BerandaPedagang() {
           />
         )
       }
+      /* Rekap pesanan hari ini. */
+      lembar={
+        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul="Pesanan Hari Ini">
+          <div className="px-4 pb-6">
+            <h2 className="tulisan-judul text-[16px] font-extrabold text-tinta">Pesanan Hari Ini</h2>
+            <p className="mt-0.5 text-[11.5px] text-tinta-4">{selesai.length} pesanan berhasil</p>
+
+            <ul className="mt-3 flex flex-col gap-2">
+              {pesananMasuk.map((p) => (
+                <li
+                  key={p.id}
+                  className="flex items-start gap-2.5 rounded-[13px] border border-garis bg-white p-3"
+                >
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-hijau-lembut text-[13px] font-bold text-hijau">
+                    {p.inisial}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="flex items-center gap-2 text-[13px] font-bold text-tinta">
+                      {p.warga}
+                      <span
+                        className={`rounded-pil px-1.5 py-0.5 text-[9.5px] font-bold ${
+                          p.status === "selesai"
+                            ? "bg-hijau-lembut text-hijau"
+                            : p.status === "diproses"
+                              ? "bg-amber/15 text-amber-tua"
+                              : "bg-biru-lembut text-biru"
+                        }`}
+                      >
+                        {p.status === "selesai" ? "Selesai" : p.status === "diproses" ? "Diproses" : "Baru"}
+                      </span>
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-tinta-3">
+                      {p.baris.map((b) => `${b.nama} ×${b.jumlah}`).join(" · ")}
+                    </p>
+                    <p className="mt-0.5 text-[10.5px] text-tinta-4">
+                      {p.titik} · {p.menitLalu} mnt lalu
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Lembar>
+      }
     >
       {/* Kepala toko */}
       <header className="flex items-center gap-3 px-4 pb-3 pt-2">
@@ -280,48 +324,6 @@ export function BerandaPedagang() {
         </ul>
       </div>
 
-      {/* Lembar rekap pesanan hari ini */}
-      <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul="Pesanan Hari Ini">
-        <div className="px-4 pb-6">
-          <h2 className="tulisan-judul text-[16px] font-extrabold text-tinta">Pesanan Hari Ini</h2>
-          <p className="mt-0.5 text-[11.5px] text-tinta-4">{selesai.length} pesanan berhasil</p>
-
-          <ul className="mt-3 flex flex-col gap-2">
-            {pesananMasuk.map((p) => (
-              <li
-                key={p.id}
-                className="flex items-start gap-2.5 rounded-[13px] border border-garis bg-white p-3"
-              >
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-hijau-lembut text-[13px] font-bold text-hijau">
-                  {p.inisial}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="flex items-center gap-2 text-[13px] font-bold text-tinta">
-                    {p.warga}
-                    <span
-                      className={`rounded-pil px-1.5 py-0.5 text-[9.5px] font-bold ${
-                        p.status === "selesai"
-                          ? "bg-hijau-lembut text-hijau"
-                          : p.status === "diproses"
-                            ? "bg-amber/15 text-amber-tua"
-                            : "bg-biru-lembut text-biru"
-                      }`}
-                    >
-                      {p.status === "selesai" ? "Selesai" : p.status === "diproses" ? "Diproses" : "Baru"}
-                    </span>
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-tinta-3">
-                    {p.baris.map((b) => `${b.nama} ×${b.jumlah}`).join(" · ")}
-                  </p>
-                  <p className="mt-0.5 text-[10.5px] text-tinta-4">
-                    {p.titik} · {p.menitLalu} mnt lalu
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Lembar>
     </Layar>
   );
 }
