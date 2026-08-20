@@ -26,26 +26,27 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
 
   if (nilaiTersimpan) {
     return (
-      <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4">
+      /* Susunannya rata tengah persis seperti keadaan sebelum dinilai.
+         Kalau yang satu rata kiri dan yang lain rata tengah, kartunya
+         melompat berpindah tata letak tepat pada saat tombol ditekan. */
+      <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4 text-center">
         <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
           Penilaian Anda
         </p>
-        <p className="mt-2 flex items-center gap-2">
-          <span aria-hidden className="flex gap-0.5">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <Star
-                key={n}
-                size={18}
-                strokeWidth={1.8}
-                className={n <= nilaiTersimpan ? "fill-amber text-amber" : "text-tinta-5"}
-              />
-            ))}
-          </span>
-          <span className="text-[13px] font-bold text-tinta">
-            {nilaiTersimpan} dari 5 · {KETERANGAN[nilaiTersimpan]}
-          </span>
+        <p aria-hidden className="mt-2.5 flex justify-center gap-1">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <Star
+              key={n}
+              size={24}
+              strokeWidth={1.7}
+              className={n <= nilaiTersimpan ? "fill-amber text-amber" : "text-tinta-5"}
+            />
+          ))}
         </p>
-        <p className="mt-1.5 text-[11.5px] text-tinta-4">
+        <p className="mt-2 text-[13px] font-bold text-tinta">
+          {nilaiTersimpan} dari 5 · {KETERANGAN[nilaiTersimpan]}
+        </p>
+        <p className="mt-1 text-[11.5px] leading-snug text-tinta-4">
           Terima kasih, penilaianmu membantu tetangga lain memilih.
         </p>
       </div>
@@ -53,7 +54,7 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
   }
 
   return (
-    <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4">
+    <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4 text-center">
       <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
         Beri Penilaian
       </p>
@@ -61,9 +62,11 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
         Bagaimana pesanan dari {namaPedagang ?? "penjual"}?
       </p>
 
-      <fieldset className="mt-3">
+      <fieldset className="mt-3.5">
         <legend className="khusus-pembaca-layar">Pilih jumlah bintang, satu sampai lima</legend>
-        <div className="flex items-center gap-1.5">
+
+        {/* Deret bintangnya rata tengah, jaraknya sama di kiri dan kanan. */}
+        <div className="flex items-center justify-center gap-1.5">
           {[1, 2, 3, 4, 5].map((n) => (
             <label key={n} className="cursor-pointer">
               <input
@@ -89,12 +92,17 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
               </span>
             </label>
           ))}
-          {pilihan > 0 && (
-            <span className="ml-1.5 text-[12.5px] font-semibold text-tinta-3">
-              {KETERANGAN[pilihan]}
-            </span>
-          )}
         </div>
+
+        {/* Keterangannya turun ke bawah deret, bukan menempel di sebelah
+            kanan bintang terakhir. Waktu ia berada di samping, munculnya
+            kata "Memuaskan" mendorong seluruh deret ke kiri, sehingga
+            bintangnya berhenti rata tengah justru pada saat pengguna
+            sedang memilih. Tingginya dikunci supaya kartunya tidak
+            tersentak memanjang saat kata itu muncul. */}
+        <p className="mt-2 flex h-[18px] items-center justify-center text-[12.5px] font-semibold text-tinta-3">
+          {pilihan > 0 ? KETERANGAN[pilihan] : ""}
+        </p>
       </fieldset>
 
       <button
