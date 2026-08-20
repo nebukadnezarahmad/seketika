@@ -1,24 +1,34 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
+import { Lembar } from "@/komponen/ui/lembar";
 import { IkonKompas } from "@/komponen/ui/ikon";
 import { Peta } from "@/komponen/peta/peta";
+import { IsiPedagang } from "@/komponen/pedagang/isi-pedagang";
 import { daftarPedagang } from "@/lib/data/pedagang";
 import { jarakSingkat } from "@/lib/format";
+import type { Pedagang } from "@/lib/tipe";
 
 /**
  * Peta satu layar penuh.
  *
  * Bedanya dengan peta kecil di beranda: di sini tiap pin membawa label
  * nama, jarak, dan perkiraan waktu, dan di bagian bawah ada rel kartu
- * ringkas yang bisa digeser untuk melompat ke pedagangnya.
+ * ringkas yang bisa digeser.
+ *
+ * Mengetuk kartu menaikkan lembar pedagang di atas peta ini, bukan
+ * membuka halaman pedagang. Berpindah ke sana berarti memuat peta layar
+ * penuh kedua hanya untuk menampilkan kartu yang sama, sementara peta
+ * yang sedang dilihat pengguna sudah tergambar di belakangnya.
  */
 export function PetaPenuh() {
   const router = useRouter();
+  const [dipilih, setDipilih] = React.useState<Pedagang | null>(null);
+  const [lembarBuka, setLembarBuka] = React.useState(false);
 
   return (
     <Layar nav>
@@ -47,8 +57,12 @@ export function PetaPenuh() {
 
         <div className="absolute left-1/2 top-4 flex -translate-x-1/2 items-center gap-1.5 rounded-pil bg-hijau px-3.5 py-2 shadow-[0_4px_10px_rgb(0_134_15/0.3)]">
           <span aria-hidden className="size-1.5 rounded-pil bg-hijau-neon" />
+          {/* Yang dihitung gerobak yang benar-benar buka. Sebelumnya
+              seluruh daftar ikut terhitung, sehingga gerobak yang sedang
+              tutup pun disebut aktif padahal kartunya di rel bawah
+              terang-terangan berlabel "Tutup". */}
           <span className="whitespace-nowrap text-[11px] font-bold text-white">
-            {daftarPedagang.length} pedagang aktif
+            {daftarPedagang.filter((p) => p.buka).length} pedagang aktif
           </span>
         </div>
 
@@ -63,10 +77,15 @@ export function PetaPenuh() {
         {/* Rel kartu ringkas di atas peta */}
         <div className="rel-gulir absolute inset-x-0 bottom-3 flex gap-2.5 px-4">
           {daftarPedagang.map((p) => (
-            <Link
+            <button
               key={p.id}
-              href={`/pedagang/${p.slug}`}
-              className="flex shrink-0 items-center gap-2.5 rounded-[14px] bg-white/95 py-2 pl-2 pr-3.5 shadow-[0_3px_12px_rgb(0_0_0/0.16)] backdrop-blur-sm transition-transform active:scale-[0.98]"
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setDipilih(p);
+                setLembarBuka(true);
+              }}
+              className="flex shrink-0 items-center gap-2.5 rounded-[14px] bg-white/95 py-2 pl-2 pr-3.5 text-left shadow-[0_3px_12px_rgb(0_0_0/0.16)] backdrop-blur-sm transition-transform active:scale-[0.98]"
             >
               <Image
                 src={p.foto}
@@ -87,10 +106,19 @@ export function PetaPenuh() {
                   {p.buka ? "Buka" : "Tutup"} · {jarakSingkat(p.jarak)}
                 </span>
               </span>
-            </Link>
+            </button>
           ))}
         </div>
       </div>
+
+      {/* Lembar pedagang, naik di atas peta yang sedang dilihat. */}
+      <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
+        {dipilih && (
+          <div className="px-4 pb-6 pt-1">
+            <IsiPedagang pedagang={dipilih} />
+          </div>
+        )}
+      </Lembar>
     </Layar>
   );
 }

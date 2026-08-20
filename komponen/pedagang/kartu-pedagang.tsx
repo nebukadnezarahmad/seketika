@@ -10,22 +10,32 @@ import type { Pedagang } from "@/lib/tipe";
  * Lebarnya dipatok 148px seperti di desain supaya kartu berikutnya
  * selalu terlihat mengintip di tepi kanan. Potongan itu yang memberi
  * tahu pengguna bahwa deretnya masih bisa digeser.
+ *
+ * Kartunya bisa berperan dua cara. Kalau `onPilih` diberikan ia jadi
+ * tombol yang menaikkan lembar di layar yang sama; tanpa itu ia kembali
+ * jadi tautan biasa ke halaman pedagang. Beranda memakai yang pertama:
+ * peta sudah tergambar di belakang, dan berpindah halaman hanya untuk
+ * menggambar peta serupa membuat kerja yang sudah selesai diulang, dan
+ * konteks tempat yang sedang dilihat pengguna hilang.
  */
 export function KartuPedagang({
   pedagang,
   utama,
+  onPilih,
 }: {
   pedagang: Pedagang;
   /** Kartu pertama pada rel; fotonya biasanya jadi elemen LCP. */
   utama?: boolean;
+  /** Kalau ada, kartu jadi tombol dan ini dipanggil saat diketuk. */
+  onPilih?: (pedagang: Pedagang) => void;
 }) {
   const { slug, nama, jenis, rating, jarak, buka, foto } = pedagang;
 
-  return (
-    <Link
-      href={`/pedagang/${slug}`}
-      className="bayang-kartu block w-[148px] shrink-0 overflow-hidden rounded-[20px] border border-garis bg-white transition-transform active:scale-[0.98]"
-    >
+  const kelas =
+    "bayang-kartu block w-[148px] shrink-0 overflow-hidden rounded-[20px] border border-garis bg-white text-left transition-transform active:scale-[0.98]";
+
+  const isi = (
+    <>
       <div className="relative h-[100px] w-full">
         <Image src={foto} alt={nama} fill sizes="148px" priority={utama} className="object-cover" />
         <span
@@ -55,6 +65,25 @@ export function KartuPedagang({
           </span>
         </div>
       </div>
+    </>
+  );
+
+  if (onPilih) {
+    return (
+      <button
+        type="button"
+        onClick={() => onPilih(pedagang)}
+        aria-haspopup="dialog"
+        className={kelas}
+      >
+        {isi}
+      </button>
+    );
+  }
+
+  return (
+    <Link href={`/pedagang/${slug}`} className={kelas}>
+      {isi}
     </Link>
   );
 }

@@ -4,18 +4,27 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Map, Receipt, Users, UtensilsCrossed } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
+import { Lembar } from "@/komponen/ui/lembar";
 import { IkonCari, IkonPin } from "@/komponen/ui/ikon";
 import { AksiCepat, type Pintasan } from "@/komponen/ui/aksi-cepat";
 import { Peta } from "@/komponen/peta/peta";
 import { KartuPedagang } from "@/komponen/pedagang/kartu-pedagang";
+import { IsiPedagang } from "@/komponen/pedagang/isi-pedagang";
 import { daftarPedagang, kategoriPenyaring } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
+import type { Pedagang } from "@/lib/tipe";
 
 /** Harga menu termurah di seluruh gerobak, untuk keping "mulai …". */
 const TERMURAH = Math.min(...daftarPedagang.flatMap((p) => p.menu.map((m) => m.harga)));
 
 export function BerandaPembeli() {
   const [saring, setSaring] = React.useState<string>("Dekat Anda");
+  /* Pedagang yang lembarnya sedang naik.
+     Nilainya ditahan terpisah dari `buka` supaya isi lembar tidak
+     berkedip kosong selama animasi turun; yang disetel null hanya
+     setelah lembarnya benar-benar tertutup. */
+  const [dipilih, setDipilih] = React.useState<Pedagang | null>(null);
+  const [lembarBuka, setLembarBuka] = React.useState(false);
   const profil = useToko((s) => s.profil);
   const titikKumpul = useToko((s) => s.titikKumpul);
   const pesanan = useToko((s) => s.pesanan);
@@ -225,7 +234,15 @@ export function BerandaPembeli() {
         {terlihat.length > 0 ? (
           <div className="rel-gulir rentet mt-3 flex gap-3 px-4 pb-1">
             {terlihat.map((p, i) => (
-              <KartuPedagang key={p.id} pedagang={p} utama={i === 0} />
+              <KartuPedagang
+                key={p.id}
+                pedagang={p}
+                utama={i === 0}
+                onPilih={(pd) => {
+                  setDipilih(pd);
+                  setLembarBuka(true);
+                }}
+              />
             ))}
           </div>
         ) : (
@@ -236,6 +253,24 @@ export function BerandaPembeli() {
           </p>
         )}
       </section>
+
+      {/* Lembar pedagang.
+
+          Naik di atas beranda, jadi peta yang sudah tergambar tetap
+          terlihat di belakangnya dan tidak perlu digambar ulang. Ini yang
+          membedakannya dari berpindah ke halaman pedagang: di sana peta
+          kedua dimuat hanya untuk menampilkan kartu yang sama. */}
+      <Lembar
+        buka={lembarBuka}
+        tutup={() => setLembarBuka(false)}
+        judul={dipilih?.nama}
+      >
+        {dipilih && (
+          <div className="px-4 pb-6 pt-1">
+            <IsiPedagang pedagang={dipilih} />
+          </div>
+        )}
+      </Lembar>
     </Layar>
   );
 }
