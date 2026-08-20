@@ -7,8 +7,8 @@ import { lewatiPengenalan } from "./bantu";
  * Sebelum berkas ini ada, pedagang yang membuka permintaan titik
  * kumpulnya sendiri mendapat layar warga: navigasi warga di bawah, dan
  * satu-satunya tombol "Ikut Pesan Sekarang". Menekannya menaikkan
- * hitungan peserta dari 3/6 jadi 4/6, yaitu angka yang justru dipakai
- * pedagang untuk memutuskan berangkat.
+ * hitungan peserta satu angka, yaitu angka yang justru dipakai pedagang
+ * untuk memutuskan berangkat.
  */
 test.describe("Titik kumpul di sisi pedagang", () => {
   test.beforeEach(async ({ page }) => {
@@ -19,7 +19,7 @@ test.describe("Titik kumpul di sisi pedagang", () => {
 
   test("pedagang tidak bisa ikut jadi peserta titik kumpulnya sendiri", async ({ page }) => {
     await expect(page.getByRole("button", { name: /Ikut Pesan Sekarang/ })).toHaveCount(0);
-    await expect(page.getByText("3/6 warga")).toBeVisible();
+    await expect(page.getByText("6/6 warga")).toBeVisible();
   });
 
   test("navigasi bawah tetap navigasi pedagang, bukan navigasi warga", async ({ page }) => {
@@ -56,20 +56,58 @@ test.describe("Titik kumpul di sisi pedagang", () => {
     await expect(page.getByRole("link", { name: /RT 04 Gang Melati/ })).toBeVisible();
   });
 
-  test("gerobak sendiri punya dua permintaan dengan keadaan berbeda", async ({ page }) => {
+  test("dua permintaan yang tampil keduanya sudah tercapai", async ({ page }) => {
     await page.goto("/d");
 
-    const kumpul = page.getByRole("link", { name: /RT 02 Taman Bermain/ });
-    const capai = page.getByRole("link", { name: /RT 04 Gang Melati/ });
-    await expect(kumpul).toBeVisible();
-    await expect(capai).toBeVisible();
-    await expect(kumpul).toContainText("Aktif");
-    await expect(capai).toContainText("Tercapai");
+    const kartu = page.getByRole("link", { name: /warga ·/ });
+    await expect(kartu).toHaveCount(2);
+    await expect(kartu.nth(0)).toContainText("Tercapai");
+    await expect(kartu.nth(1)).toContainText("Tercapai");
 
     /* Ajakan saat gerobak tutup menyebut angka yang sama dengan jumlah
        kotak yang menunggu. */
     await page.getByRole("checkbox", { name: "Buka gerobak" }).uncheck({ force: true });
     await expect(page.getByText(/2 permintaan titik kumpul/)).toBeVisible();
+  });
+
+  test("membuka yang belum tercapai lewat tautan tidak menawarkan berangkat", async ({ page }) => {
+    /* Berandanya sudah menyaring, tapi tautan lama di kabar atau riwayat
+       peramban masih bisa mengantar ke sini. */
+    await page.evaluate(() => {
+      const simpanan = JSON.parse(localStorage.getItem("seketika") ?? "{}");
+      simpanan.state.titikKumpul = simpanan.state.titikKumpul.map(
+        (t: { id: string; peserta: unknown[] }) =>
+          t.id === "tk-05" ? { ...t, peserta: t.peserta.slice(0, 2) } : t,
+      );
+      localStorage.setItem("seketika", JSON.stringify(simpanan));
+    });
+    await page.goto("/kolab/tk-05");
+
+    await expect(page.getByRole("button", { name: /Terima & Berangkat/ })).toHaveCount(0);
+    await expect(page.getByText("Menunggu warga terkumpul (2/4)")).toBeVisible();
+    await expect(page.getByText(/Permintaan ini masuk ke berandamu/)).toBeVisible();
+  });
+
+  test("yang belum tercapai tidak sampai ke pedagang", async ({ page }) => {
+    /* Satu peserta dicabut dari RT 04 supaya targetnya kembali kurang.
+       Pedagang tidak punya cara membuat keadaan ini sendiri: yang
+       mengumpulkan warga adalah warga. */
+    await page.goto("/d");
+    await page.evaluate(() => {
+      const simpanan = JSON.parse(localStorage.getItem("seketika") ?? "{}");
+      simpanan.state.titikKumpul = simpanan.state.titikKumpul.map(
+        (t: { id: string; peserta: unknown[] }) =>
+          t.id === "tk-05" ? { ...t, peserta: t.peserta.slice(0, 3) } : t,
+      );
+      localStorage.setItem("seketika", JSON.stringify(simpanan));
+    });
+    await page.reload();
+
+    await expect(page.getByRole("link", { name: /RT 04 Gang Melati/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /RT 02 Taman Bermain/ })).toBeVisible();
+
+    await page.getByRole("checkbox", { name: "Buka gerobak" }).uncheck({ force: true });
+    await expect(page.getByText(/1 permintaan titik kumpul/)).toBeVisible();
   });
 
   test("menyelesaikan satu permintaan menurunkan hitungan, bukan menghapusnya", async ({ page }) => {

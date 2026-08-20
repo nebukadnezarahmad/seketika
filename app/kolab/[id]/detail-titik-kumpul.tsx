@@ -26,8 +26,8 @@ import { useSekarang } from "@/lib/waktu";
  * pedagang pemilik gerobaknya diantar ke sini juga dari beranda. Yang ia
  * dapat: navigasi warga di bawah layar, dan satu-satunya tombol
  * "Ikut Pesan Sekarang". Menekannya membuat pedagang tercatat sebagai
- * peserta titik kumpulnya sendiri dan menaikkan hitungan dari 3/6 jadi
- * 4/6 — angka yang justru dipakai pedagang untuk memutuskan berangkat
+ * peserta titik kumpulnya sendiri dan menaikkan hitungan pesertanya satu
+ * angka — angka yang justru dipakai pedagang untuk memutuskan berangkat
  * atau tidak.
  *
  * Karena itu sisi pedagang dipisah di sini. Ia tidak bergabung; ia
@@ -178,11 +178,11 @@ export function DetailTitikKumpul({ id }: { id: string }) {
                 </>
               ) : (
                 <>
-                  Baru{" "}
+                  Warga masih mengumpulkan, baru{" "}
                   <strong className="font-bold text-hijau">
-                    {titik.peserta.length} dari {titik.target} warga
-                  </strong>{" "}
-                  yang bergabung. Kamu boleh berangkat sekarang atau menunggu targetnya penuh.
+                    {titik.peserta.length} dari {titik.target}
+                  </strong>
+                  . Permintaan ini masuk ke berandamu begitu targetnya terpenuhi.
                 </>
               )
             ) : penuh ? (
@@ -302,8 +302,18 @@ export function DetailTitikKumpul({ id }: { id: string }) {
                 <Info size={15} />
                 Sudah lewat batas waktu
               </p>
+            ) : !penuh ? (
+              /* Pedagang baru dipanggil setelah warganya terkumpul cukup,
+                 jadi yang belum tercapai tidak menawarkan tombol berangkat.
+                 Cabang ini tidak dilewati dari beranda, yang memang sudah
+                 menyaringnya; ia menjaga jalan masuk lain, misalnya tautan
+                 lama di kabar atau riwayat peramban. */
+              <p className="flex items-center justify-center gap-2 rounded-[14px] bg-tinta-5/12 py-3.5 text-[13px] font-semibold text-tinta-3">
+                <Info size={15} />
+                Menunggu warga terkumpul ({titik.peserta.length}/{titik.target})
+              </p>
             ) : (
-              <Tombol rupa={penuh ? "amber" : "utama"} penuh onClick={terimaLaluBerangkat}>
+              <Tombol rupa="amber" penuh onClick={terimaLaluBerangkat}>
                 <Navigation size={16} strokeWidth={2.3} />
                 Terima &amp; Berangkat
               </Tombol>

@@ -111,17 +111,19 @@ export const titikKumpulAwal: TitikKumpul[] = [
       { id: "w-10", nama: "Bu Tuti", inisial: "T" },
       { id: "w-11", nama: "Pak Har", inisial: "H" },
       { id: "w-12", nama: "Mbak Ayu", inisial: "A" },
+      { id: "w-17", nama: "Pak Bambang", inisial: "B" },
+      { id: "w-18", nama: "Bu Marni", inisial: "M" },
+      { id: "w-19", nama: "Mas Fajar", inisial: "F" },
     ],
     status: "mengumpulkan",
     kedaluwarsa: jamDepan(15),
     jarak: 210,
   },
-  /* Permintaan kedua untuk gerobak sendiri, dan sengaja sudah memenuhi
-     targetnya. Dengan satu permintaan saja, layar pedagang cuma pernah
-     memperlihatkan satu keadaan; dua permintaan dengan keadaan berbeda
-     membuat perbedaan antara "masih mengumpulkan" dan "tercapai" terlihat
-     berdampingan, dan membuat hilangnya satu kotak setelah diselesaikan
-     bisa dibedakan dari daftar yang kosong. */
+  /* Permintaan kedua untuk gerobak sendiri. Keduanya sudah memenuhi
+     target, karena pedagang memang baru dipanggil setelah wargalah yang
+     terkumpul cukup; titik kumpul yang masih mengumpulkan belum jadi
+     urusannya. Dua permintaan, bukan satu, supaya hilangnya satu kotak
+     setelah diselesaikan bisa dibedakan dari daftar yang memang kosong. */
   {
     id: "tk-05",
     nama: "RT 04 Gang Melati",

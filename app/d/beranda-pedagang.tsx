@@ -12,7 +12,7 @@ import { Lonceng } from "@/komponen/ui/lonceng";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
-import { labelStatusTitik, menungguPedagang, statusTitik } from "@/lib/kolab";
+import { labelStatusTitik, menungguPedagang, statusTitik, tampilBagiPedagang } from "@/lib/kolab";
 import { pendapatanHari } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -61,12 +61,12 @@ export function BerandaPedagang() {
      pedagang aktif di peta. */
   const permintaan = milikSaya.filter((t) => menungguPedagang(t, sekarang)).length;
 
-  /* Yang sudah diselesaikan hilang dari daftar. Kotaknya tidak menyisakan
-     tindakan apa pun, dan daftar berjudul "Permintaan" yang memuat
-     permintaan yang sudah dituntaskan lama-lama jadi arsip yang tidak
-     pernah bisa dibersihkan. Yang dijemput tetap ada karena pedagang
-     masih harus menutupnya. */
-  const tampil = milikSaya.filter((t) => statusTitik(t, sekarang) !== "selesai");
+  /* Yang tampil cuma yang sudah tercapai dan yang sedang dijemput.
+     Titik kumpul yang masih mengumpulkan belum jadi urusan pedagang, dan
+     yang sudah diselesaikan tidak menyisakan tindakan apa pun; daftar
+     berjudul "Permintaan" yang memuat keduanya lama-lama jadi arsip yang
+     tidak pernah bisa dibersihkan. */
+  const tampil = milikSaya.filter((t) => tampilBagiPedagang(t, sekarang));
 
   return (
     <Layar
