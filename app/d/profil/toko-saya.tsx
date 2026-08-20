@@ -17,12 +17,30 @@ export function TokoSaya() {
   const profil = useToko((s) => s.profil);
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const menuNonaktif = useToko((s) => s.menuNonaktif);
+  const riwayat = useToko((s) => s.riwayatPedagang);
   const gantiPeran = useToko((s) => s.gantiPeran);
   const setelUlang = useToko((s) => s.setelUlang);
 
+  /* Dua angka ini dulu ditulis langsung sebagai 248 dan 1.2K, padahal
+     tidak berasal dari mana-mana. Sejak Buku Kas ada, angka karangan itu
+     berdiri tepat di layar yang sama dengan angka yang benar-benar
+     dihitung, dan siapa pun yang membandingkan keduanya akan menemukan
+     dua kenyataan yang berbeda tentang gerobak yang sama.
+
+     Sekarang keduanya dihitung dari sumber yang sama dengan Buku Kas:
+     seluruh pesanan yang pernah selesai, dan berapa nama warga berbeda
+     di dalamnya. Angkanya jadi jauh lebih kecil, tapi angka kecil yang
+     benar lebih berguna daripada angka besar yang tidak bisa
+     dipertanggungjawabkan. */
+  const selesai = [...riwayat, ...pesananMasuk].filter((p) => p.status === "selesai");
+  const wargaTerlayani = new Set(selesai.map((p) => p.warga)).size;
+
+  const namaToko = profil?.namaUsaha || gerobak.nama;
+  const pemilik = profil?.nama;
+
   return (
     <Layar nav peran="pedagang">
-      <header className="gradasi-kumpul relative overflow-hidden px-4 pb-4 pt-3">
+      <header className="gradasi-kumpul relative overflow-hidden rounded-b-[24px] px-4 pb-5 pt-3">
         <span aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]" />
 
         <div className="relative flex items-center justify-between">
@@ -53,10 +71,16 @@ export function TokoSaya() {
 
           <div className="min-w-0 flex-1">
             <p className="truncate text-[21px] font-extrabold leading-tight text-white">
-              {profil?.namaUsaha || gerobak.nama}
+              {namaToko}
             </p>
+            {/* Nama pemilik hanya disebut kalau memang berbeda dari nama
+                tokonya. Pedagang yang mengosongkan nama usaha saat
+                mendaftar akan memakai nama pribadinya sebagai nama toko,
+                dan tanpa penjagaan ini nama yang sama tercetak dua kali
+                bertumpuk di judul dan subjudulnya. */}
             <p className="mt-0.5 truncate text-[12.5px] text-white/65">
-              {gerobak.jenis} · {profil?.nama ?? "Pak Anton"}
+              {gerobak.jenis}
+              {pemilik && namaToko !== pemilik ? ` · ${pemilik}` : ""}
             </p>
             <span className="mt-2 inline-flex items-center gap-1.5 rounded-pil bg-white/15 px-2.5 py-1 text-[11.5px] font-semibold text-white">
               <BadgeCheck size={13} strokeWidth={2.2} />
@@ -67,17 +91,17 @@ export function TokoSaya() {
 
         <dl className="relative mt-4 grid grid-cols-2 rounded-[16px] bg-white/10 py-3">
           <div className="border-r border-white/15 text-center">
-            <dd className="text-[20px] font-extrabold text-white">248</dd>
-            <dt className="mt-0.5 text-[11px] text-white/60">Total Pesanan</dt>
+            <dd className="text-[20px] font-extrabold text-white">{selesai.length}</dd>
+            <dt className="mt-0.5 text-[11px] text-white/60">Pesanan Selesai</dt>
           </div>
           <div className="text-center">
-            <dd className="text-[20px] font-extrabold text-white">1.2K</dd>
+            <dd className="text-[20px] font-extrabold text-white">{wargaTerlayani}</dd>
             <dt className="mt-0.5 text-[11px] text-white/60">Warga Terlayani</dt>
           </div>
         </dl>
       </header>
 
-      <div className="px-4 pb-5 pt-3">
+      <div className="px-4 pb-5 pt-4">
         <div className="bayang-kartu flex items-center gap-3 rounded-[16px] border border-garis bg-white p-3.5">
           <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-hijau-lembut text-hijau">
             <ShoppingBag size={18} strokeWidth={1.9} />
@@ -90,7 +114,7 @@ export function TokoSaya() {
           </div>
           <button
             type="button"
-            className="shrink-0 rounded-[11px] bg-hijau px-4 py-2 text-[12px] font-bold text-white transition-transform active:scale-95"
+            className="shrink-0 rounded-full bg-hijau px-4 py-2 text-[12px] font-bold text-white transition-transform active:scale-95"
           >
             Edit
           </button>
