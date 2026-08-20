@@ -34,6 +34,20 @@ export function statusTitik(titik: TitikKumpul, sekarang: number | null): Status
   return new Date(titik.kedaluwarsa).getTime() <= sekarang ? "hangus" : "mengumpulkan";
 }
 
+/**
+ * Masih menunggu keputusan pedagang.
+ *
+ * Dipakai bersama oleh hitungan permintaan di beranda dan daftar
+ * pemberitahuan, supaya keduanya tidak bisa berselisih. Yang sudah
+ * dijemput sengaja tidak termasuk: pekerjaannya memang belum selesai,
+ * tapi pedagang sudah memutuskan dan sedang menjalankannya, jadi ia tidak
+ * perlu diingatkan lagi lewat lencana atau kabar.
+ */
+export function menungguPedagang(titik: TitikKumpul, sekarang: number | null): boolean {
+  const keadaan = statusTitik(titik, sekarang);
+  return keadaan === "mengumpulkan" || keadaan === "tercapai";
+}
+
 /** Masih menerima peserta baru. */
 export function masihMengumpulkan(titik: TitikKumpul, sekarang: number | null): boolean {
   return statusTitik(titik, sekarang) === "mengumpulkan";

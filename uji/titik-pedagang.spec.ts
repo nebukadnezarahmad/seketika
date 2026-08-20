@@ -13,7 +13,7 @@ import { lewatiPengenalan } from "./bantu";
 test.describe("Titik kumpul di sisi pedagang", () => {
   test.beforeEach(async ({ page }) => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
-    await page.getByRole("link").filter({ hasText: /warga ·/ }).first().click();
+    await page.getByRole("link", { name: /RT 02 Taman Bermain/ }).click();
     await page.waitForURL(/\/kolab\/tk-/);
   });
 
@@ -41,20 +41,46 @@ test.describe("Titik kumpul di sisi pedagang", () => {
     await expect(page.getByText("Dijemput").first()).toBeVisible();
   });
 
-  test("titik kumpul yang sudah selesai berhenti dihitung sebagai permintaan", async ({ page }) => {
+  test("yang diselesaikan hilang dari daftar, yang lain tetap tinggal", async ({ page }) => {
     await page.getByRole("button", { name: /Terima & Berangkat/ }).click();
     await page.waitForURL(/\/rute/);
     await page.goBack();
     await page.getByRole("button", { name: /Selesaikan Titik Kumpul/ }).click();
     await expect(page.getByText("Titik kumpul ini sudah selesai")).toBeVisible();
 
-    /* Gerobak ditutup supaya ajakan yang menyebut jumlah permintaan
-       muncul; kalau permintaan yang sudah beres masih terhitung,
-       ajakannya akan mengaku ada kerjaan yang sebenarnya tidak ada. */
+    await page.goto("/d");
+    /* Yang diselesaikan hilang, yang belum tetap ada. Menguji keduanya
+       sekaligus penting: daftar yang menghilangkan semuanya juga akan
+       lolos kalau yang diperiksa cuma hilangnya satu kotak. */
+    await expect(page.getByRole("link", { name: /RT 02 Taman Bermain/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /RT 04 Gang Melati/ })).toBeVisible();
+  });
+
+  test("gerobak sendiri punya dua permintaan dengan keadaan berbeda", async ({ page }) => {
+    await page.goto("/d");
+
+    const kumpul = page.getByRole("link", { name: /RT 02 Taman Bermain/ });
+    const capai = page.getByRole("link", { name: /RT 04 Gang Melati/ });
+    await expect(kumpul).toBeVisible();
+    await expect(capai).toBeVisible();
+    await expect(kumpul).toContainText("Aktif");
+    await expect(capai).toContainText("Tercapai");
+
+    /* Ajakan saat gerobak tutup menyebut angka yang sama dengan jumlah
+       kotak yang menunggu. */
+    await page.getByRole("checkbox", { name: "Buka gerobak" }).uncheck({ force: true });
+    await expect(page.getByText(/2 permintaan titik kumpul/)).toBeVisible();
+  });
+
+  test("menyelesaikan satu permintaan menurunkan hitungan, bukan menghapusnya", async ({ page }) => {
+    await page.getByRole("button", { name: /Terima & Berangkat/ }).click();
+    await page.waitForURL(/\/rute/);
+    await page.goBack();
+    await page.getByRole("button", { name: /Selesaikan Titik Kumpul/ }).click();
+
     await page.goto("/d");
     await page.getByRole("checkbox", { name: "Buka gerobak" }).uncheck({ force: true });
-    await expect(page.getByText(/permintaan titik kumpul/)).toHaveCount(0);
-    await expect(page.getByText("Selesai").first()).toBeVisible();
+    await expect(page.getByText(/1 permintaan titik kumpul/)).toBeVisible();
   });
 });
 

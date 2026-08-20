@@ -1,4 +1,4 @@
-import { statusTitik } from "@/lib/kolab";
+import { menungguPedagang, statusTitik } from "@/lib/kolab";
 import { rp, totalBaris } from "@/lib/format";
 import type { Peran, Pesanan, PesananMasuk, TitikKumpul } from "@/lib/tipe";
 
@@ -88,6 +88,7 @@ export function pemberitahuanPedagang(
   pesananMasuk: PesananMasuk[],
   titikKumpul: TitikKumpul[],
   slugGerobak: string,
+  sekarang: number | null,
 ): Pemberitahuan[] {
   const daftar: Pemberitahuan[] = [];
 
@@ -105,6 +106,12 @@ export function pemberitahuanPedagang(
 
   for (const t of titikKumpul) {
     if (t.pedagangSlug !== slugGerobak) continue;
+    /* Hanya yang masih menunggu keputusan. Sebelumnya setiap titik kumpul
+       milik gerobak ini dikabarkan tanpa melihat statusnya, jadi yang
+       sudah diselesaikan pedagang tetap mengabari selamanya, dan
+       mengetuknya mengantar ke permintaan yang sudah tidak ada lagi di
+       daftar berandanya. */
+    if (!menungguPedagang(t, sekarang)) continue;
     daftar.push({
       id: `tk-${t.id}-permintaan`,
       judul: "Permintaan titik kumpul",
@@ -128,6 +135,6 @@ export function pemberitahuan(
   sekarang: number | null,
 ): Pemberitahuan[] {
   return peran === "pedagang"
-    ? pemberitahuanPedagang(sumber.pesananMasuk, sumber.titikKumpul, sumber.slugGerobak)
+    ? pemberitahuanPedagang(sumber.pesananMasuk, sumber.titikKumpul, sumber.slugGerobak, sekarang)
     : pemberitahuanPembeli(sumber.pesanan, sumber.titikKumpul, sekarang);
 }
