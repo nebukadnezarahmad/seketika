@@ -42,19 +42,18 @@ export function Daftar() {
     "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-full border border-garis bg-krem text-[14px] font-medium text-tinta transition-transform active:scale-[0.98]";
 
   return (
-    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#001c06]">
+    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-white">
       {/* Latarnya sama dengan layar sambutan, digambar di kode. Kalau
-          layar ini kembali memakai ilustrasi lama, menekan "Buat Akun"
-          akan melompat dari layar gelap yang mewah ke gambar yang sama
-          sekali berbeda wataknya, dan alur mendaftar terasa seperti
-          keluar dari aplikasi. */}
+          layar ini memakai latar sendiri, menekan "Buat Akun" akan
+          melompat ke layar yang berbeda wataknya dan alur mendaftar
+          terasa seperti keluar dari aplikasi. */}
       <PanggungSambutan />
 
       <button
         type="button"
         onClick={() => router.back()}
         aria-label="Kembali"
-        className="absolute left-4 top-[54px] z-10 grid size-10 place-items-center rounded-full border border-white/25 bg-white/12 text-white backdrop-blur-sm transition-transform active:scale-90"
+        className="absolute left-4 top-[54px] z-10 grid size-10 place-items-center rounded-full border border-garis bg-white text-tinta shadow-[0_4px_14px_rgb(0_90_10/0.1)] transition-transform active:scale-90"
       >
         <ArrowLeft size={20} strokeWidth={2.2} />
       </button>
@@ -67,7 +66,7 @@ export function Daftar() {
           dijangkau di ponsel pendek ketika papan ketik terbuka. */}
       <form
         onSubmit={kirim}
-        className="bayang-lembar relative mt-auto max-h-[74%] overflow-y-auto rounded-t-[30px] bg-krem px-6 pb-[env(safe-area-inset-bottom)] pt-6"
+        className="relative mt-auto max-h-[74%] overflow-y-auto rounded-t-[30px] border-t border-garis bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-6 shadow-[0_-10px_34px_rgb(0_90_10/0.1)]"
       >
         <h1 className="tulisan-judul text-[20px] font-bold text-tinta">Perjalanan Anda dimulai di sini.</h1>
         <p className="mt-[9px] text-[16px] font-normal text-tinta">Masukkan Detail Anda di bawah</p>
