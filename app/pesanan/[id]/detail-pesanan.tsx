@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, Circle, MapPin, MessageSquare } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
+import { BeriNilai } from "@/komponen/pesanan/beri-nilai";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { jarakSingkat, rp, totalBaris } from "@/lib/format";
 import { useToko } from "@/lib/toko";
@@ -75,6 +76,13 @@ export function DetailPesanan({ id }: { id: string }) {
             </p>
           </div>
         </div>
+
+        {/* Penilaian hanya ditawarkan setelah pesanan benar-benar selesai.
+            Meminta bintang untuk sesuatu yang belum diterima warga cuma
+            menghasilkan angka yang tidak berarti apa-apa. */}
+        {pesanan.status === "selesai" && (
+          <BeriNilai pesananId={pesanan.id} namaPedagang={pedagang?.nama} />
+        )}
 
         {/* Rincian belanja */}
         <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4">

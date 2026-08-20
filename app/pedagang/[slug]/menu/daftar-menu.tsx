@@ -8,7 +8,7 @@ import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { Tombol } from "@/komponen/ui/tombol";
-import { fotoMenu } from "@/lib/data/pedagang";
+import { SLUG_GEROBAK_SAYA, fotoMenu } from "@/lib/data/pedagang";
 import { jarakSingkat, rp } from "@/lib/format";
 import { useToko } from "@/lib/toko";
 import type { Menu, Pedagang } from "@/lib/tipe";
@@ -32,6 +32,15 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
   const siapkanPanggilan = useToko((s) => s.siapkanPanggilan);
   const buatPesanan = useToko((s) => s.buatPesanan);
   const alamat = useToko((s) => s.profil?.alamat) ?? "Bumi Marina Emas Selatan No.12";
+
+  /* Menu yang dimatikan pedagang tidak ditampilkan ke warga. Daftar itu
+     hanya berlaku untuk gerobak sendiri; gerobak lain datang dari data
+     contoh dan tidak punya pemiliknya di aplikasi ini. */
+  const menuNonaktif = useToko((s) => s.menuNonaktif);
+  const menu =
+    pedagang.slug === SLUG_GEROBAK_SAYA
+      ? pedagang.menu.filter((m) => !menuNonaktif.includes(m.id))
+      : pedagang.menu;
 
   const [dipilih, setDipilih] = React.useState<Menu | null>(null);
   const [lembarBuka, setLembarBuka] = React.useState(false);
@@ -122,7 +131,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
         </p>
 
         <ul className="rentet flex flex-col gap-2.5">
-          {pedagang.menu.map((m) => (
+          {menu.map((m) => (
             <li key={m.id}>
               <button
                 type="button"
@@ -162,6 +171,14 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
             </li>
           ))}
         </ul>
+
+        {menu.length === 0 && (
+          <p className="rounded-[20px] border border-dashed border-garis bg-white px-4 py-8 text-center text-[12.5px] leading-relaxed text-tinta-4">
+            Gerobak ini sedang tidak menampilkan menu apa pun.
+            <br />
+            Kamu tetap bisa memanggilnya dan bertanya langsung.
+          </p>
+        )}
       </div>
     </Layar>
   );

@@ -4,10 +4,11 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, ChevronDown, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
+import { ChevronDown, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { TombolTaut } from "@/komponen/ui/tombol";
+import { Lonceng } from "@/komponen/ui/lonceng";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
@@ -133,13 +134,7 @@ export function BerandaPedagang() {
           </h1>
           <p className="text-[11px] text-tinta-4">{gerobak.jenis}</p>
         </div>
-        <button
-          type="button"
-          aria-label="Notifikasi"
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-hijau-lembut text-hijau transition-transform active:scale-90"
-        >
-          <Bell size={17} strokeWidth={2} />
-        </button>
+        <Lonceng />
       </header>
 
       <div className="px-4 pb-4 data-[melayang]:pb-32" data-melayang={sedangDiantar ? "" : undefined}>
@@ -222,6 +217,11 @@ export function BerandaPedagang() {
             { nilai: baru.length, label: "Baru", warna: "text-biru" },
             { nilai: pesananMasuk.filter((p) => p.status === "diantar").length, label: "Diantar", warna: "text-amber-tua" },
             { nilai: selesai.length, label: "Selesai", warna: "text-hijau" },
+            {
+              nilai: pesananMasuk.filter((p) => p.status === "ditolak").length,
+              label: "Ditolak",
+              warna: "text-merah",
+            },
           ].map(({ nilai, label, warna }, i) => (
             <span key={label} className="flex flex-1 items-center">
               {i > 0 && <span aria-hidden className="h-8 w-px shrink-0 bg-garis" />}
@@ -278,9 +278,14 @@ export function BerandaPedagang() {
               </div>
 
               <div className="mt-3 flex gap-2">
+                {/* Menolak menyetel `ditolak`, bukan `selesai`. Dulu tombol
+                    ini menyetel `selesai`, dan sejak Buku Kas ada, pesanan
+                    yang ditolak ikut distempel waktu selesai lalu terhitung
+                    sebagai pemasukan hari itu: menolak pesanan justru
+                    menaikkan omzet. */}
                 <button
                   type="button"
-                  onClick={() => ubahStatusMasuk(p.id, "selesai")}
+                  onClick={() => ubahStatusMasuk(p.id, "ditolak")}
                   className="h-10 shrink-0 rounded-full border border-garis px-5 text-[12.5px] font-bold text-tinta-3 transition-transform active:scale-95"
                 >
                   Tolak

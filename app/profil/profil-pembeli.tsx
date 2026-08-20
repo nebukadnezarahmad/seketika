@@ -5,6 +5,7 @@ import {
   Bell, CircleHelp, Info, MapPin, RotateCcw, ShieldCheck, Store, History,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
+import { Lonceng } from "@/komponen/ui/lonceng";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
 import { useToko } from "@/lib/toko";
 
@@ -26,13 +27,7 @@ export function ProfilPembeli() {
 
         <div className="relative flex items-center justify-between">
           <h1 className="text-[19px] font-extrabold text-white">Profil Saya</h1>
-          <button
-            type="button"
-            aria-label="Notifikasi"
-            className="grid size-9 place-items-center rounded-full bg-white/15 text-white transition-transform active:scale-90"
-          >
-            <Bell size={17} strokeWidth={2} />
-          </button>
+          <Lonceng nada="putih" />
         </div>
 
         <div className="relative mt-4 flex items-start gap-3.5">
@@ -103,8 +98,8 @@ export function ProfilPembeli() {
             Ikon={Bell}
             nada="ungu"
             judul="Notifikasi"
-            isi="Pedagang favorit, titik kumpul"
-            href="/profil"
+            isi="Kabar pesanan dan titik kumpul"
+            href="/notifikasi"
             akhir
           />
         </div>

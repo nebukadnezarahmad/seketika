@@ -47,11 +47,16 @@ harus berjalan.
 | Sambutan & daftar akun | Masuk atau buat akun, termasuk pintasan Google dan Facebook |
 | Peta pedagang | Gerobak aktif di sekitar, dengan jarak dan estimasi waktu |
 | Pencarian | Cari menu atau pedagang, dengan penyaring estimasi harga |
-| Daftar menu & keranjang | Keranjang terkunci pada satu pedagang |
+| Daftar menu | Ketuk menu untuk melihat foto dan keterangan lengkapnya |
+| Panggil penjual | Memanggil gerobak ke lokasi, dengan atau tanpa pesanan awal |
 | Pelacakan pesanan | Empat tahap, dari menunggu konfirmasi sampai selesai |
 | **Titik Kumpul** | Buat atau ikut patungan pesanan bersama tetangga |
+| Obrolan titik kumpul | Warga yang ikut patungan berunding jam berkumpul |
+| Kedaluwarsa otomatis | Titik kumpul yang lewat tenggat berhenti menerima warga |
 | Bagikan undangan | Tautan titik kumpul dibagikan lewat WhatsApp |
 | Percakapan | Obrolan langsung dengan pedagang |
+| Beri penilaian | Bintang untuk pesanan yang sudah selesai, sekali kirim |
+| Pusat notifikasi | Kabar pesanan dan titik kumpul, dengan lencana belum dibaca |
 
 ### Sisi pedagang
 
@@ -62,6 +67,9 @@ harus berjalan.
 | Terima & berangkat | Membuka navigasi dengan panduan arah |
 | Rekap harian | Ringkasan pesanan yang sudah dilayani |
 | Buku Kas | Pendapatan harian, grafik tujuh hari, menu terlaris, dan jam paling ramai |
+| Kelola menu | Menyalakan atau mematikan menu; yang mati hilang dari aplikasi warga |
+| Tolak pesanan | Punya statusnya sendiri dan tidak terhitung sebagai pemasukan |
+| Pusat notifikasi | Pesanan baru dan permintaan titik kumpul untuk gerobak sendiri |
 | Halaman toko | Kelola menu, area jangkauan, dan jam operasional |
 
 ## Teknologi

@@ -8,6 +8,7 @@ import { Kepala } from "@/komponen/ui/kepala";
 import { BatangKemajuan, TumpukanPeserta } from "@/komponen/kolab/kemajuan";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { sisaWaktu } from "@/lib/format";
+import { labelStatusTitik, statusTitik } from "@/lib/kolab";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
 import { salinTeks, tautTitik } from "@/lib/berbagi";
@@ -21,7 +22,19 @@ export function PesanKolaborasi() {
   const namaSaya = useToko((s) => s.profil?.nama);
   const sekarang = useSekarang();
 
-  const aktif = titikKumpul.filter((t) => t.status !== "selesai");
+  /* Yang hangus tetap ditampilkan, tidak dibuang diam-diam. Titik kumpul
+     yang tiba-tiba lenyap membuat warga yang sudah bergabung mengira
+     datanya hilang; yang benar adalah ia lewat tenggat, dan itu perlu
+     terbaca. Urutannya yang hangus turun ke bawah supaya tidak menghalangi
+     yang masih bisa diikuti. */
+  const aktif = titikKumpul
+    .filter((t) => t.status !== "selesai")
+    .slice()
+    .sort(
+      (a, b) =>
+        Number(statusTitik(a, sekarang) === "hangus") -
+        Number(statusTitik(b, sekarang) === "hangus"),
+    );
 
   return (
     <Layar nav>
@@ -65,11 +78,15 @@ export function PesanKolaborasi() {
             const kurang = Math.max(0, t.target - t.peserta.length);
             const penuh = kurang === 0;
             const pembuat = t.peserta[0]?.nama ?? "Warga";
+            const keadaan = statusTitik(t, sekarang);
+            const hangus = keadaan === "hangus";
 
             return (
               <li
                 key={t.id}
-                className="bayang-kartu overflow-hidden rounded-[20px] border border-garis bg-white"
+                className={`bayang-kartu overflow-hidden rounded-[20px] border border-garis bg-white ${
+                  hangus ? "opacity-70" : ""
+                }`}
               >
                 <div className="p-3.5">
                   <div className="flex items-start justify-between gap-2">
@@ -79,15 +96,20 @@ export function PesanKolaborasi() {
                     </p>
                     <span
                       className={`shrink-0 rounded-pil px-2 py-1 text-[10px] font-bold ${
-                        penuh ? "bg-amber/15 text-amber-tua" : "bg-hijau-lembut text-hijau"
+                        hangus
+                          ? "bg-tinta-5/20 text-tinta-3"
+                          : penuh
+                            ? "bg-amber/15 text-amber-tua"
+                            : "bg-hijau-lembut text-hijau"
                       }`}
                     >
-                      {penuh ? "Target tercapai" : "Aktif"}
+                      {hangus ? "Hangus" : penuh ? "Target tercapai" : labelStatusTitik[keadaan]}
                     </span>
                   </div>
 
                   <p className="mt-1 text-[11px] text-tinta-4">
-                    Dibuat oleh {punyaSaya ? "Anda" : pembuat} · {sisaWaktu(t.kedaluwarsa, sekarang)}
+                    Dibuat oleh {punyaSaya ? "Anda" : pembuat} ·{" "}
+                    {hangus ? "waktunya sudah lewat" : sisaWaktu(t.kedaluwarsa, sekarang)}
                   </p>
 
                   <div className="mt-3 flex items-baseline justify-between gap-2">
@@ -106,7 +128,12 @@ export function PesanKolaborasi() {
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <TumpukanPeserta peserta={t.peserta} target={t.target} />
 
-                    {punyaSaya ? (
+                    {hangus ? (
+                      <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-tinta-5/15 px-3 py-2 text-[12px] font-semibold text-tinta-3">
+                        <Clock size={13} strokeWidth={2.2} />
+                        Tidak menerima warga baru
+                      </span>
+                    ) : punyaSaya ? (
                       <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-tinta-5/15 px-3 py-2 text-[12px] font-semibold text-tinta-3">
                         <Clock size={13} strokeWidth={2.2} />
                         Menunggu Warga ({t.peserta.length}/{t.target})
@@ -123,7 +150,7 @@ export function PesanKolaborasi() {
                   </div>
                 </div>
 
-                {punyaSaya && (
+                {punyaSaya && !hangus && (
                   <div className="flex items-center gap-2.5 border-t border-garis bg-krem px-3.5 py-2.5">
                     <Share2 size={14} className="shrink-0 text-tinta-4" />
                     <p className="min-w-0 flex-1 text-[11px] leading-snug text-tinta-3">
