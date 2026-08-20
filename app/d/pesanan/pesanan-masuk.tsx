@@ -8,7 +8,7 @@ import { useToko } from "@/lib/toko";
 import type { PesananMasuk } from "@/lib/tipe";
 
 const rupaStatus: Record<PesananMasuk["status"], { label: string; kelas: string }> = {
-  baru: { label: "Pesanan Baru", kelas: "bg-[#e8f0fe] text-[#2563eb]" },
+  baru: { label: "Pesanan Baru", kelas: "bg-biru-lembut text-biru" },
   diproses: { label: "Diproses", kelas: "bg-amber/15 text-amber-tua" },
   diantar: { label: "Sedang Diantar", kelas: "bg-hijau/12 text-hijau" },
   selesai: { label: "Selesai", kelas: "bg-hijau-lembut text-hijau" },
@@ -50,7 +50,7 @@ export function PesananMasukLayar() {
     <Layar nav peran="pedagang">
       <header className="px-4 pb-3 pt-3">
         <div className="flex items-start justify-between gap-3">
-          <h1 className="text-[20px] font-extrabold text-hijau">Pesanan Masuk</h1>
+          <h1 className="tulisan-judul text-[20px] font-extrabold text-hijau">Pesanan Masuk</h1>
           {hitung.baru > 0 && (
             <span className="shrink-0 rounded-pil bg-merah px-2.5 py-1 text-[11px] font-bold text-white">
               {hitung.baru} baru
@@ -105,8 +105,8 @@ export function PesananMasukLayar() {
           return (
             <li
               key={p.id}
-              className={`bayang-kartu overflow-hidden rounded-[14px] border border-garis bg-white ${
-                p.status === "baru" ? "border-t-[3px] border-t-[#3b82f6]" : ""
+              className={`bayang-kartu overflow-hidden rounded-2xl border border-garis bg-white ${
+                p.status === "baru" ? "border-t-[3px] border-t-biru" : ""
               }`}
             >
               <button
@@ -137,7 +137,7 @@ export function PesananMasukLayar() {
                       <MapPin size={11} strokeWidth={2.2} className="shrink-0" />
                       {p.titik}
                     </span>
-                    <span className={`shrink-0 rounded-[7px] px-2 py-0.5 text-[10px] font-bold ${kelas}`}>
+                    <span className={`shrink-0 rounded-pil px-2 py-0.5 text-[10px] font-bold ${kelas}`}>
                       {label}
                     </span>
                   </span>
@@ -177,7 +177,7 @@ export function PesananMasukLayar() {
                     <button
                       type="button"
                       onClick={() => ubahStatusMasuk(p.id, "selesai")}
-                      className="mt-3 h-10 w-full rounded-[12px] bg-hijau text-[12.5px] font-bold text-white transition-transform active:scale-[0.98]"
+                      className="mt-3 h-10 w-full rounded-full bg-hijau text-[12.5px] font-bold text-white transition-transform active:scale-[0.98]"
                     >
                       Tandai Selesai
                     </button>
@@ -189,7 +189,7 @@ export function PesananMasukLayar() {
         })}
 
         {terlihat.length === 0 && (
-          <li className="rounded-[14px] border border-dashed border-garis bg-white px-4 py-10 text-center text-[12.5px] text-tinta-4">
+          <li className="rounded-2xl border border-dashed border-garis bg-white px-4 py-10 text-center text-[12.5px] text-tinta-4">
             Belum ada pesanan di kelompok ini.
           </li>
         )}

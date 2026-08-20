@@ -66,7 +66,7 @@ export function BerandaPedagang() {
           className="size-10 shrink-0 rounded-full object-cover"
         />
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[15px] font-extrabold leading-tight text-hijau">
+          <h1 className="tulisan-judul truncate text-[15px] font-extrabold leading-tight text-hijau">
             {profil?.namaUsaha || gerobak.nama}
           </h1>
           <p className="text-[11px] text-tinta-4">{gerobak.jenis}</p>
@@ -84,7 +84,7 @@ export function BerandaPedagang() {
         {/* Status gerobak */}
         <section
           className={`relative overflow-hidden rounded-[18px] p-4 ${
-            buka ? "gradasi-gerobak" : "bg-[#3d4a42]"
+            buka ? "gradasi-gerobak" : "bg-hijau-gelap"
           }`}
         >
           <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-white/55">
@@ -96,7 +96,7 @@ export function BerandaPedagang() {
               Sedang {buka ? "BUKA" : "TUTUP"}
               <span
                 aria-hidden
-                className={`size-3 rounded-full ${buka ? "bg-[#22c55e]" : "bg-merah"}`}
+                className={`size-3 rounded-full ${buka ? "bg-hijau-neon" : "bg-merah"}`}
               />
             </p>
 
@@ -110,7 +110,7 @@ export function BerandaPedagang() {
               <span className="sr-only">Buka gerobak</span>
               <span
                 aria-hidden
-                className="block h-8 w-[54px] rounded-pil bg-white/25 transition-colors peer-checked:bg-[#22c55e] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60"
+                className="block h-8 w-[54px] rounded-pil bg-white/25 transition-colors peer-checked:bg-hijau-neon peer-focus-visible:ring-2 peer-focus-visible:ring-white/60"
               />
               <span
                 aria-hidden
@@ -136,7 +136,17 @@ export function BerandaPedagang() {
           )}
         </section>
 
-        {/* Ringkasan pesanan hari ini */}
+        {/* Ringkasan pesanan hari ini.
+
+            Sebelumnya kartu ini hanya memuat satu angka besar berisi total
+            pesanan, dan sisanya ruang kosong. Angka itu sendiri tidak
+            memberi tahu apa pun yang bisa ditindaklanjuti: yang ingin
+            diketahui pedagang saat membuka aplikasi adalah berapa yang
+            menunggu dijawab, berapa yang sedang di jalan, dan berapa yang
+            sudah kelar. Ketiganya sudah ada di data yang sama, jadi ruang
+            itu diisi tiga angka itu — bukan komponen baru, hanya isi yang
+            sebelumnya terbuang. Perilakunya tidak berubah: tetap satu
+            tombol yang membuka lembar rekap. */}
         <button
           type="button"
           onClick={() => {
@@ -144,16 +154,25 @@ export function BerandaPedagang() {
             setLembarBuka(true);
           }}
           aria-expanded={ringkasTerbuka}
-          className="bayang-kartu mt-3 flex w-full flex-col items-center rounded-[16px] border border-garis bg-white py-3"
+          className="bayang-kartu mt-3 flex w-full items-center gap-1 rounded-[20px] border border-garis bg-white px-2 py-3.5"
         >
-          <span className="text-[20px] font-extrabold leading-none text-tinta">
-            {pesananMasuk.length}
-          </span>
-          <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
-            Pesanan
-          </span>
-          <span aria-hidden className="mt-1 text-tinta-5">
-            {ringkasTerbuka ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          {[
+            { nilai: baru.length, label: "Baru", warna: "text-biru" },
+            { nilai: pesananMasuk.filter((p) => p.status === "diantar").length, label: "Diantar", warna: "text-amber-tua" },
+            { nilai: selesai.length, label: "Selesai", warna: "text-hijau" },
+          ].map(({ nilai, label, warna }, i) => (
+            <span key={label} className="flex flex-1 items-center">
+              {i > 0 && <span aria-hidden className="h-8 w-px shrink-0 bg-garis" />}
+              <span className="flex flex-1 flex-col items-center">
+                <span className={`text-[21px] font-extrabold leading-none ${warna}`}>{nilai}</span>
+                <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
+                  {label}
+                </span>
+              </span>
+            </span>
+          ))}
+          <span aria-hidden className="shrink-0 pr-1 text-tinta-5">
+            {ringkasTerbuka ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </span>
         </button>
 
@@ -176,7 +195,7 @@ export function BerandaPedagang() {
           {baru.map((p) => (
             <li
               key={p.id}
-              className="bayang-kartu overflow-hidden rounded-[14px] border border-garis border-t-[3px] border-t-[#3b82f6] bg-white p-3"
+              className="bayang-kartu overflow-hidden rounded-[14px] border border-garis border-t-[3px] border-t-biru bg-white p-3"
             >
               <div className="flex items-center gap-2.5">
                 <span className="grid size-9 shrink-0 place-items-center rounded-full bg-hijau-lembut text-[13px] font-bold text-hijau">
@@ -200,7 +219,7 @@ export function BerandaPedagang() {
                 <button
                   type="button"
                   onClick={() => ubahStatusMasuk(p.id, "selesai")}
-                  className="h-10 shrink-0 rounded-[12px] border border-garis px-5 text-[12.5px] font-bold text-tinta-3 transition-transform active:scale-95"
+                  className="h-10 shrink-0 rounded-full border border-garis px-5 text-[12.5px] font-bold text-tinta-3 transition-transform active:scale-95"
                 >
                   Tolak
                 </button>
@@ -210,7 +229,7 @@ export function BerandaPedagang() {
                     ubahStatusMasuk(p.id, "diantar");
                     router.push(`/d/antar/${p.id}`);
                   }}
-                  className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-[12px] bg-hijau text-[12.5px] font-bold text-white transition-transform active:scale-[0.98]"
+                  className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-hijau text-[12.5px] font-bold text-white transition-transform active:scale-[0.98]"
                 >
                   <Navigation size={14} strokeWidth={2.3} />
                   Terima &amp; Berangkat
@@ -264,7 +283,7 @@ export function BerandaPedagang() {
       {/* Lembar rekap pesanan hari ini */}
       <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul="Pesanan Hari Ini">
         <div className="px-4 pb-6">
-          <h2 className="text-[16px] font-extrabold text-tinta">Pesanan Hari Ini</h2>
+          <h2 className="tulisan-judul text-[16px] font-extrabold text-tinta">Pesanan Hari Ini</h2>
           <p className="mt-0.5 text-[11.5px] text-tinta-4">{selesai.length} pesanan berhasil</p>
 
           <ul className="mt-3 flex flex-col gap-2">
@@ -280,12 +299,12 @@ export function BerandaPedagang() {
                   <p className="flex items-center gap-2 text-[13px] font-bold text-tinta">
                     {p.warga}
                     <span
-                      className={`rounded-[6px] px-1.5 py-0.5 text-[9.5px] font-bold ${
+                      className={`rounded-pil px-1.5 py-0.5 text-[9.5px] font-bold ${
                         p.status === "selesai"
                           ? "bg-hijau-lembut text-hijau"
                           : p.status === "diproses"
                             ? "bg-amber/15 text-amber-tua"
-                            : "bg-[#e8f0fe] text-[#2563eb]"
+                            : "bg-biru-lembut text-biru"
                       }`}
                     >
                       {p.status === "selesai" ? "Selesai" : p.status === "diproses" ? "Diproses" : "Baru"}

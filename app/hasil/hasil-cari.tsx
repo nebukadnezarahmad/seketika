@@ -55,7 +55,7 @@ export function HasilCari() {
             </p>
             <Link
               href="/cari"
-              className="mt-5 rounded-[12px] bg-hijau-lembut px-4 py-2.5 text-[12.5px] font-bold text-hijau"
+              className="mt-5 rounded-full bg-hijau-lembut px-4 py-2.5 text-[12.5px] font-bold text-hijau"
             >
               Ubah pencarian
             </Link>
@@ -65,7 +65,7 @@ export function HasilCari() {
             {hasil.map(({ pedagang, menu }) => (
               <li
                 key={pedagang.id}
-                className="bayang-kartu overflow-hidden rounded-[16px] border border-garis bg-white"
+                className="bayang-kartu overflow-hidden rounded-[20px] border border-garis bg-white"
               >
                 <Link
                   href={`/pedagang/${pedagang.slug}/menu`}
@@ -91,7 +91,7 @@ export function HasilCari() {
                     </span>
                   </span>
                   <span
-                    className={`shrink-0 rounded-[7px] px-2 py-1 text-[10px] font-bold ${
+                    className={`shrink-0 rounded-pil px-2 py-1 text-[10px] font-bold ${
                       pedagang.buka ? "bg-hijau-lembut text-hijau" : "bg-tinta-5/20 text-tinta-3"
                     }`}
                   >

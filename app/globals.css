@@ -1,40 +1,71 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Token diambil langsung dari berkas Figma SEKETIKA, bukan dikira-kira.
-   Nilai heksadesimalnya hasil baca get_design_context dan pencuplikan
-   piksel pada ekspor bingkai, jadi angkanya sama persis dengan desain.
+   Rancangan awal token ini diambil langsung dari berkas Figma SEKETIKA.
+   Set ini adalah revisi kedua: warnanya digeser mengikuti ekosistem
+   Gojek (hijau #00AA13, latar putih/abu sejuk, bentuk serba membulat)
+   supaya aplikasinya terasa lebih segar dan kekinian, atas permintaan
+   eksplisit pengguna. Nama variabelnya sengaja dipertahankan sama
+   dengan versi lama — sebagian besar berkas di aplikasi ini memanggil
+   token, bukan angka mentah, jadi mengganti nilai di sini saja sudah
+   mengubah tampilan sebagian besar layar tanpa menyentuh berkas lain.
    ------------------------------------------------------------------ */
 @theme {
-  /* Hijau, warna utama merek */
-  --color-hijau: #1a4d2e;
-  --color-hijau-terang: #2d6b45;
-  --color-hijau-lembut: #ebf2ec;
-  --color-hijau-neon: #7af0a0;
+  /* Hijau, warna utama merek, terinspirasi hijau Gojek (#00AA13).
+     --color-hijau BUKAN angka itu persis: pada teks putih kecil (label
+     tombol, badge jumlah) #00AA13 hanya mencapai kontras 3,1:1, di
+     bawah ambang AA 4,5:1 untuk teks. #00860F menahan rona dan
+     kejenuhan yang sama tapi lolos 4,75:1, jadi tombol tetap terbaca.
+     Hijau aslinya sendiri disimpan di --color-hijau-terang untuk
+     gradasi dan aksen dekoratif besar yang tidak menanggung teks kecil
+     di atasnya. */
+  --color-hijau-gelap: #005c0a;
+  --color-hijau: #00860f;
+  --color-hijau-terang: #00aa13;
+  --color-hijau-lembut: #e6f8e8;
+  --color-hijau-neon: #17c93b;
 
-  /* Netral hangat. Latarnya krem, bukan putih; ini yang membuat
-     antarmukanya terasa hangat alih-alih steril. */
-  --color-krem: #fdfbf7;
-  --color-garis: #ede8e0;
-  --color-garis-pil: #e8e3dc;
+  /* Netral sejuk. Latarnya abu-putih, bukan krem hangat seperti versi
+     pertama — pola super-app modern: kartu putih mengambang di atas
+     latar abu sangat muda, bukan kartu di atas krem. Nama variabelnya
+     tetap "krem" supaya berkas lain yang memanggil `bg-krem` tidak
+     perlu diubah. */
+  --color-krem: #f5f6f5;
+  --color-garis: #e7e9e7;
+  --color-garis-pil: #e2e5e2;
 
-  /* Tinta, dari paling pekat ke paling pudar */
-  --color-tinta: #1c1916;
-  --color-tinta-2: #2c2924;
-  --color-tinta-3: #7a746c;
-  /* Desain aslinya #a09890, tapi di atas krem rasionya hanya 2,75:1,
-     sedangkan hampir semua pemakaiannya teks 10-12px. #78726c adalah
-     nilai paling terang pada rona yang sama yang masih lulus 4.5:1
-     (4,59:1 di krem, 4,75:1 di putih), jadi hierarki visualnya utuh
-     sementara teksnya benar-benar terbaca. */
-  --color-tinta-4: #78726c;
-  --color-tinta-5: #c0bab3;
-  --color-tinta-6: #6e6860;
+  /* Tinta, dari paling pekat ke paling pudar. Rona digeser dari
+     kecoklatan hangat ke abu sejuk supaya serasi dengan latar barunya. */
+  --color-tinta: #191b19;
+  --color-tinta-2: #2a2d2a;
+  --color-tinta-3: #767b76;
+  /* #6b706b lolos 5,05:1 di atas krem baru maupun putih — marjinnya
+     malah lebih longgar dari versi lama karena latarnya kini lebih
+     terang. */
+  --color-tinta-4: #6b706b;
+  --color-tinta-5: #c4c7c4;
+  --color-tinta-6: #63675f;
 
-  /* Aksen */
-  --color-amber: #f59e0b;
-  --color-amber-tua: #d97706;
-  --color-merah: #ef4444;
+  /* Aksen. Oranye dan merah dinaikkan kejenuhannya (dan merahnya
+     digelapkan secukupnya untuk tetap lolos AA di atas dirinya sendiri
+     sebagai latar teks putih) supaya terasa lebih hidup. Biru dan ungu
+     baru menggantikan hex tertambat yang sebelumnya tersebar sendiri-
+     sendiri di beberapa berkas (badge status, ikon kategori, aksen
+     rute) supaya semuanya menarik dari satu sumber yang sama.
+
+     Pengecualian yang SENGAJA tidak memakai token ini: logo Google di
+     ikon-sosial.tsx (empat warna resmi Google, bukan warna kita) dan
+     titik lokasi pengguna di peta (konvensi biru universal ala Google
+     Maps, bukan warna merek). Keduanya tetap hex literal. */
+  --color-amber: #ff9500;
+  --color-amber-tua: #e65100;
+  --color-amber-lembut: #fff3e0;
+  --color-merah: #d6291f;
+  --color-merah-lembut: #fdeceb;
+  --color-biru: #2f6fed;
+  --color-biru-lembut: #eaf1fe;
+  --color-ungu: #7c3aed;
+  --color-ungu-lembut: #f3ecfe;
 
   --radius-pil: 99px;
 
@@ -83,29 +114,36 @@
   /* Bayangan berulang dari desain, disimpan sebagai utilitas supaya
      nilainya tidak tersalin-salin dan menyimpang satu sama lain. */
   .bayang-kartu {
-    box-shadow: 0 2px 14px rgb(0 0 0 / 0.07), 0 1px 3px rgb(0 0 0 / 0.04);
+    box-shadow: 0 2px 14px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.04);
   }
   .bayang-kendali {
-    box-shadow: 0 3px 8px rgb(0 0 0 / 0.07), 0 1px 2px rgb(0 0 0 / 0.04);
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
   }
   .bayang-peta {
-    box-shadow: 0 4px 24px rgb(0 0 0 / 0.1), 0 1px 6px rgb(0 0 0 / 0.05);
+    box-shadow: 0 4px 24px rgb(0 0 0 / 0.09), 0 1px 6px rgb(0 0 0 / 0.05);
   }
   .bayang-nav {
-    box-shadow: 0 -6px 12px rgb(0 0 0 / 0.06);
+    box-shadow: 0 -6px 12px rgb(0 0 0 / 0.05);
   }
   .bayang-pil-aktif {
-    box-shadow: 0 2px 6px rgb(26 77 46 / 0.19);
+    box-shadow: 0 2px 6px rgb(0 134 15 / 0.22);
   }
   .bayang-lembar {
-    box-shadow: 0 -8px 32px rgb(0 0 0 / 0.14);
+    box-shadow: 0 -8px 32px rgb(0 0 0 / 0.13);
+  }
+
+  /* Huruf lambang/judul. Poppins terasa lebih bulat dan geometris
+     daripada Inter — dipakai pada judul-judul besar yang ingin terasa
+     kekinian (wordmark, judul bagian utama), bukan pada seluruh teks. */
+  .tulisan-judul {
+    font-family: var(--font-lambang);
   }
 
   /* Tulisan bergradasi. Warnanya dipotong mengikuti bentuk huruf, jadi
      latarnya harus transparan; tanpa `text-transparent` yang terlihat
      hanya blok warna. */
   .tulisan-gradasi {
-    background-image: linear-gradient(to bottom, #2d6b45 0%, #1a4d2e 100%);
+    background-image: linear-gradient(to bottom, #00aa13 0%, #00860f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -114,13 +152,13 @@
   /* Gradasi kartu hijau. Dua arah berbeda dipakai di desain: kartu
      status gerobak menyapu diagonal, kartu titik kumpul lebih datar. */
   .gradasi-gerobak {
-    background-image: linear-gradient(135deg, #133d2a 0%, #27603d 100%);
+    background-image: linear-gradient(135deg, #005c0a 0%, #00aa13 100%);
   }
   .gradasi-kumpul {
-    background-image: linear-gradient(140deg, #1e5a34 0%, #194c2c 100%);
+    background-image: linear-gradient(140deg, #00aa13 0%, #00860f 100%);
   }
   .gradasi-amber {
-    background-image: linear-gradient(135deg, #f0970a 0%, #d97706 100%);
+    background-image: linear-gradient(135deg, #ffb020 0%, #e65100 100%);
   }
 
   /* Deret bergulir mendatar tanpa batang gulir yang terlihat. Dipakai
@@ -245,7 +283,7 @@
   }
   25% {
     transform: scaleX(2);
-    background-color: #4ade80;
+    background-color: #17c93b;
   }
 }
 

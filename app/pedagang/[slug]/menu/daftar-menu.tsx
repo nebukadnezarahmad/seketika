@@ -43,7 +43,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
             return (
               <li
                 key={m.id}
-                className="bayang-kartu flex gap-3 overflow-hidden rounded-[16px] border border-garis bg-white"
+                className="bayang-kartu flex gap-3 overflow-hidden rounded-[20px] border border-garis bg-white"
               >
                 <Image
                   src={fotoMenu[m.id]}
@@ -68,20 +68,20 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                         onClick={() =>
                           ubahJumlah(pedagang.slug, { menuId: m.id, nama: m.nama, harga: m.harga }, 1)
                         }
-                        className="flex shrink-0 items-center gap-1 rounded-[9px] bg-hijau-lembut px-2.5 py-1.5 text-[11.5px] font-bold text-hijau transition-transform active:scale-95"
+                        className="flex shrink-0 items-center gap-1 rounded-full bg-hijau-lembut px-2.5 py-1.5 text-[11.5px] font-bold text-hijau transition-transform active:scale-95"
                       >
                         <Plus size={13} strokeWidth={2.6} />
                         Tambah
                       </button>
                     ) : (
-                      <span className="flex shrink-0 items-center gap-1 rounded-[9px] bg-hijau-lembut p-1">
+                      <span className="flex shrink-0 items-center gap-1 rounded-full bg-hijau-lembut p-1">
                         <button
                           type="button"
                           aria-label={`Kurangi ${m.nama}`}
                           onClick={() =>
                             ubahJumlah(pedagang.slug, { menuId: m.id, nama: m.nama, harga: m.harga }, -1)
                           }
-                          className="grid size-6 place-items-center rounded-[7px] text-hijau transition-transform active:scale-90"
+                          className="grid size-6 place-items-center rounded-full text-hijau transition-transform active:scale-90"
                         >
                           <Minus size={13} strokeWidth={2.6} />
                         </button>
@@ -94,7 +94,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                           onClick={() =>
                             ubahJumlah(pedagang.slug, { menuId: m.id, nama: m.nama, harga: m.harga }, 1)
                           }
-                          className="grid size-6 place-items-center rounded-[7px] bg-hijau text-white transition-transform active:scale-90"
+                          className="grid size-6 place-items-center rounded-full bg-hijau text-white transition-transform active:scale-90"
                         >
                           <Plus size={13} strokeWidth={2.6} />
                         </button>

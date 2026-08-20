@@ -51,7 +51,7 @@ export function Peta({
 }) {
   return (
     <div
-      className={`overflow-hidden bg-[#eceae4] ${penuh ? "absolute inset-0" : "relative"} ${className}`}
+      className={`overflow-hidden bg-krem ${penuh ? "absolute inset-0" : "relative"} ${className}`}
       style={penuh ? undefined : { height: tinggi }}
     >
       <Image
@@ -91,7 +91,7 @@ export function Peta({
       )}
 
       {jumlahAktif !== undefined && (
-        <div className="absolute left-1.5 top-3 flex items-center gap-1.5 rounded-[12px] bg-hijau px-3 py-1.5 shadow-[0_4px_7px_rgb(26_77_46/0.27)]">
+        <div className="absolute left-1.5 top-3 flex items-center gap-1.5 rounded-full bg-hijau px-3 py-1.5 shadow-[0_4px_7px_rgb(0_134_15/0.27)]">
           <span aria-hidden className="size-1.5 rounded-pil bg-hijau-neon" />
           <span className="text-[11px] font-bold leading-[16.5px] tracking-[0.22px] text-white">
             {jumlahAktif} pedagang aktif

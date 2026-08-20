@@ -6,8 +6,8 @@ export type Warna = "hijau" | "biru" | "ungu" | "amber" | "merah";
 
 const warna: Record<Warna, string> = {
   hijau: "bg-hijau-lembut text-hijau",
-  biru: "bg-[#e8f0fe] text-[#2563eb]",
-  ungu: "bg-[#f3e8ff] text-[#9333ea]",
+  biru: "bg-biru-lembut text-biru",
+  ungu: "bg-ungu-lembut text-ungu",
   amber: "bg-amber/12 text-amber-tua",
   merah: "bg-merah/10 text-merah",
 };

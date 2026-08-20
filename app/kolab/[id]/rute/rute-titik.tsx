@@ -51,7 +51,7 @@ export function RuteTitik({ id }: { id: string }) {
                 <House size={17} strokeWidth={2} />
               </span>
               <span aria-hidden className="my-1 w-px flex-1 bg-garis" />
-              <span className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-[#e8f0fe] text-[#2563eb]">
+              <span className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-biru-lembut text-biru">
                 <MapPin size={17} strokeWidth={2} />
               </span>
             </div>
@@ -87,7 +87,7 @@ export function RuteTitik({ id }: { id: string }) {
               <path
                 d="M28 82 L 28 46 L 74 46 L 74 20"
                 fill="none"
-                stroke="#2563eb"
+                stroke="var(--color-biru)"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
@@ -95,17 +95,17 @@ export function RuteTitik({ id }: { id: string }) {
               />
             </svg>
             <span
-              className="absolute size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#2563eb]"
+              className="absolute size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-biru"
               style={{ left: "28%", top: "82%" }}
             />
             <span
               className="absolute -translate-x-1/2 -translate-y-full"
               style={{ left: "74%", top: "20%" }}
             >
-              <Pin size={24} warna="#ef4444" mata="polos" />
+              <Pin size={24} warna="var(--color-merah)" mata="polos" />
             </span>
             <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 items-center gap-2 rounded-pil bg-white px-3 py-1.5 shadow-[0_2px_8px_rgb(0_0_0/0.16)]">
-              <span aria-hidden className="size-2 rounded-full bg-[#2563eb]" />
+              <span aria-hidden className="size-2 rounded-full bg-biru" />
               <span className="text-[12px] font-bold text-tinta">{rute} meter</span>
               <span className="text-[11px] text-tinta-4">{menit} menit</span>
             </span>
@@ -127,7 +127,7 @@ export function RuteTitik({ id }: { id: string }) {
           <dl className="mt-3.5 grid grid-cols-3 gap-2">
             {[
               { Ikon: Footprints, nilai: `${lurus}m`, label: "Dari Anda", kelas: "bg-hijau-lembut text-hijau" },
-              { Ikon: Navigation, nilai: `${rute}m`, label: "Total Rute", kelas: "bg-[#e8f0fe] text-[#2563eb]" },
+              { Ikon: Navigation, nilai: `${rute}m`, label: "Total Rute", kelas: "bg-biru-lembut text-biru" },
               { Ikon: Clock, nilai: `${menit} min`, label: "Estimasi", kelas: "bg-amber/12 text-amber-tua" },
             ].map(({ Ikon, nilai, label, kelas }) => (
               <div key={label} className={`rounded-[13px] px-2 py-3 text-center ${kelas}`}>

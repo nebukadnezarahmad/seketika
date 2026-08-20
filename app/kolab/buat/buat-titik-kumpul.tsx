@@ -51,14 +51,14 @@ export function BuatTitikKumpul() {
       <Kepala judul="Buat Titik Kumpul" />
 
       <form onSubmit={kirim} className="px-4 pb-4 pt-3">
-        <div className="bayang-kartu rounded-[18px] border border-garis bg-white p-4">
+        <div className="bayang-kartu rounded-[20px] border border-garis bg-white p-4">
           <div>
             <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
               Jenis Dagangan
             </p>
             {/* Pedagangnya sudah ditentukan dari layar sebelumnya, jadi
                 ditampilkan saja alih-alih dibuka untuk diubah. */}
-            <p className="flex items-center gap-2.5 rounded-[12px] bg-[#fbf9f5] px-3 py-2.5 text-[13.5px] font-semibold text-tinta">
+            <p className="flex items-center gap-2.5 rounded-[12px] bg-krem px-3 py-2.5 text-[13.5px] font-semibold text-tinta">
               <House size={15} className="shrink-0 text-hijau" />
               {pedagang?.nama ?? "Pedagang"}
             </p>
@@ -68,7 +68,7 @@ export function BuatTitikKumpul() {
             <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
               Lokasi Titik Kumpul
             </span>
-            <span className="flex items-center gap-2.5 rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2.5">
+            <span className="flex items-center gap-2.5 rounded-[12px] border border-garis bg-krem px-3 py-2.5">
               <MapPin size={15} className="shrink-0 text-tinta-5" />
               <input
                 value={lokasi}
@@ -84,12 +84,12 @@ export function BuatTitikKumpul() {
             <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
               Target Minimal Warga
             </p>
-            <div className="flex items-center justify-between rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-2 py-1.5">
+            <div className="flex items-center justify-between rounded-[12px] border border-garis bg-krem px-2 py-1.5">
               <button
                 type="button"
                 aria-label="Kurangi target"
                 onClick={() => setTarget((n) => Math.max(0, n - 1))}
-                className="grid size-9 place-items-center rounded-[10px] text-hijau transition-transform active:scale-90 disabled:opacity-35"
+                className="grid size-9 place-items-center rounded-full text-hijau transition-transform active:scale-90 disabled:opacity-35"
                 disabled={target === 0}
               >
                 <Minus size={16} strokeWidth={2.6} />
@@ -102,7 +102,7 @@ export function BuatTitikKumpul() {
                 type="button"
                 aria-label="Tambah target"
                 onClick={() => setTarget((n) => Math.min(TARGET_MAKS, n + 1))}
-                className="grid size-9 place-items-center rounded-[10px] text-hijau transition-transform active:scale-90 disabled:opacity-35"
+                className="grid size-9 place-items-center rounded-full text-hijau transition-transform active:scale-90 disabled:opacity-35"
                 disabled={target === TARGET_MAKS}
               >
                 <Plus size={16} strokeWidth={2.6} />
@@ -124,7 +124,7 @@ export function BuatTitikKumpul() {
               onChange={(e) => setCatatan(e.target.value)}
               rows={3}
               placeholder="Misal: Datang jam 9 pagi ya biar bareng..."
-              className="w-full resize-none rounded-[12px] border border-[#f1ede6] bg-[#fbf9f5] px-3 py-2.5 text-[13.5px] leading-snug text-tinta placeholder:text-tinta-3 focus:outline-none"
+              className="w-full resize-none rounded-[12px] border border-garis bg-krem px-3 py-2.5 text-[13.5px] leading-snug text-tinta placeholder:text-tinta-3 focus:outline-none"
             />
           </label>
         </div>

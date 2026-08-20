@@ -42,7 +42,7 @@ export function ProfilPembeli() {
             </span>
             <span
               aria-label="Sedang aktif"
-              className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-2 border-[#1c5531] bg-[#22c55e]"
+              className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-2 border-hijau bg-hijau-neon"
             />
           </span>
 
@@ -78,7 +78,7 @@ export function ProfilPembeli() {
           </div>
         </dl>
 
-        <p className="relative mb-1 mt-5 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/50">
+        <p className="relative mb-1 mt-5 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/80">
           Akun &amp; Transaksi
         </p>
       </header>

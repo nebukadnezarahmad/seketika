@@ -29,7 +29,7 @@ export function KartuPedagang({
       <div className="relative h-[100px] w-full">
         <Image src={foto} alt={nama} fill sizes="148px" priority={utama} className="object-cover" />
         <span
-          className={`absolute right-2 top-2 rounded-[8px] px-[7px] py-[3px] text-[9px] font-bold leading-[13.5px] tracking-[0.36px] text-white ${
+          className={`absolute right-2 top-2 rounded-pil px-[7px] py-[3px] text-[9px] font-bold leading-[13.5px] tracking-[0.36px] text-white ${
             buka ? "bg-hijau/88" : "bg-black/55"
           }`}
         >
@@ -50,7 +50,7 @@ export function KartuPedagang({
               {rating.toFixed(1)}
             </span>
           </span>
-          <span className="rounded-[7px] bg-hijau-lembut px-[7px] py-0.5 text-[10px] font-semibold leading-[15px] text-hijau">
+          <span className="rounded-pil bg-hijau-lembut px-[7px] py-0.5 text-[10px] font-semibold leading-[15px] text-hijau">
             {jarakSingkat(jarak)}
           </span>
         </div>

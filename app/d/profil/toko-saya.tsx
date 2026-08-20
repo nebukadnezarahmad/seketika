@@ -46,7 +46,7 @@ export function TokoSaya() {
             />
             <BadgeCheck
               size={20}
-              className="absolute -bottom-1 -right-1 fill-[#22c55e] text-white"
+              className="absolute -bottom-1 -right-1 fill-hijau-neon text-white"
             />
           </span>
 

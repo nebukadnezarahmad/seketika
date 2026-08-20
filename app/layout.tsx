@@ -12,13 +12,15 @@ const inter = Inter({
   display: "swap",
 });
 
-/* Poppins hanya dipakai untuk lambang kata "SEKETIKA" dan taglinenya di
-   layar sambutan. Bentuk geometrisnya yang bulat membedakannya dari Inter
-   yang menangani seluruh teks lain. */
+/* Poppins dipakai untuk lambang kata "SEKETIKA", taglinenya di layar
+   sambutan, dan judul-judul besar lewat utilitas `.tulisan-judul`.
+   Bentuk geometrisnya yang bulat membedakannya dari Inter yang menangani
+   isi teks biasa. Bobot 600-800 dimuat supaya judul yang memakainya bisa
+   memilih ketebalan tanpa memicu unduhan bobot baru di tengah sesi. */
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["600", "700", "800"],
   display: "swap",
 });
 
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1a4d2e",
+  themeColor: "#00860f",
   width: "device-width",
   initialScale: 1,
   /* Aplikasi ini punya banyak sasaran sentuh kecil di peta. Cubit-zoom
@@ -60,7 +62,7 @@ export default function TataLetakAkar({
 }) {
   return (
     <html lang="id" className={`${inter.variable} ${poppins.variable} ${caveat.variable}`}>
-      <body className="bg-[#e9e5dd] antialiased">
+      <body className="bg-[#ececea] antialiased">
         {/* Di ponsel bingkai ini memenuhi layar. Di layar lebar ia
             menyusut jadi kolom selebar 390px persis seperti papan Figma,
             supaya juri yang membuka dari laptop melihat proporsi yang

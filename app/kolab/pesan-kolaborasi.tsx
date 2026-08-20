@@ -31,7 +31,7 @@ export function PesanKolaborasi() {
         {/* Ajakan membuat titik kumpul baru */}
         <Link
           href={`/kolab/buat?pedagang=${slug}`}
-          className="gradasi-kumpul relative block overflow-hidden rounded-[18px] p-5 transition-transform active:scale-[0.99]"
+          className="gradasi-kumpul relative block overflow-hidden rounded-[20px] p-5 transition-transform active:scale-[0.99]"
         >
           <span
             aria-hidden
@@ -40,7 +40,7 @@ export function PesanKolaborasi() {
           <span className="relative grid size-10 place-items-center rounded-full bg-white/15 text-white">
             <Plus size={20} strokeWidth={2.2} />
           </span>
-          <p className="relative mt-3.5 text-[19px] font-extrabold text-white">
+          <p className="tulisan-judul relative mt-3.5 text-[19px] font-extrabold text-white">
             Buat Titik Kumpul Baru
           </p>
           <p className="relative mt-1.5 max-w-[15rem] text-[12.5px] leading-snug text-white/70">
@@ -64,7 +64,7 @@ export function PesanKolaborasi() {
             return (
               <li
                 key={t.id}
-                className="bayang-kartu overflow-hidden rounded-[16px] border border-garis bg-white"
+                className="bayang-kartu overflow-hidden rounded-[20px] border border-garis bg-white"
               >
                 <div className="p-3.5">
                   <div className="flex items-start justify-between gap-2">
@@ -73,7 +73,7 @@ export function PesanKolaborasi() {
                       <span className="truncate">{t.nama}</span>
                     </p>
                     <span
-                      className={`shrink-0 rounded-[7px] px-2 py-1 text-[10px] font-bold ${
+                      className={`shrink-0 rounded-pil px-2 py-1 text-[10px] font-bold ${
                         penuh ? "bg-amber/15 text-amber-tua" : "bg-hijau-lembut text-hijau"
                       }`}
                     >
@@ -102,14 +102,14 @@ export function PesanKolaborasi() {
                     <TumpukanPeserta peserta={t.peserta} target={t.target} />
 
                     {punyaSaya ? (
-                      <span className="flex shrink-0 items-center gap-1.5 rounded-[11px] bg-tinta-5/15 px-3 py-2 text-[12px] font-semibold text-tinta-3">
+                      <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-tinta-5/15 px-3 py-2 text-[12px] font-semibold text-tinta-3">
                         <Clock size={13} strokeWidth={2.2} />
                         Menunggu Warga ({t.peserta.length}/{t.target})
                       </span>
                     ) : (
                       <Link
                         href={`/kolab/${t.id}`}
-                        className="flex shrink-0 items-center gap-1.5 rounded-[11px] bg-hijau-lembut px-3 py-2 text-[12px] font-bold text-hijau transition-transform active:scale-95"
+                        className="flex shrink-0 items-center gap-1.5 rounded-full bg-hijau-lembut px-3 py-2 text-[12px] font-bold text-hijau transition-transform active:scale-95"
                       >
                         Ikut Bergabung
                         <ArrowRight size={13} strokeWidth={2.6} />
@@ -139,7 +139,7 @@ export function PesanKolaborasi() {
         </ul>
 
         {aktif.length === 0 && (
-          <p className="rounded-[16px] border border-dashed border-garis bg-white px-4 py-8 text-center text-[12.5px] leading-relaxed text-tinta-4">
+          <p className="rounded-[20px] border border-dashed border-garis bg-white px-4 py-8 text-center text-[12.5px] leading-relaxed text-tinta-4">
             Belum ada titik kumpul aktif{namaSaya ? `, ${namaSaya}` : ""}.
             <br />
             Buat yang pertama di lingkunganmu.

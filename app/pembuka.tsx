@@ -46,7 +46,7 @@ export function Pembuka() {
   }, [lanjut]);
 
   return (
-    <main className="relative h-[100dvh] overflow-hidden bg-[#fcf9f0]">
+    <main className="relative h-[100dvh] overflow-hidden bg-krem">
       <div className="absolute inset-0 animate-[ilustrasi-masuk_900ms_ease-out_both]">
         {/* Lewat next/image, bukan latar CSS. Sebagai latar CSS berkasnya
             dikirim mentah 79 KB; lewat pengoptimal Next ia jadi WebP 16 KB
