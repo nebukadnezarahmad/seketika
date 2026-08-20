@@ -18,7 +18,21 @@ import { useSekarang } from "@/lib/waktu";
  * tujuannya, jadi angka pada lencana tidak bisa berbeda dengan isi yang
  * ditemukan pengguna setelah mengetuknya.
  */
-export function Lonceng({ nada = "hijau" }: { nada?: "hijau" | "putih" }) {
+export function Lonceng({
+  nada = "hijau",
+  ukuran = 36,
+}: {
+  /**
+   * `hijau` lingkaran hijau muda, dipakai di atas latar terang.
+   * `putih` tembus pandang, dipakai di atas kepala hijau.
+   * `polos` putih bergaris, untuk bilah atas beranda warga yang
+   *   tetangganya kolom cari dan avatar yang juga putih bergaris.
+   */
+  nada?: "hijau" | "putih" | "polos";
+  /** Sisi kotaknya dalam piksel, supaya bisa disejajarkan dengan
+      tetangganya di bilah atas beranda. */
+  ukuran?: number;
+}) {
   const profil = useToko((s) => s.profil);
   const pesanan = useToko((s) => s.pesanan);
   const pesananMasuk = useToko((s) => s.pesananMasuk);
@@ -37,11 +51,16 @@ export function Lonceng({ nada = "hijau" }: { nada?: "hijau" | "putih" }) {
     <Link
       href="/notifikasi"
       aria-label={belum > 0 ? `Notifikasi, ${belum} belum dibaca` : "Notifikasi"}
-      className={`relative grid size-9 shrink-0 place-items-center rounded-full transition-transform active:scale-90 ${
-        nada === "putih" ? "bg-white/15 text-white" : "bg-hijau-lembut text-hijau"
+      style={{ width: ukuran, height: ukuran }}
+      className={`relative grid shrink-0 place-items-center rounded-full transition-transform active:scale-90 ${
+        nada === "putih"
+          ? "bg-white/15 text-white"
+          : nada === "polos"
+            ? "border border-garis bg-white text-tinta-2"
+            : "bg-hijau-lembut text-hijau"
       }`}
     >
-      <Bell size={17} strokeWidth={2} />
+      <Bell size={ukuran >= 44 ? 19 : 17} strokeWidth={2} />
       {belum > 0 && (
         /* Angkanya ikut ditulis, bukan cuma titik merah. Titik saja
            memaksa orang membuka layarnya untuk tahu ada berapa, dan bagi

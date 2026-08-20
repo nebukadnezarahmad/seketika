@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Map, Receipt, Users, UtensilsCrossed } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
+import { Lonceng } from "@/komponen/ui/lonceng";
 import { IkonCari, IkonPin } from "@/komponen/ui/ikon";
 import { AksiCepat, type Pintasan } from "@/komponen/ui/aksi-cepat";
 import { Peta } from "@/komponen/peta/peta";
@@ -104,15 +105,23 @@ export function BerandaPembeli() {
           masuk bagi pengguna yang menjelajah lewat daftar heading. */}
       <h1 className="khusus-pembaca-layar">Beranda</h1>
 
-      {/* Bilah atas: kolom cari memanjang di kiri, avatar di kanan.
+      {/* Bilah atas: kolom cari memanjang di kiri, lonceng dan avatar di
+          kanan.
 
           Susunan ini menggantikan sapaan bertumpuk yang sempat dipakai.
           Pada aplikasi sejenis, baris teratas dipakai untuk bertindak,
           bukan untuk menyapa: kolom cari adalah unsur paling sering
           disentuh, jadi dialah yang berhak atas baris paling mudah
           dijangkau. Nama pengguna tetap muncul, tapi pindah ke kolom
-          lokasi di bawahnya yang memang menerangkan konteks. */}
-      <header className="flex items-center gap-2.5 px-4 pb-1 pt-2.5">
+          lokasi di bawahnya yang memang menerangkan konteks.
+
+          Loncengnya di sini, bukan di dalam profil. Kabar pesanan dan
+          titik kumpul perlu terlihat begitu aplikasi dibuka; kalau
+          lencananya bersembunyi satu tab jauhnya, ia baru ketahuan justru
+          setelah orang punya alasan lain untuk membuka profilnya. Sisi
+          pedagang sudah memasangnya di beranda sejak awal, jadi ini
+          sekaligus menyudahi ketimpangan antara kedua peran. */}
+      <header className="flex items-center gap-2 px-4 pb-1 pt-2.5">
         <Link
           href="/cari"
           className="flex h-[46px] min-w-0 flex-1 items-center gap-2.5 rounded-full border border-garis bg-white px-4"
@@ -120,6 +129,7 @@ export function BerandaPembeli() {
           <IkonCari size={17} className="shrink-0 text-tinta-3" />
           <span className="truncate text-[13.5px] text-tinta-4">Mau jajan apa hari ini?</span>
         </Link>
+        <Lonceng nada="polos" ukuran={46} />
         <Link
           href="/profil"
           aria-label="Buka profil saya"
