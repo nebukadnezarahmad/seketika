@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { TombolTaut } from "@/komponen/ui/tombol";
@@ -329,14 +329,27 @@ export function BerandaPedagang() {
           {titikKumpul
             .filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA)
             .map((t) => (
-              <li key={t.id} className="bayang-kartu rounded-[14px] border border-garis bg-white p-3">
-                <p className="flex items-center gap-1.5 text-[13.5px] font-bold text-tinta">
-                  <Users size={14} strokeWidth={2.1} className="shrink-0 text-hijau" />
-                  {t.nama}
-                </p>
-                <p className="mt-0.5 text-[11px] text-tinta-4">
-                  {t.peserta.length}/{t.target} warga · {t.patokan}
-                </p>
+              /* Kartunya tautan, bukan kotak diam. Sebelumnya ia
+                 memperlihatkan permintaan yang sedang menunggu tapi tidak
+                 bisa ditekan, sehingga pedagang tidak punya cara melihat
+                 siapa saja yang sudah bergabung atau ikut berunding di
+                 obrolannya. */
+              <li key={t.id}>
+                <Link
+                  href={`/kolab/${t.id}`}
+                  className="bayang-kartu flex items-center gap-2.5 rounded-[14px] border border-garis bg-white p-3 transition-transform active:scale-[0.99]"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-1.5 text-[13.5px] font-bold text-tinta">
+                      <Users size={14} strokeWidth={2.1} className="shrink-0 text-hijau" />
+                      {t.nama}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] text-tinta-4">
+                      {t.peserta.length}/{t.target} warga · {t.patokan}
+                    </span>
+                  </span>
+                  <ChevronRight size={16} className="shrink-0 text-tinta-5" aria-hidden />
+                </Link>
               </li>
             ))}
           {permintaan === 0 && (

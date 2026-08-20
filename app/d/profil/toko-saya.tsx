@@ -1,13 +1,18 @@
 "use client";
 
+import * as React from "react";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  BadgeCheck, BookOpen, Camera, Clock, MapPin, RotateCcw, Settings, ShoppingBag, Wallet,
+  BadgeCheck, BookOpen, Camera, Clock, MapPin, RotateCcw, Settings, ShoppingBag, Star, Wallet,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
-import { gerobakSaya } from "@/lib/data/pedagang";
+import { Kolom, LembarUbah } from "@/komponen/ui/lembar-ubah";
+import { SLUG_GEROBAK_SAYA, fotoMenu, gerobakSaya } from "@/lib/data/pedagang";
+import { menuBerlaku } from "@/lib/menu";
+import { nilaiRataRata } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 
 
@@ -17,7 +22,10 @@ export function TokoSaya() {
   const profil = useToko((s) => s.profil);
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const menuNonaktif = useToko((s) => s.menuNonaktif);
+  const menuSaya = useToko((s) => s.menuSaya);
   const riwayat = useToko((s) => s.riwayatPedagang);
+  const pesanan = useToko((s) => s.pesanan);
+  const penilaian = useToko((s) => s.penilaian);
   const gantiPeran = useToko((s) => s.gantiPeran);
   const setelUlang = useToko((s) => s.setelUlang);
 
@@ -35,11 +43,140 @@ export function TokoSaya() {
   const selesai = [...riwayat, ...pesananMasuk].filter((p) => p.status === "selesai");
   const wargaTerlayani = new Set(selesai.map((p) => p.warga)).size;
 
+  /* Bintang yang benar-benar diberikan warga, bukan angka rating pada
+     data contoh. Kalau belum ada yang menilai, yang ditulis tanda pisah,
+     bukan 0,0: nol terbaca seperti gerobak terburuk padahal yang benar
+     adalah belum ada yang menilai. */
+  const nilai = nilaiRataRata(pesanan, penilaian, SLUG_GEROBAK_SAYA);
+  const daftarMenu = menuBerlaku(menuSaya, gerobak.menu);
   const namaToko = profil?.namaUsaha || gerobak.nama;
   const pemilik = profil?.nama;
+  const area = profil?.areaJangkauan || "Bumi Marina Emas";
+  const buka2 = profil?.jamBuka || "07.00";
+  const tutup2 = profil?.jamTutup || "20.00";
+
+  const [lembar, setLembar] = React.useState<
+    "toko" | "area" | "jam" | "galeri" | null
+  >(null);
+  const perbaruiProfil = useToko((s) => s.perbaruiProfil);
+
+  const [namaUsaha, setNamaUsaha] = React.useState("");
+  const [jenisUsaha, setJenisUsaha] = React.useState("");
+  const [deskripsi, setDeskripsi] = React.useState("");
+  const [isiArea, setIsiArea] = React.useState("");
+  const [isiBuka, setIsiBuka] = React.useState("");
+  const [isiTutup, setIsiTutup] = React.useState("");
+
+  const bukaLembar = (mana: typeof lembar) => {
+    setNamaUsaha(profil?.namaUsaha ?? "");
+    setJenisUsaha(profil?.jenisUsaha ?? gerobak.jenis);
+    setDeskripsi(profil?.deskripsiUsaha ?? "");
+    setIsiArea(area);
+    setIsiBuka(buka2);
+    setIsiTutup(tutup2);
+    setLembar(mana);
+  };
+
+  /* Galeri menampilkan foto yang memang sudah dimiliki gerobak ini: foto
+     gerobaknya sendiri dan foto tiap menunya. Tidak ada pengunggahan di
+     purwarupa ini, dan tombol unggah yang tidak mengunggah apa pun lebih
+     buruk daripada galeri yang jujur cuma menampilkan yang ada. */
+  const galeri = [gerobak.foto, ...daftarMenu.map((m) => fotoMenu[m.id]).filter(Boolean)];
 
   return (
-    <Layar nav peran="pedagang">
+    <Layar
+      nav
+      peran="pedagang"
+      lembar={
+        <>
+          <LembarUbah
+            buka={lembar === "toko"}
+            tutup={() => setLembar(null)}
+            judul="Edit Profil Toko"
+            keterangan="Nama toko inilah yang dilihat warga saat mencari gerobakmu."
+            simpan={() =>
+              perbaruiProfil({
+                namaUsaha: namaUsaha.trim(),
+                jenisUsaha: jenisUsaha.trim(),
+                deskripsiUsaha: deskripsi.trim(),
+              })
+            }
+          >
+            <Kolom
+              label="Nama toko"
+              nilai={namaUsaha}
+              ubah={setNamaUsaha}
+              contoh={gerobak.nama}
+            />
+            <Kolom
+              label="Jenis dagangan"
+              nilai={jenisUsaha}
+              ubah={setJenisUsaha}
+              contoh="Bakso & Mie"
+            />
+            <Kolom
+              label="Keterangan singkat"
+              nilai={deskripsi}
+              ubah={setDeskripsi}
+              contoh="Bakso sapi asli, keliling tiap sore"
+              banyakBaris
+            />
+          </LembarUbah>
+
+          <LembarUbah
+            buka={lembar === "area"}
+            tutup={() => setLembar(null)}
+            judul="Area Jangkauan"
+            keterangan="Kawasan yang sanggup kamu datangi. Warga di luar area masih bisa melihat gerobakmu, tapi tahu jaraknya lebih jauh."
+            simpan={() => perbaruiProfil({ areaJangkauan: isiArea.trim() })}
+          >
+            <Kolom
+              label="Kawasan"
+              nilai={isiArea}
+              ubah={setIsiArea}
+              contoh="Bumi Marina Emas"
+            />
+          </LembarUbah>
+
+          <LembarUbah
+            buka={lembar === "jam"}
+            tutup={() => setLembar(null)}
+            judul="Jam Operasional"
+            keterangan="Jam ini keterangan bagi warga. Yang benar-benar menentukan gerobakmu menerima pesanan adalah sakelar buka-tutup di beranda."
+            simpan={() =>
+              perbaruiProfil({ jamBuka: isiBuka.trim(), jamTutup: isiTutup.trim() })
+            }
+          >
+            <Kolom label="Mulai" nilai={isiBuka} ubah={setIsiBuka} contoh="07.00" />
+            <Kolom label="Sampai" nilai={isiTutup} ubah={setIsiTutup} contoh="20.00" />
+          </LembarUbah>
+
+          <LembarUbah
+            buka={lembar === "galeri"}
+            tutup={() => setLembar(null)}
+            judul="Foto & Galeri"
+            keterangan="Foto gerobak dan tiap menu yang sedang dipakai di aplikasi warga."
+          >
+            <ul className="grid grid-cols-3 gap-2">
+              {galeri.map((src, i) => (
+                <li key={src} className="relative aspect-square overflow-hidden rounded-[14px]">
+                  <Image
+                    src={src}
+                    alt={i === 0 ? "Foto gerobak" : `Foto menu ${daftarMenu[i - 1]?.nama ?? ""}`}
+                    fill
+                    sizes="110px"
+                    className="object-cover"
+                  />
+                </li>
+              ))}
+            </ul>
+            <p className="text-[11px] leading-relaxed text-tinta-4">
+              Mengunggah foto baru belum tersedia pada purwarupa ini.
+            </p>
+          </LembarUbah>
+        </>
+      }
+    >
       <header className="gradasi-kumpul relative overflow-hidden rounded-b-[24px] px-4 pb-5 pt-3">
         <span aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]" />
 
@@ -47,7 +184,9 @@ export function TokoSaya() {
           <h1 className="text-[19px] font-extrabold text-white">Toko Saya</h1>
           <button
             type="button"
-            aria-label="Pengaturan"
+            aria-label="Pengaturan toko"
+            aria-haspopup="dialog"
+            onClick={() => bukaLembar("toko")}
             className="grid size-9 place-items-center rounded-full bg-white/15 text-white transition-transform active:scale-90"
           >
             <Settings size={17} strokeWidth={2} />
@@ -89,14 +228,29 @@ export function TokoSaya() {
           </div>
         </div>
 
-        <dl className="relative mt-4 grid grid-cols-2 rounded-[16px] bg-white/10 py-3">
+        <dl className="relative mt-4 grid grid-cols-3 rounded-[16px] bg-white/10 py-3">
           <div className="border-r border-white/15 text-center">
             <dd className="text-[20px] font-extrabold text-white">{selesai.length}</dd>
-            <dt className="mt-0.5 text-[11px] text-white/60">Pesanan Selesai</dt>
+            <dt className="mt-0.5 text-[11px] text-white/60">Selesai</dt>
+          </div>
+          <div className="border-r border-white/15 text-center">
+            <dd className="text-[20px] font-extrabold text-white">{wargaTerlayani}</dd>
+            <dt className="mt-0.5 text-[11px] text-white/60">Warga</dt>
           </div>
           <div className="text-center">
-            <dd className="text-[20px] font-extrabold text-white">{wargaTerlayani}</dd>
-            <dt className="mt-0.5 text-[11px] text-white/60">Warga Terlayani</dt>
+            <dd className="flex items-center justify-center gap-1 text-[20px] font-extrabold text-white">
+              {nilai ? (
+                <>
+                  <Star size={15} strokeWidth={2} className="fill-amber text-amber" aria-hidden />
+                  {nilai.rata.toLocaleString("id-ID")}
+                </>
+              ) : (
+                "—"
+              )}
+            </dd>
+            <dt className="mt-0.5 text-[11px] text-white/60">
+              {nilai ? `${nilai.jumlah} penilaian` : "Belum dinilai"}
+            </dt>
           </div>
         </dl>
       </header>
@@ -114,6 +268,8 @@ export function TokoSaya() {
           </div>
           <button
             type="button"
+            aria-haspopup="dialog"
+            onClick={() => bukaLembar("toko")}
             className="shrink-0 rounded-full bg-hijau px-4 py-2 text-[12px] font-bold text-white transition-transform active:scale-95"
           >
             Edit
@@ -128,29 +284,29 @@ export function TokoSaya() {
             Ikon={BookOpen}
             nada="hijau"
             judul="Kelola Menu"
-            isi={`${gerobak.menu.length - menuNonaktif.length} dari ${gerobak.menu.length} menyala`}
+            isi={`${daftarMenu.filter((m) => !menuNonaktif.includes(m.id)).length} dari ${daftarMenu.length} menyala`}
             href="/d/menu"
           />
           <BarisMenu
             Ikon={MapPin}
             nada="biru"
             judul="Area Jangkauan"
-            isi="Bumi Marina Emas"
-            href="/d/profil"
+            isi={area}
+            onClick={() => bukaLembar("area")}
           />
           <BarisMenu
             Ikon={Clock}
             nada="amber"
             judul="Jam Operasional"
-            isi="07.00 - 20.00"
-            href="/d/profil"
+            isi={`${buka2} - ${tutup2}`}
+            onClick={() => bukaLembar("jam")}
           />
           <BarisMenu
             Ikon={Camera}
             nada="ungu"
             judul="Foto & Galeri"
-            isi="3 foto diunggah"
-            href="/d/profil"
+            isi={`${galeri.length} foto dipakai`}
+            onClick={() => bukaLembar("galeri")}
             akhir
           />
         </div>

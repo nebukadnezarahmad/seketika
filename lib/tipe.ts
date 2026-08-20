@@ -114,6 +114,11 @@ export type Profil = {
   namaUsaha?: string;
   jenisUsaha?: string;
   deskripsiUsaha?: string;
+  /** Kawasan yang dilayani gerobak, misalnya "Bumi Marina Emas". */
+  areaJangkauan?: string;
+  /** Jam buka dan tutup, disimpan sebagai "07.00" dan "20.00". */
+  jamBuka?: string;
+  jamTutup?: string;
 };
 
 /** Pesanan dilihat dari sisi pedagang. */

@@ -1,13 +1,16 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   ArrowDownRight,
   ArrowUpRight,
   Box,
+  ChevronRight,
   ClipboardCheck,
   Copy,
   Lock,
+  MapPin,
   Sparkles,
   TrendingUp,
 } from "lucide-react";
@@ -17,12 +20,15 @@ import { Tombol } from "@/komponen/ui/tombol";
 import { salinTeks } from "@/lib/berbagi";
 import { rp } from "@/lib/format";
 import {
+  HARI_BULANAN,
   bandingHari,
   deretTujuhHari,
   jamRamai,
   jamRapi,
+  laporanBulanan,
   menuTerlaris,
   pendapatanHari,
+  prakiraanRamai,
 } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -32,6 +38,8 @@ const JEDA_SALIN = 2000;
 
 export function BukuKas() {
   const riwayat = useToko((s) => s.riwayatPedagang);
+  const pro = useToko((s) => s.pro);
+  const setPro = useToko((s) => s.setPro);
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const sekarang = useSekarang();
   const [tersalin, setTersalin] = React.useState(false);
@@ -56,6 +64,8 @@ export function BukuKas() {
       deret: deretTujuhHari(sumber, sekarang),
       menu: menuTerlaris(sumber, sekarang).slice(0, 3),
       jam: jamRamai(sumber, sekarang).slice(0, 3),
+      bulanan: laporanBulanan(sumber, sekarang),
+      prakiraan: prakiraanRamai(sumber, sekarang).slice(0, 3),
     };
   }, [sumber, sekarang]);
 
@@ -283,38 +293,200 @@ export function BukuKas() {
           </>
         )}
 
-        {/* 7. Tawaran berbayar */}
+        {/* 7. Langganan berbayar.
+
+            Kartunya berubah watak menurut keadaan langganan. Waktu mati ia
+            menawarkan; waktu menyala ia jadi pintu ke isinya. Menyimpan
+            dua kartu terpisah untuk dua keadaan berarti dua tempat yang
+            harus sama-sama diperbarui setiap kali daftar fiturnya
+            berubah. */}
         <section className="mt-5 overflow-hidden rounded-[20px] border border-garis bg-white">
           <div className="gradasi-amber flex items-center gap-2.5 px-4 py-3">
-            <Lock size={15} strokeWidth={2.3} className="shrink-0 text-white" aria-hidden />
-            <p className="text-[13.5px] font-extrabold text-white">SEKETIKA Pro</p>
+            <Sparkles size={15} strokeWidth={2.3} className="shrink-0 text-white" aria-hidden />
+            <p className="flex-1 text-[13.5px] font-extrabold text-white">SEKETIKA Pro</p>
+            <span className="rounded-pil bg-white/25 px-2.5 py-1 text-[10px] font-bold text-white">
+              {pro ? "Aktif" : "Nonaktif"}
+            </span>
           </div>
 
-          <ul className="px-4 py-3">
-            {[
-              { Ikon: TrendingUp, teks: "Laporan bulanan lengkap" },
-              { Ikon: Sparkles, teks: "Prediksi kawasan & jam ramai" },
-              { Ikon: Box, teks: "Catatan stok dagangan" },
-            ].map(({ Ikon, teks }) => (
-              <li key={teks} className="flex items-center gap-2.5 py-1.5">
-                <Ikon size={15} strokeWidth={2} className="shrink-0 text-tinta-5" aria-hidden />
-                <span className="flex-1 text-[12.5px] text-tinta-3">{teks}</span>
-                <Lock size={12} strokeWidth={2.2} className="shrink-0 text-tinta-5" aria-hidden />
-                <span className="khusus-pembaca-layar">terkunci</span>
-              </li>
-            ))}
-          </ul>
+          {pro ? (
+            <>
+              <p className="border-b border-garis px-4 py-3 text-[12px] leading-relaxed text-tinta-3">
+                Langganan menyala. Laporan bulanan dan prakiraan kawasan
+                muncul di bawah, catatan stok ada di layarnya sendiri.
+              </p>
+              <Link
+                href="/d/stok"
+                className="flex items-center gap-3 border-b border-garis px-4 py-3.5"
+              >
+                <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-amber-lembut text-amber-tua">
+                  <Box size={18} strokeWidth={1.9} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13.5px] font-bold text-tinta">Catatan Stok</span>
+                  <span className="mt-0.5 block text-[11.5px] text-tinta-4">
+                    Sisa porsi tiap menu
+                  </span>
+                </span>
+                <ChevronRight size={17} className="shrink-0 text-tinta-5" aria-hidden />
+              </Link>
+            </>
+          ) : (
+            <ul className="border-b border-garis px-4 py-3">
+              {[
+                { Ikon: TrendingUp, teks: "Laporan bulanan lengkap" },
+                { Ikon: MapPin, teks: "Prakiraan kawasan & jam ramai" },
+                { Ikon: Box, teks: "Catatan stok dagangan" },
+              ].map(({ Ikon, teks }) => (
+                <li key={teks} className="flex items-center gap-2.5 py-1.5">
+                  <Ikon size={15} strokeWidth={2} className="shrink-0 text-tinta-5" aria-hidden />
+                  <span className="flex-1 text-[12.5px] text-tinta-3">{teks}</span>
+                  <Lock size={12} strokeWidth={2.2} className="shrink-0 text-tinta-5" aria-hidden />
+                  <span className="khusus-pembaca-layar">terkunci</span>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          <div className="px-4 pb-4">
-            {/* Sengaja mati. Halamannya memang belum ada, dan tombol yang
-                menjanjikan halaman kosong lebih buruk daripada tombol yang
-                jujur mengaku belum bisa ditekan. */}
-            <Tombol rupa="halus" ukur="md" penuh disabled>
-              Pelajari
+          <div className="px-4 py-4">
+            <Tombol
+              rupa={pro ? "garis" : "amber"}
+              ukur="md"
+              penuh
+              onClick={() => setPro(!pro)}
+            >
+              {pro ? "Nonaktifkan Langganan" : "Aktifkan SEKETIKA Pro"}
             </Tombol>
-            <p className="mt-2 text-center text-[11px] text-tinta-4">Segera hadir</p>
+            {/* Purwarupa ini tidak memungut pembayaran. Menuliskannya
+                terang-terangan lebih baik daripada membiarkan orang
+                mengira ada tagihan yang berjalan di belakang. */}
+            <p className="mt-2 text-center text-[11px] leading-snug text-tinta-4">
+              Purwarupa lomba, belum ada pembayaran sungguhan
+            </p>
           </div>
         </section>
+
+        {pro && angka && adaTransaksi && (
+          <>
+            {/* Laporan bulanan */}
+            <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
+              <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
+                <TrendingUp size={16} strokeWidth={2.1} className="shrink-0 text-amber-tua" />
+                Laporan {HARI_BULANAN} Hari
+              </h2>
+
+              <p className="mt-2.5 text-[26px] font-extrabold leading-none text-tinta">
+                {rp(angka.bulanan.total)}
+              </p>
+              <p className="mt-1 text-[11.5px] text-tinta-4">
+                {angka.bulanan.jumlahPesanan} pesanan · {angka.bulanan.hariBerjualan} hari
+                berjualan
+              </p>
+
+              <dl className="mt-3.5 grid grid-cols-2 gap-2">
+                <div className="rounded-[14px] bg-krem px-3 py-2.5">
+                  <dt className="text-[10.5px] text-tinta-4">Rata-rata per hari jualan</dt>
+                  <dd className="mt-0.5 text-[14px] font-extrabold text-tinta">
+                    {rp(angka.bulanan.rataRataHarian)}
+                  </dd>
+                </div>
+                <div className="rounded-[14px] bg-krem px-3 py-2.5">
+                  <dt className="text-[10.5px] text-tinta-4">Hari terbaik</dt>
+                  <dd className="mt-0.5 text-[14px] font-extrabold text-tinta">
+                    {angka.bulanan.terbaik
+                      ? `${angka.bulanan.terbaik.label} · ${rp(angka.bulanan.terbaik.total)}`
+                      : "—"}
+                  </dd>
+                </div>
+              </dl>
+
+              <ul className="mt-3.5 flex flex-col gap-2">
+                {angka.bulanan.mingguan.map((m) => {
+                  const puncakMinggu = Math.max(
+                    1,
+                    ...angka.bulanan.mingguan.map((x) => x.total),
+                  );
+                  return (
+                    <li key={m.label} className="flex items-center gap-3">
+                      <span className="w-[86px] shrink-0 text-[11.5px] text-tinta-3">
+                        {m.label}
+                      </span>
+                      <span
+                        aria-hidden
+                        className="h-2 rounded-pil bg-amber"
+                        style={{
+                          width: `${(m.total / puncakMinggu) * 100}%`,
+                          minWidth: "8px",
+                        }}
+                      />
+                      <span className="shrink-0 text-[11.5px] font-semibold tabular-nums text-tinta-2">
+                        {rp(m.total)}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+
+            {/* Prakiraan kawasan */}
+            <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
+              <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
+                <MapPin size={16} strokeWidth={2.1} className="shrink-0 text-amber-tua" />
+                Prakiraan Kawasan
+              </h2>
+              <p className="mt-0.5 text-[11.5px] text-tinta-4">
+                Dari {HARI_BULANAN} hari terakhir, bukan cuma sepekan
+              </p>
+
+              <ol className="mt-3 flex flex-col gap-2">
+                {angka.prakiraan.map((k, i) => (
+                  <li
+                    key={`${k.titik}-${k.mulai}`}
+                    className="flex items-center gap-3 rounded-[14px] bg-krem px-3 py-2.5"
+                  >
+                    <span className="grid size-6 shrink-0 place-items-center rounded-full bg-amber text-[11px] font-extrabold text-white">
+                      {i + 1}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[12.5px] font-bold text-tinta">
+                        {k.titik}
+                      </span>
+                      <span className="text-[11px] text-tinta-4">
+                        {jamRapi(k.mulai)}–{jamRapi(k.selesai)} · {rp(k.total)}
+                      </span>
+                    </span>
+                    {/* Jumlah pesanan yang ditebalkan, bukan rupiahnya,
+                        karena itulah kunci pengurutan daftar ini. Waktu
+                        rupiah yang ditonjolkan, kolomnya terbaca menurun
+                        ke arah yang salah: kawasan kedua bisa punya nominal
+                        lebih besar dari yang pertama, dan daftarnya
+                        terlihat gagal diurutkan padahal urutannya benar. */}
+                    <span className="shrink-0 text-right text-[12px] font-bold text-hijau">
+                      {k.jumlah}
+                      <span className="block text-[10px] font-normal text-tinta-4">pesanan</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+
+              {angka.prakiraan.length > 0 && (
+                <p className="mt-3.5 flex gap-2.5 rounded-[14px] bg-amber-lembut px-3.5 py-3 text-[12px] leading-relaxed text-amber-tua">
+                  <Sparkles size={15} strokeWidth={2.1} className="mt-px shrink-0" aria-hidden />
+                  <span>
+                    Besok mulai dari{" "}
+                    <strong className="font-bold">{angka.prakiraan[0].titik}</strong> sekitar{" "}
+                    <strong className="font-bold">
+                      {jamRapi(angka.prakiraan[0].mulai)}
+                    </strong>
+                    . Kawasan itu paling sering menghasilkan pesanan pada jam
+                    tersebut.
+                  </span>
+                </p>
+              )}
+            </section>
+          </>
+        )}
+
       </div>
     </Layar>
   );

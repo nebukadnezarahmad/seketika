@@ -1,10 +1,13 @@
 "use client";
 
+import * as React from "react";
+
 import { useRouter } from "next/navigation";
 import {
   Bell, CircleHelp, Info, MapPin, RotateCcw, ShieldCheck, Store, History,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
+import { Kolom, LembarUbah } from "@/komponen/ui/lembar-ubah";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
 import { useToko } from "@/lib/toko";
 
@@ -18,8 +21,141 @@ export function ProfilPembeli() {
 
   const kolaborasi = titikKumpul.filter((t) => t.peserta.some((p) => p.id === "saya")).length;
 
+  /* Satu keadaan untuk seluruh lembar, bukan satu penanda buka-tutup per
+     baris menu. Dengan satu keadaan, hanya satu lembar yang mungkin
+     terbuka pada satu waktu, dan itu memang satu-satunya keadaan yang
+     masuk akal. */
+  const [lembar, setLembar] = React.useState<
+    "diri" | "alamat" | "bantuan" | "tentang" | null
+  >(null);
+  const perbaruiProfil = useToko((s) => s.perbaruiProfil);
+
+  const [nama, setNama] = React.useState("");
+  const [telepon, setTelepon] = React.useState("");
+  const [alamat, setAlamat] = React.useState("");
+  const [patokan, setPatokan] = React.useState("");
+
+  const buka = (mana: typeof lembar) => {
+    setNama(profil?.nama ?? "");
+    setTelepon(profil?.telepon ?? "");
+    setAlamat(profil?.alamat ?? "");
+    setPatokan(profil?.patokan ?? "");
+    setLembar(mana);
+  };
+
   return (
-    <Layar nav latar="bg-krem">
+    <Layar
+      nav
+      latar="bg-krem"
+      lembar={
+        <>
+          <LembarUbah
+            buka={lembar === "diri"}
+            tutup={() => setLembar(null)}
+            judul="Ubah Data Diri"
+            keterangan="Nama dipakai saat kamu bergabung ke titik kumpul, jadi tetangga tahu siapa yang ikut."
+            simpan={() => {
+              if (!nama.trim()) return false;
+              perbaruiProfil({ nama: nama.trim(), telepon: telepon.trim() });
+            }}
+          >
+            <Kolom label="Nama lengkap" nilai={nama} ubah={setNama} contoh="Dewi Anggraini" />
+            <Kolom
+              label="Nomor telepon"
+              nilai={telepon}
+              ubah={setTelepon}
+              contoh="0812-3456-7890"
+              mode="tel"
+            />
+          </LembarUbah>
+
+          <LembarUbah
+            buka={lembar === "alamat"}
+            tutup={() => setLembar(null)}
+            judul="Alamat Tersimpan"
+            keterangan="Ke sinilah pedagang menuju saat kamu memanggilnya. Patokan membantu gerobak menemukan rumahmu."
+            simpan={() => perbaruiProfil({ alamat: alamat.trim(), patokan: patokan.trim() })}
+          >
+            <Kolom
+              label="Alamat"
+              nilai={alamat}
+              ubah={setAlamat}
+              contoh="Bumi Marina Emas Selatan No.12"
+            />
+            <Kolom
+              label="Patokan"
+              nilai={patokan}
+              ubah={setPatokan}
+              contoh="Depan pos ronda, pagar hijau"
+            />
+          </LembarUbah>
+
+          <LembarUbah
+            buka={lembar === "bantuan"}
+            tutup={() => setLembar(null)}
+            judul="Pusat Bantuan Tetangga"
+          >
+            <ul className="flex flex-col gap-2.5">
+              {[
+                {
+                  t: "Pedagang tidak kunjung datang",
+                  i: "Buka rincian pesanan lalu ketuk Chat Penjual. Gerobak keliling kadang tertahan di gang lain.",
+                },
+                {
+                  t: "Titik kumpul saya hangus",
+                  i: "Titik kumpul berhenti menerima warga setelah lewat tenggatnya. Buat yang baru, ajak tetangga lewat tautan undangan.",
+                },
+                {
+                  t: "Kenapa tidak ada pembayaran di aplikasi?",
+                  i: "Semua transaksi dibayar tunai di tempat saat gerobak sampai. SEKETIKA hanya mempertemukan, tidak memegang uang.",
+                },
+                {
+                  t: "Data saya tersimpan di mana?",
+                  i: "Seluruhnya di peramban perangkat ini. Menekan Setel Ulang Data menghapusnya sampai bersih.",
+                },
+              ].map((f) => (
+                <li key={f.t} className="rounded-[14px] border border-garis bg-white p-3.5">
+                  <p className="text-[12.5px] font-bold text-tinta">{f.t}</p>
+                  <p className="mt-1 text-[11.5px] leading-relaxed text-tinta-4">{f.i}</p>
+                </li>
+              ))}
+            </ul>
+          </LembarUbah>
+
+          <LembarUbah
+            buka={lembar === "tentang"}
+            tutup={() => setLembar(null)}
+            judul="Tentang SEKETIKA"
+          >
+            <div className="rounded-[14px] border border-garis bg-white p-3.5">
+              <p className="text-[12.5px] leading-relaxed text-tinta-3">
+                SEKETIKA mempertemukan pedagang keliling dengan warga di
+                sekitarnya. Warga bisa memanggil gerobak ke depan rumah, atau
+                patungan lewat Titik Kumpul supaya pedagang datang sekali
+                untuk beberapa tetangga sekaligus.
+              </p>
+            </div>
+            <dl className="rounded-[14px] border border-garis bg-white p-3.5 text-[12px]">
+              {[
+                ["Versi", "1.0"],
+                ["Penyimpanan", "Peramban perangkat ini"],
+                ["Pembayaran", "Tunai di tempat"],
+              ].map(([k, v]) => (
+                <div key={k} className="flex justify-between gap-3 py-1">
+                  <dt className="text-tinta-4">{k}</dt>
+                  <dd className="font-semibold text-tinta-2">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="text-[11px] leading-relaxed text-tinta-4">
+              Purwarupa untuk App Development Competition IT FEST 2026. Data
+              pedagang dan warga di dalamnya adalah contoh, bukan orang
+              sungguhan.
+            </p>
+          </LembarUbah>
+        </>
+      }
+    >
       {/* Kepala hijau */}
       <header className="gradasi-kumpul relative overflow-hidden rounded-b-[24px] px-4 pb-5 pt-3">
         <span aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]" />
@@ -52,6 +188,8 @@ export function ProfilPembeli() {
 
           <button
             type="button"
+            aria-haspopup="dialog"
+            onClick={() => buka("diri")}
             className="shrink-0 rounded-full bg-white/15 px-4 py-2 text-[12px] font-bold text-white transition-transform active:scale-95"
           >
             Edit
@@ -86,7 +224,7 @@ export function ProfilPembeli() {
             nada="hijau"
             judul="Alamat Tersimpan"
             isi={profil?.alamat || "Belum diisi"}
-            href="/profil"
+            onClick={() => buka("alamat")}
           />
           <BarisMenu
             Ikon={History}
@@ -113,15 +251,15 @@ export function ProfilPembeli() {
             Ikon={CircleHelp}
             nada="biru"
             judul="Pusat Bantuan Tetangga"
-            isi="FAQ & hubungi kami"
-            href="/profil"
+            isi="Pertanyaan yang sering muncul"
+            onClick={() => buka("bantuan")}
           />
           <BarisMenu
             Ikon={Info}
             nada="amber"
             judul="Tentang SEKETIKA"
-            isi="Versi 1.0 · Kebijakan Privasi"
-            href="/profil"
+            isi="Versi 1.0 · cara kerja aplikasi"
+            onClick={() => buka("tentang")}
           />
           {/* Tanpa server autentikasi, berpindah peran adalah satu-satunya
               cara melihat sisi pedagang. Barisnya diletakkan di sini

@@ -55,7 +55,8 @@ harus berjalan.
 | Kedaluwarsa otomatis | Titik kumpul yang lewat tenggat berhenti menerima warga |
 | Bagikan undangan | Tautan titik kumpul dibagikan lewat WhatsApp |
 | Percakapan | Obrolan langsung dengan pedagang |
-| Beri penilaian | Bintang untuk pesanan yang sudah selesai, sekali kirim |
+| Beri penilaian | Bintang untuk pesanan selesai, sekali kirim, tampil di riwayat |
+| Kelola akun | Ubah nama, telepon, alamat, dan patokan lewat lembar di profil |
 | Pusat notifikasi | Kabar pesanan dan titik kumpul, dengan lencana belum dibaca |
 
 ### Sisi pedagang
@@ -67,9 +68,15 @@ harus berjalan.
 | Terima & berangkat | Membuka navigasi dengan panduan arah |
 | Rekap harian | Ringkasan pesanan yang sudah dilayani |
 | Buku Kas | Pendapatan harian, grafik tujuh hari, menu terlaris, dan jam paling ramai |
-| Kelola menu | Menyalakan atau mematikan menu; yang mati hilang dari aplikasi warga |
+| Kelola menu | Tambah, ubah, hapus, dan matikan menu; yang mati hilang dari aplikasi warga |
+| Pengaturan toko | Nama, jenis, keterangan, area jangkauan, jam operasional, dan galeri |
+| Penilaian diterima | Rata-rata bintang dari warga, dihitung dari pesanan yang dinilai |
 | Tolak pesanan | Punya statusnya sendiri dan tidak terhitung sebagai pemasukan |
 | Pusat notifikasi | Pesanan baru dan permintaan titik kumpul untuk gerobak sendiri |
+| **SEKETIKA Pro** | Langganan yang bisa dinyalakan dan dimatikan, membuka tiga fitur di bawah |
+| Laporan 30 hari | Total, rata-rata per hari jualan, hari terbaik, dan perbandingan mingguan |
+| Prakiraan kawasan | Kawasan dan jam yang paling sering menghasilkan pesanan |
+| Catatan stok | Sisa porsi tiap menu, dicatat naik-turun dengan satu ketukan |
 | Halaman toko | Kelola menu, area jangkauan, dan jam operasional |
 
 ## Teknologi
