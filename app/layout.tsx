@@ -66,8 +66,12 @@ export default function TataLetakAkar({
         {/* Di ponsel bingkai ini memenuhi layar. Di layar lebar ia
             menyusut jadi kolom selebar 390px persis seperti papan Figma,
             supaya juri yang membuka dari laptop melihat proporsi yang
-            sama dengan rancangannya, bukan versi yang melar. */}
-        <div className="mx-auto flex min-h-[100dvh] w-full max-w-[390px] flex-col bg-krem shadow-[0_0_60px_rgb(0_0_0/0.12)] sm:min-h-[100dvh]">
+            sama dengan rancangannya, bukan versi yang melar. Tepinya
+            ditandai garis rambut, bukan cahaya kabur: yang dibutuhkan
+            cuma batas kolomnya, dan bayangan selebar 60px pada layar
+            yang isinya sendiri sudah datar justru jadi satu-satunya
+            unsur yang mengambang. */}
+        <div className="mx-auto flex min-h-[100dvh] w-full max-w-[390px] flex-col bg-krem sm:min-h-[100dvh] sm:border-x sm:border-garis">
           <PemulihData>{children}</PemulihData>
         </div>
       </body>
