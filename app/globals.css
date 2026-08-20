@@ -42,6 +42,14 @@
   --color-krem: #f5f6f5;
   --color-garis: #e7e9e7;
   --color-garis-pil: #e2e5e2;
+  /* Garis yang MENANDAI batas komponen, bukan sekadar memisahkan isi.
+     WCAG 1.4.11 menuntut 3:1 untuk batas yang dipakai mengenali kontrol,
+     dan --color-garis hanya 1,22:1 di atas putih: tepi kotak isian dan
+     tombol bergaris praktis tidak terlihat. #909290 lolos 3,13:1.
+     Dipakai untuk tepi input dan tombol sekunder; untuk garis pemisah
+     yang murni hiasan, --color-garis tetap yang benar karena di sana
+     tidak ada ambang yang harus dilewati. */
+  --color-garis-tegas: #909290;
 
   /* Tinta, dari paling pekat ke paling pudar. Rona digeser dari
      kecoklatan hangat ke abu sejuk supaya serasi dengan latar barunya. */
