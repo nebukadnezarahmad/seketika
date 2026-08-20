@@ -123,4 +123,15 @@ export type PesananMasuk = {
   status: "baru" | "diproses" | "diantar" | "selesai";
   /** Menit sejak pesanan masuk, dipakai untuk teks "5 mnt lalu". */
   menitLalu: number;
+  /**
+   * Waktu pesanan diselesaikan sebagai ISO string. Hanya terisi untuk
+   * status `selesai`.
+   *
+   * Sengaja opsional. Data yang sudah tersimpan di localStorage pengguna
+   * dari versi sebelum Buku Kas ada tidak punya medan ini, dan kalau
+   * dibuat wajib, aplikasi akan pecah begitu diperbarui. Rekap
+   * memperlakukan pesanan tanpa stempel ini sebagai tidak bertanggal,
+   * jadi ia dilewati alih-alih dihitung pada hari yang salah.
+   */
+  selesaiPada?: string;
 };

@@ -17,6 +17,7 @@ import {
   percakapanPedagangAwal,
   pesananAwal,
   pesananMasukAwal,
+  riwayatPedagangAwal,
   titikKumpulAwal,
 } from "@/lib/data/awal";
 
@@ -39,6 +40,15 @@ type Keadaan = {
   pesanan: Pesanan[];
   /** Pesanan yang masuk ke gerobak, dilihat dari sisi pedagang. */
   pesananMasuk: PesananMasuk[];
+  /**
+   * Pesanan yang sudah selesai pada hari-hari sebelumnya, bahan Buku Kas.
+   *
+   * Terpisah dari `pesananMasuk` karena keduanya menjawab pertanyaan
+   * berbeda: yang satu "apa yang harus saya kerjakan sekarang", yang ini
+   * "bagaimana dagangan saya seminggu terakhir". Menyatukannya membuat
+   * kotak masuk hari ini terkubur riwayat.
+   */
+  riwayatPedagang: PesananMasuk[];
   /** Gerobak sedang buka atau tutup. */
   gerobakBuka: boolean;
   titikKumpul: TitikKumpul[];
@@ -58,6 +68,15 @@ type Tindakan = {
   ubahJumlah: (pedagangSlug: string, baris: Omit<BarisPesanan, "jumlah">, delta: number) => void;
   kosongkanKeranjang: () => void;
 
+  /**
+   * Menyiapkan keranjang untuk satu panggilan, menimpa isinya.
+   *
+   * Dipakai layar menu yang tidak lagi menumpuk pesanan butir demi butir:
+   * di sana pengguna memanggil penjual, bukan mengisi troli. Daftar boleh
+   * kosong, artinya penjual dipanggil tanpa pesanan awal dan warga
+   * memilih dagangannya setelah gerobak sampai.
+   */
+  siapkanPanggilan: (pedagangSlug: string, baris: BarisPesanan[]) => void;
   buatPesanan: (alamat: string, titikKumpulId?: string) => string;
   ubahStatusPesanan: (id: string, status: StatusPesanan) => void;
 
@@ -80,6 +99,7 @@ const awal: Keadaan = {
   izin: { lokasi: false, notifikasi: false, suara: false },
   pesanan: pesananAwal,
   pesananMasuk: pesananMasukAwal,
+  riwayatPedagang: riwayatPedagangAwal,
   gerobakBuka: true,
   titikKumpul: titikKumpulAwal,
   percakapan: percakapanAwal,
@@ -130,6 +150,8 @@ export const useToko = create<Keadaan & Tindakan>()(
 
       kosongkanKeranjang: () => set({ keranjang: { pedagangSlug: null, baris: [] } }),
 
+      siapkanPanggilan: (pedagangSlug, baris) => set({ keranjang: { pedagangSlug, baris } }),
+
       buatPesanan: (alamat, titikKumpulId) => {
         const { keranjang, pesanan } = get();
         const id = `ord-${String(pesanan.length + 1).padStart(3, "0")}`;
@@ -151,9 +173,22 @@ export const useToko = create<Keadaan & Tindakan>()(
           pesanan: s.pesanan.map((p) => (p.id === id ? { ...p, status } : p)),
         })),
 
+      /* Menstempel waktu begitu pesanan ditandai selesai. Tanpa stempel
+         ini pesanan yang baru diselesaikan tidak punya tanggal, sehingga
+         Buku Kas tidak tahu ia milik hari yang mana dan pendapatan hari
+         ini tidak pernah bertambah. Stempelnya hanya dipasang untuk
+         status `selesai`; status lain tidak menandai apa pun. */
       ubahStatusMasuk: (id, status) =>
         set((s) => ({
-          pesananMasuk: s.pesananMasuk.map((p) => (p.id === id ? { ...p, status } : p)),
+          pesananMasuk: s.pesananMasuk.map((p) =>
+            p.id === id
+              ? {
+                  ...p,
+                  status,
+                  ...(status === "selesai" ? { selesaiPada: new Date().toISOString() } : {}),
+                }
+              : p,
+          ),
         })),
 
       setGerobak: (gerobakBuka) => set({ gerobakBuka }),

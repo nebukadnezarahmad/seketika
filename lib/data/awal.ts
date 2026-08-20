@@ -222,6 +222,7 @@ export const pesananMasukAwal: PesananMasuk[] = [
     baris: [{ menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 2 }],
     status: "selesai",
     menitLalu: 45,
+    selesaiPada: hariLalu(0, 12, 5),
   },
   {
     id: "in-05",
@@ -234,6 +235,7 @@ export const pesananMasukAwal: PesananMasuk[] = [
     ],
     status: "selesai",
     menitLalu: 62,
+    selesaiPada: hariLalu(0, 11, 40),
   },
 ];
 
@@ -312,3 +314,208 @@ export const rupaPercakapanPedagang: Record<
 
 /** Balasan cepat yang tersedia di ruang obrolan pedagang. */
 export const balasanCepat = ["Oke, segera!", "Sudah habis hari ini", "Sekitar 10 menit lagi"];
+
+/**
+ * Riwayat pesanan yang sudah selesai pada hari-hari sebelumnya.
+ *
+ * Bahan mentah Buku Kas. Dipisahkan dari `pesananMasukAwal` dengan
+ * sengaja: array itu adalah kotak masuk hari ini yang dipakai layar
+ * Pesanan Masuk, dan menumpuk dua puluhan riwayat ke dalamnya akan
+ * mengubur pesanan yang benar-benar perlu dijawab pedagang hari ini.
+ *
+ * Sebarannya dibuat menyerupai hari kerja gerobak bakso keliling: ada
+ * kelompok pagi, siang, dan sore, dengan sore paling padat. Pola itu
+ * tidak ditulis di mana pun sebagai angka; fitur "jam paling ramai"
+ * menemukannya sendiri dari data ini. Jumlah pesanan per hari juga
+ * sengaja naik-turun, bukan rata, supaya grafik tujuh harinya bergerak.
+ *
+ * `menitLalu` diisi nol karena tidak dipakai untuk data riwayat; yang
+ * menentukan penempatan pada grafik adalah `selesaiPada`.
+ */
+export const riwayatPedagangAwal: PesananMasuk[] = [
+  /* Kemarin */
+  {
+    id: "rw-01", warga: "Bu Rahma", inisial: "R", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 2 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(1, 8, 15),
+  },
+  {
+    id: "rw-02", warga: "Pak Dedi", inisial: "D", titik: "RT 05 Blok C · Pos 2",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 1 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(1, 12, 30),
+  },
+  {
+    id: "rw-03", warga: "Bu Sri", inisial: "S", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 2 },
+      { menuId: "m-04", nama: "Bakso Telur", harga: 15000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(1, 16, 45),
+  },
+  {
+    id: "rw-04", warga: "Mas Yudi", inisial: "Y", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-02", nama: "Bakso Mercon", harga: 15000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 3 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(1, 17, 20),
+  },
+  {
+    id: "rw-05", warga: "Bu Lina", inisial: "L", titik: "RT 02 Taman Bermain",
+    baris: [{ menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 3 }],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(1, 18, 10),
+  },
+
+  /* Dua hari lalu */
+  {
+    id: "rw-06", warga: "Pak Soni", inisial: "S", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [
+      { menuId: "m-04", nama: "Bakso Telur", harga: 15000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(2, 7, 40),
+  },
+  {
+    id: "rw-07", warga: "Bu Ratna", inisial: "R", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 1 },
+      { menuId: "m-02", nama: "Bakso Mercon", harga: 15000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(2, 17, 5),
+  },
+  {
+    id: "rw-08", warga: "Kak Nia", inisial: "N", titik: "RT 02 Taman Bermain",
+    baris: [
+      { menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 1 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 2 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(2, 18, 40),
+  },
+
+  /* Tiga hari lalu */
+  {
+    id: "rw-09", warga: "Pak Ito", inisial: "I", titik: "RT 05 Blok C · Pos 2",
+    baris: [{ menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 2 }],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(3, 8, 0),
+  },
+  {
+    id: "rw-10", warga: "Bu Rahma", inisial: "R", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 1 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(3, 11, 50),
+  },
+  {
+    id: "rw-11", warga: "Mas Fajar", inisial: "F", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [{ menuId: "m-02", nama: "Bakso Mercon", harga: 15000, jumlah: 3 }],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(3, 12, 40),
+  },
+  {
+    id: "rw-12", warga: "Bu Endah", inisial: "E", titik: "RT 02 Taman Bermain",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 2 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(3, 16, 20),
+  },
+  {
+    id: "rw-13", warga: "Pak Dedi", inisial: "D", titik: "RT 05 Blok C · Pos 2",
+    baris: [{ menuId: "m-04", nama: "Bakso Telur", harga: 15000, jumlah: 3 }],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(3, 17, 35),
+  },
+  {
+    id: "rw-14", warga: "Kak Budi", inisial: "B", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [
+      { menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(3, 18, 55),
+  },
+
+  /* Empat hari lalu */
+  {
+    id: "rw-15", warga: "Bu Wati", inisial: "W", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 4 },
+      { menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(4, 9, 0),
+  },
+  {
+    id: "rw-16", warga: "Pak Har", inisial: "H", titik: "RT 02 Taman Bermain",
+    baris: [{ menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 1 }],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(4, 12, 10),
+  },
+  {
+    id: "rw-17", warga: "Bu Sri", inisial: "S", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [
+      { menuId: "m-02", nama: "Bakso Mercon", harga: 15000, jumlah: 2 },
+      { menuId: "m-04", nama: "Bakso Telur", harga: 15000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(4, 17, 15),
+  },
+  {
+    id: "rw-18", warga: "Mas Yudi", inisial: "Y", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 2 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(4, 17, 50),
+  },
+
+  /* Lima hari lalu, hari paling sepi */
+  {
+    id: "rw-19", warga: "Bu Lina", inisial: "L", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(5, 16, 50),
+  },
+  {
+    id: "rw-20", warga: "Pak Soni", inisial: "S", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 1 },
+      { menuId: "m-02", nama: "Bakso Mercon", harga: 15000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(5, 18, 20),
+  },
+
+  /* Enam hari lalu */
+  {
+    id: "rw-21", warga: "Bu Ratna", inisial: "R", titik: "RT 05 Blok C · Pos Ronda",
+    baris: [
+      { menuId: "m-04", nama: "Bakso Telur", harga: 15000, jumlah: 1 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(6, 7, 15),
+  },
+  {
+    id: "rw-22", warga: "Kak Nia", inisial: "N", titik: "RT 02 Taman Bermain",
+    baris: [{ menuId: "m-03", nama: "Bakso Polos", harga: 13000, jumlah: 2 }],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(6, 11, 30),
+  },
+  {
+    id: "rw-23", warga: "Pak Ito", inisial: "I", titik: "RT 05 Blok C · Pos 2",
+    baris: [
+      { menuId: "m-01", nama: "Bakso Komplit", harga: 25000, jumlah: 2 },
+      { menuId: "m-08", nama: "Es Teh Manis", harga: 5000, jumlah: 1 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(6, 16, 35),
+  },
+  {
+    id: "rw-24", warga: "Bu Endah", inisial: "E", titik: "RT 07 Taman Asri · Pos Satpam",
+    baris: [
+      { menuId: "m-02", nama: "Bakso Mercon", harga: 15000, jumlah: 2 },
+      { menuId: "m-04", nama: "Bakso Telur", harga: 15000, jumlah: 2 },
+    ],
+    status: "selesai", menitLalu: 0, selesaiPada: hariLalu(6, 17, 45),
+  },
+];

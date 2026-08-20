@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  BadgeCheck, BookOpen, Camera, Clock, MapPin, RotateCcw, Settings, ShoppingBag,
+  BadgeCheck, BookOpen, Camera, Clock, MapPin, RotateCcw, Settings, ShoppingBag, Wallet,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
@@ -134,6 +134,13 @@ export function TokoSaya() {
           Akun &amp; Analitik
         </p>
         <div className="bayang-kartu overflow-hidden rounded-[16px] border border-garis bg-white">
+          <BarisMenu
+            Ikon={Wallet}
+            nada="amber"
+            judul="Buku Kas"
+            isi="Pendapatan, menu terlaris, jam ramai"
+            href="/d/rekap"
+          />
           <BarisMenu
             Ikon={ShoppingBag}
             nada="hijau"
