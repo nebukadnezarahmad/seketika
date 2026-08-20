@@ -45,7 +45,11 @@ export function NavBawah({ peran = "pembeli" }: { peran?: "pembeli" | "pedagang"
   return (
     <nav
       aria-label={peran === "pedagang" ? "Navigasi pedagang" : "Navigasi utama"}
-      className="bayang-nav sticky bottom-0 z-30 grid shrink-0 grid-cols-4 border-t border-garis bg-white pb-[env(safe-area-inset-bottom)]"
+      /* Lapisannya di atas lembar (z-40), bukan di bawahnya. Itu yang
+         membuat lembar terlihat merangkak keluar dari balik navigasi
+         alih-alih menyeberang di depannya. Kartu melayang (z-30) tetap
+         di bawah lembar supaya ia tertutup saat lembar naik. */
+      className="bayang-nav sticky bottom-0 z-50 grid shrink-0 grid-cols-4 border-t border-garis bg-white pb-[env(safe-area-inset-bottom)]"
     >
       {tab.map(({ label, href, Ikon, cocok }) => {
         /* Tab beranda pedagang beralamat "/d" saja, jadi pencocokan

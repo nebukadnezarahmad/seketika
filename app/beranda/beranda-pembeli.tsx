@@ -84,7 +84,22 @@ export function BerandaPembeli() {
   );
 
   return (
-    <Layar nav>
+    <Layar
+      nav
+      /* Lembar pedagang naik di atas beranda, jadi peta yang sudah
+         tergambar tetap terlihat di belakangnya dan tidak perlu digambar
+         ulang. Ini yang membedakannya dari berpindah ke halaman pedagang:
+         di sana peta kedua dimuat hanya untuk menampilkan kartu sama. */
+      lembar={
+        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
+          {dipilih && (
+            <div className="px-4 pb-6 pt-1">
+              <IsiPedagang pedagang={dipilih} />
+            </div>
+          )}
+        </Lembar>
+      }
+    >
       {/* Beranda tidak punya judul yang terlihat, tapi tetap butuh titik
           masuk bagi pengguna yang menjelajah lewat daftar heading. */}
       <h1 className="khusus-pembaca-layar">Beranda</h1>
@@ -253,24 +268,6 @@ export function BerandaPembeli() {
           </p>
         )}
       </section>
-
-      {/* Lembar pedagang.
-
-          Naik di atas beranda, jadi peta yang sudah tergambar tetap
-          terlihat di belakangnya dan tidak perlu digambar ulang. Ini yang
-          membedakannya dari berpindah ke halaman pedagang: di sana peta
-          kedua dimuat hanya untuk menampilkan kartu yang sama. */}
-      <Lembar
-        buka={lembarBuka}
-        tutup={() => setLembarBuka(false)}
-        judul={dipilih?.nama}
-      >
-        {dipilih && (
-          <div className="px-4 pb-6 pt-1">
-            <IsiPedagang pedagang={dipilih} />
-          </div>
-        )}
-      </Lembar>
     </Layar>
   );
 }

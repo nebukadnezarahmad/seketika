@@ -31,7 +31,19 @@ export function PetaPenuh() {
   const [lembarBuka, setLembarBuka] = React.useState(false);
 
   return (
-    <Layar nav>
+    <Layar
+      nav
+      lembar={
+        /* Lembar pedagang, naik di atas peta yang sedang dilihat. */
+        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
+          {dipilih && (
+            <div className="px-4 pb-6 pt-1">
+              <IsiPedagang pedagang={dipilih} />
+            </div>
+          )}
+        </Lembar>
+      }
+    >
       <div className="relative flex-1">
         <Peta
           penuh
@@ -110,15 +122,6 @@ export function PetaPenuh() {
           ))}
         </div>
       </div>
-
-      {/* Lembar pedagang, naik di atas peta yang sedang dilihat. */}
-      <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
-        {dipilih && (
-          <div className="px-4 pb-6 pt-1">
-            <IsiPedagang pedagang={dipilih} />
-          </div>
-        )}
-      </Lembar>
     </Layar>
   );
 }
