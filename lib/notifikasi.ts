@@ -106,16 +106,15 @@ export function pemberitahuanPedagang(
 
   for (const t of titikKumpul) {
     if (t.pedagangSlug !== slugGerobak) continue;
-    /* Hanya yang masih menunggu keputusan. Sebelumnya setiap titik kumpul
+    /* Hanya yang targetnya sudah tercapai. Sebelumnya setiap titik kumpul
        milik gerobak ini dikabarkan tanpa melihat statusnya, jadi yang
-       sudah diselesaikan pedagang tetap mengabari selamanya, dan
-       mengetuknya mengantar ke permintaan yang sudah tidak ada lagi di
-       daftar berandanya. */
+       masih mengumpulkan sudah memanggil pedagang sebelum warganya cukup,
+       dan yang sudah diselesaikan tetap mengabari selamanya. */
     if (!menungguPedagang(t, sekarang)) continue;
     daftar.push({
       id: `tk-${t.id}-permintaan`,
       judul: "Permintaan titik kumpul",
-      isi: `${t.nama} · ${t.peserta.length} dari ${t.target} warga sudah bergabung.`,
+      isi: `${t.nama} · ${t.peserta.length} warga sudah berkumpul dan menunggu dijemput.`,
       nada: "ungu",
       href: `/kolab/${t.id}`,
     });

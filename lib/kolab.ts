@@ -35,17 +35,36 @@ export function statusTitik(titik: TitikKumpul, sekarang: number | null): Status
 }
 
 /**
- * Masih menunggu keputusan pedagang.
+ * Menunggu keputusan pedagang.
+ *
+ * Hanya yang targetnya sudah tercapai. Titik kumpul yang masih
+ * mengumpulkan adalah urusan antarwarga: mereka yang mengajak tetangga
+ * sampai jumlahnya cukup. Memanggil pedagang sebelum itu berarti
+ * memintanya mendorong gerobak ke tempat yang belum tentu jadi, dan
+ * lencana yang menghitungnya akan menyuruh pedagang menunggu sesuatu
+ * yang tidak bisa ia percepat.
+ *
+ * Yang sudah dijemput juga tidak termasuk: pedagang sudah memutuskan dan
+ * sedang menjalankannya, jadi ia tidak perlu diingatkan lagi.
  *
  * Dipakai bersama oleh hitungan permintaan di beranda dan daftar
- * pemberitahuan, supaya keduanya tidak bisa berselisih. Yang sudah
- * dijemput sengaja tidak termasuk: pekerjaannya memang belum selesai,
- * tapi pedagang sudah memutuskan dan sedang menjalankannya, jadi ia tidak
- * perlu diingatkan lagi lewat lencana atau kabar.
+ * pemberitahuan, supaya keduanya tidak bisa berselisih.
  */
 export function menungguPedagang(titik: TitikKumpul, sekarang: number | null): boolean {
+  return statusTitik(titik, sekarang) === "tercapai";
+}
+
+/**
+ * Layak muncul di daftar permintaan pedagang.
+ *
+ * Lebih longgar dari `menungguPedagang` karena memuat yang sedang
+ * dijemput. Kalau daftarnya hanya menampilkan yang tercapai, kotaknya
+ * lenyap tepat setelah pedagang menekan "Terima & Berangkat", dan tidak
+ * ada lagi jalan untuk kembali menutupnya.
+ */
+export function tampilBagiPedagang(titik: TitikKumpul, sekarang: number | null): boolean {
   const keadaan = statusTitik(titik, sekarang);
-  return keadaan === "mengumpulkan" || keadaan === "tercapai";
+  return keadaan === "tercapai" || keadaan === "dijemput";
 }
 
 /** Masih menerima peserta baru. */
