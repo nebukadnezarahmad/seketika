@@ -15,6 +15,15 @@ test.describe("Pintu masuk", () => {
 
     await expect(page.getByRole("button", { name: "Masuk" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Buat Akun" })).toBeVisible();
+
+    /* Ilustrasinya karya tim di berkas Figma, bukan hiasan yang bisa
+       hilang tanpa akibat: tanpa itu layar pertama cuma teks dan dua
+       tombol. Tingginya ikut dikunci supaya tidak menyusut jadi
+       perangko kalau tata letaknya berubah lagi. */
+    const gambar = page.getByRole("img", { name: /Warung jajanan keliling/ });
+    await expect(gambar).toBeVisible();
+    const kotak = await gambar.boundingBox();
+    expect(kotak!.height).toBeGreaterThan(120);
   });
 
   /* Pada ekspor Figma aslinya pasangan roda berpusat 8,5 unit di kanan

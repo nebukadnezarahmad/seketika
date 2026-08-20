@@ -37,9 +37,9 @@ export function Daftar() {
 
   const label = "block text-[16px] font-medium text-tinta";
   const kotak =
-    "mt-[6px] h-[40px] w-full rounded-full border border-garis bg-krem px-[18px] text-[14px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau/35";
+    "mt-[6px] h-[40px] w-full rounded-full border border-garis-tegas bg-white px-[18px] text-[14px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau/35";
   const sosial =
-    "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-full border border-garis bg-krem text-[14px] font-medium text-tinta transition-transform active:scale-[0.98]";
+    "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-full border border-garis-tegas bg-white text-[14px] font-medium text-tinta transition-transform active:scale-[0.98]";
 
   return (
     <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-white">
@@ -52,15 +52,15 @@ export function Daftar() {
         <ArrowLeft size={20} strokeWidth={2.2} />
       </button>
 
-      <div className="flex shrink-0 flex-col items-center pt-[9%]">
-        <KepalaMerek sapaan={false} />
+      <div className="flex shrink-0 flex-col items-center pt-[7%]">
+        <KepalaMerek sapaan={false} ukuran={58} />
       </div>
 
       {/* Lembar formulir. Ia bergulir sendiri supaya isinya tetap dapat
           dijangkau di ponsel pendek ketika papan ketik terbuka. */}
       <form
         onSubmit={kirim}
-        className="mt-auto max-h-[76%] overflow-y-auto border-t border-garis bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-6"
+        className="mt-auto max-h-[82%] overflow-y-auto border-t border-garis bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-6"
       >
         <h1 className="tulisan-judul text-[20px] font-bold text-tinta">Perjalanan Anda dimulai di sini.</h1>
         <p className="mt-[9px] text-[16px] font-normal text-tinta">Masukkan Detail Anda di bawah</p>
