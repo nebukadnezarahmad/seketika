@@ -26,9 +26,11 @@ import {
   jamRamai,
   jamRapi,
   laporanBulanan,
+  labelHari,
   menuTerlaris,
   pendapatanHari,
   prakiraanRamai,
+  rincianHari,
 } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -43,6 +45,11 @@ export function BukuKas() {
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const sekarang = useSekarang();
   const [tersalin, setTersalin] = React.useState(false);
+  /* Offset hari yang batangnya sedang diketuk; null berarti sedang
+     melihat rangkuman tujuh hari. Disimpan sebagai offset, bukan tanggal,
+     supaya nilainya tetap benar walau tengah malam lewat sementara layar
+     dibiarkan terbuka. */
+  const [hariDipilih, setHariDipilih] = React.useState<number | null>(null);
 
   /* Buku Kas membaca dua sumber sekaligus: riwayat hari-hari sebelumnya
      dan pesanan hari ini yang sudah ditandai selesai. Keduanya digabung
@@ -68,6 +75,25 @@ export function BukuKas() {
       prakiraan: prakiraanRamai(sumber, sekarang).slice(0, 3),
     };
   }, [sumber, sekarang]);
+
+  /* Rincian hari yang dipilih. Dihitung terpisah dari rangkuman tujuh
+     hari supaya memilih hari tidak memaksa seluruh rekap dihitung ulang. */
+  const rincian = React.useMemo(
+    () =>
+      sekarang === null || hariDipilih === null
+        ? null
+        : {
+            ...rincianHari(sumber, sekarang, hariDipilih),
+            label: labelHari(sekarang, hariDipilih),
+          },
+    [sumber, sekarang, hariDipilih],
+  );
+
+  /* Yang ditampilkan di bawah grafik: rincian satu hari kalau ada yang
+     dipilih, kalau tidak rangkuman tujuh hari seperti semula. */
+  const menuTampil = rincian ? rincian.menu.slice(0, 3) : (angka?.menu ?? []);
+  const jamTampil = rincian ? rincian.jam.slice(0, 3) : (angka?.jam ?? []);
+  const rentang = rincian ? rincian.label : "7 hari";
 
   /* Puncak dipakai sebagai penyebut tinggi batang. Kalau seluruh minggu
      nol, penyebutnya diganti satu supaya tidak ada pembagian dengan nol
@@ -166,46 +192,106 @@ export function BukuKas() {
                   ikut ditulis. */}
               <ul className="mt-4 flex h-[132px] items-end gap-1.5">
                 {(angka?.deret ?? []).map((d, i) => {
-                  const iniHariIni = i === (angka?.deret.length ?? 0) - 1;
+                  const offset = (angka?.deret.length ?? 7) - 1 - i;
+                  const iniHariIni = offset === 0;
+                  const terpilih = hariDipilih === offset;
                   return (
-                    <li key={d.iso} className="flex h-full flex-1 flex-col justify-end gap-1.5">
-                      <span
-                        aria-hidden
-                        className={`w-full rounded-t-[6px] transition-[height] duration-[var(--gerak-lambat)] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                          iniHariIni ? "bg-hijau" : "bg-hijau-lembut"
-                        }`}
-                        /* Minimum dua piksel supaya hari tanpa pemasukan
-                           tetap kelihatan sebagai batang kosong, bukan
-                           menghilang seolah harinya tidak ada. */
-                        style={{ height: `${Math.max(2, (d.total / puncak) * 100)}%` }}
-                      />
-                      <span
-                        aria-hidden
-                        className={`text-center text-[10px] leading-none ${
-                          iniHariIni ? "font-bold text-hijau" : "text-tinta-4"
-                        }`}
+                    <li key={d.iso} className="flex h-full flex-1">
+                      {/* Tiap batang tombol sungguhan, bukan div berwarna.
+                          Dengan begitu ia bisa dicapai papan ketik, punya
+                          nama yang disuarakan pembaca layar, dan keadaan
+                          terpilihnya diumumkan lewat `aria-pressed`. */}
+                      <button
+                        type="button"
+                        aria-pressed={terpilih}
+                        onClick={() => setHariDipilih(terpilih ? null : offset)}
+                        className="flex h-full w-full flex-col justify-end gap-1.5 rounded-[8px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hijau"
                       >
-                        {d.label}
-                      </span>
-                      <span className="khusus-pembaca-layar">
-                        {d.label}
-                        {iniHariIni ? " (hari ini)" : ""}: {rp(d.total)}
-                      </span>
+                        <span
+                          aria-hidden
+                          className={`w-full rounded-t-[6px] transition-[height,background-color] duration-[var(--gerak-lambat)] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                            terpilih
+                              ? "bg-amber"
+                              : iniHariIni
+                                ? "bg-hijau"
+                                : "bg-hijau-lembut"
+                          }`}
+                          /* Minimum dua piksel supaya hari tanpa pemasukan
+                             tetap kelihatan sebagai batang kosong, bukan
+                             menghilang seolah harinya tidak ada. */
+                          style={{ height: `${Math.max(2, (d.total / puncak) * 100)}%` }}
+                        />
+                        <span
+                          aria-hidden
+                          className={`text-center text-[10px] leading-none ${
+                            terpilih
+                              ? "font-bold text-amber-tua"
+                              : iniHariIni
+                                ? "font-bold text-hijau"
+                                : "text-tinta-4"
+                          }`}
+                        >
+                          {d.label}
+                        </span>
+                        <span className="khusus-pembaca-layar">
+                          {d.label}
+                          {iniHariIni ? " (hari ini)" : ""}: {rp(d.total)}. Ketuk untuk
+                          rinciannya.
+                        </span>
+                      </button>
                     </li>
                   );
                 })}
               </ul>
+
+              <p className="mt-2.5 text-center text-[11px] text-tinta-4">
+                {rincian
+                  ? "Ketuk batang yang sama untuk kembali ke rangkuman tujuh hari"
+                  : "Ketuk satu batang untuk melihat rincian hari itu"}
+              </p>
             </section>
 
+            {/* Rincian hari yang batangnya diketuk */}
+            {rincian && (
+              <section className="bayang-kartu mt-4 rounded-[20px] border border-amber/40 bg-amber-lembut p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-[14px] font-bold text-tinta">{rincian.label}</h2>
+                    <p className="mt-0.5 text-[11.5px] text-amber-tua">
+                      {rincian.jumlahPesanan} pesanan selesai
+                    </p>
+                  </div>
+                  <p className="shrink-0 text-[18px] font-extrabold text-tinta">
+                    {rp(rincian.total)}
+                  </p>
+                </div>
+
+                {rincian.jumlahPesanan === 0 && (
+                  <p className="mt-2.5 text-[12px] leading-relaxed text-amber-tua">
+                    Tidak ada pesanan yang selesai pada hari ini. Bagian di bawah
+                    ikut kosong, bukan menampilkan angka hari lain.
+                  </p>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setHariDipilih(null)}
+                  className="mt-3 rounded-full bg-white px-3.5 py-2 text-[12px] font-bold text-amber-tua transition-transform active:scale-95"
+                >
+                  Kembali ke tujuh hari
+                </button>
+              </section>
+            )}
+
             {/* 3. Menu terlaris */}
-            {(angka?.menu.length ?? 0) > 0 && (
+            {menuTampil.length > 0 && (
               <section className="bayang-kartu mt-4 overflow-hidden rounded-[20px] border border-garis bg-white">
                 <h2 className="border-b border-garis px-4 py-3 text-[14px] font-bold text-tinta">
                   Menu Terlaris
-                  <span className="ml-1.5 text-[11px] font-normal text-tinta-4">7 hari</span>
+                  <span className="ml-1.5 text-[11px] font-normal text-tinta-4">{rentang}</span>
                 </h2>
                 <ol>
-                  {(angka?.menu ?? []).map((m, i) => (
+                  {menuTampil.map((m, i) => (
                     <li
                       key={m.nama}
                       className="flex items-center gap-3 border-b border-garis px-4 py-3 last:border-b-0"
@@ -234,15 +320,16 @@ export function BukuKas() {
             )}
 
             {/* 4. Jam paling ramai */}
-            {(angka?.jam.length ?? 0) > 0 && (
+            {jamTampil.length > 0 && (
               <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
                 <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
                   <TrendingUp size={16} strokeWidth={2.1} className="shrink-0 text-hijau" />
                   Jam Paling Ramai
+                  <span className="text-[11px] font-normal text-tinta-4">{rentang}</span>
                 </h2>
 
                 <ul className="mt-3 flex flex-col gap-2">
-                  {(angka?.jam ?? []).map((j, i) => (
+                  {jamTampil.map((j, i) => (
                     <li key={j.mulai} className="flex items-center gap-3">
                       <span className="w-[92px] shrink-0 text-[12.5px] font-semibold text-tinta-2">
                         {jamRapi(j.mulai)}–{jamRapi(j.selesai)}
@@ -251,7 +338,7 @@ export function BukuKas() {
                         aria-hidden
                         className={`h-2 rounded-pil ${i === 0 ? "bg-hijau" : "bg-hijau-lembut"}`}
                         style={{
-                          width: `${(j.jumlah / (angka?.jam[0].jumlah ?? 1)) * 100}%`,
+                          width: `${(j.jumlah / (jamTampil[0]?.jumlah || 1)) * 100}%`,
                           minWidth: "8px",
                         }}
                       />
@@ -266,7 +353,7 @@ export function BukuKas() {
                     belakang proposal ini justru soal rute pedagang yang
                     ditentukan kebiasaan alih-alih data; di sinilah datanya
                     berbicara. */}
-                {angka && angka.jam.length > 0 && (
+                {!rincian && angka && angka.jam.length > 0 && (
                   <p className="mt-3.5 flex gap-2.5 rounded-[14px] bg-hijau-lembut px-3.5 py-3 text-[12px] leading-relaxed text-hijau-gelap">
                     <Sparkles size={15} strokeWidth={2.1} className="mt-px shrink-0" aria-hidden />
                     <span>

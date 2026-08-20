@@ -68,7 +68,8 @@ harus berjalan.
 | Terima & berangkat | Membuka navigasi dengan panduan arah |
 | Rekap harian | Ringkasan pesanan yang sudah dilayani |
 | Buku Kas | Pendapatan harian, grafik tujuh hari, menu terlaris, dan jam paling ramai |
-| Kelola menu | Tambah, ubah, hapus, dan matikan menu; yang mati hilang dari aplikasi warga |
+| Rincian per hari | Batang grafik bisa diketuk; menu terlaris dan jam ramai ikut menyesuaikan hari itu |
+| Kelola menu | Tambah, ubah, hapus, dan matikan menu, lengkap dengan foto yang bisa diganti |
 | Pengaturan toko | Nama, jenis, keterangan, area jangkauan, jam operasional, dan galeri |
 | Penilaian diterima | Rata-rata bintang dari warga, dihitung dari pesanan yang dinilai |
 | Tolak pesanan | Punya statusnya sendiri dan tidak terhitung sebagai pemasukan |

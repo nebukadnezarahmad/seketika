@@ -1,16 +1,16 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChevronRight, Phone } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { Kepala } from "@/komponen/ui/kepala";
+import { Gambar } from "@/komponen/ui/gambar";
 import { Tombol } from "@/komponen/ui/tombol";
 import { SLUG_GEROBAK_SAYA, fotoMenu } from "@/lib/data/pedagang";
 import { jarakSingkat, rp } from "@/lib/format";
-import { menuTampil } from "@/lib/menu";
+import { fotoDariMenu, menuTampil } from "@/lib/menu";
 import { useToko } from "@/lib/toko";
 import type { Menu, Pedagang } from "@/lib/tipe";
 
@@ -40,6 +40,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
      disuntingnya dikurangi menu yang sedang dimatikan. */
   const menuNonaktif = useToko((s) => s.menuNonaktif);
   const menuSaya = useToko((s) => s.menuSaya);
+  const fotoUnggahan = useToko((s) => s.fotoMenuSaya);
   const menu =
     pedagang.slug === SLUG_GEROBAK_SAYA
       ? menuTampil(menuSaya, pedagang.menu, menuNonaktif)
@@ -80,10 +81,10 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                   jarak ini tombol itu jatuh menindih pojok foto dan jadi
                   sulit dibedakan dari isi gambarnya. */}
               <div className="relative mx-4 mt-6 h-[190px] overflow-hidden rounded-[18px]">
-                <Image
-                  src={fotoMenu[dipilih.id] ?? "/img/menu/bakso-polos.jpg"}
+                <Gambar
+                  src={fotoDariMenu(dipilih.id, fotoUnggahan, fotoMenu)}
                   alt={dipilih.nama}
-                  fill
+                  penuh
                   sizes="358px"
                   className="object-cover"
                 />
@@ -149,12 +150,12 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                     kartu, bukan dijejalkan menempel ke sudutnya. Waktu
                     menempel, sudut foto yang siku bertabrakan dengan sudut
                     kartu yang membulat dan tepinya terlihat tercuil. */}
-                <Image
-                  src={fotoMenu[m.id] ?? "/img/menu/bakso-polos.jpg"}
+                <Gambar
+                  src={fotoDariMenu(m.id, fotoUnggahan, fotoMenu)}
                   alt={m.nama}
-                  width={84}
-                  height={84}
-                  className="size-[84px] shrink-0 rounded-[15px] object-cover"
+                  lebar={84}
+                  tinggi={84}
+                  className="shrink-0 rounded-[15px] object-cover"
                 />
 
                 <span className="flex min-w-0 flex-1 flex-col">

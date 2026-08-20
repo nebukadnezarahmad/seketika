@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Lock, Minus, Plus } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
+import { Gambar } from "@/komponen/ui/gambar";
 import { TombolTaut } from "@/komponen/ui/tombol";
 import { fotoMenu, gerobakSaya } from "@/lib/data/pedagang";
-import { menuBerlaku } from "@/lib/menu";
+import { fotoDariMenu, menuBerlaku } from "@/lib/menu";
 import { useToko } from "@/lib/toko";
 
 /** Di bawah angka ini menunya dianggap hampir habis. */
@@ -32,6 +32,7 @@ export function CatatanStok() {
   const menuSaya = useToko((s) => s.menuSaya);
   const stok = useToko((s) => s.stok);
   const aturStok = useToko((s) => s.aturStok);
+  const fotoUnggahan = useToko((s) => s.fotoMenuSaya);
   const pro = useToko((s) => s.pro);
 
   const daftar = menuBerlaku(menuSaya, gerobak.menu);
@@ -84,13 +85,12 @@ export function CatatanStok() {
                 key={m.id}
                 className="bayang-kartu flex items-center gap-3 rounded-[20px] border border-garis bg-white p-2.5"
               >
-                <Image
-                  src={fotoMenu[m.id] ?? "/img/menu/bakso-polos.jpg"}
+                <Gambar
+                  src={fotoDariMenu(m.id, fotoUnggahan, fotoMenu)}
                   alt=""
-                  width={52}
-                  height={52}
+                  lebar={52}
+                  tinggi={52}
                   className="shrink-0 rounded-[13px] object-cover"
-                  style={{ width: 52, height: 52 }}
                 />
 
                 <div className="min-w-0 flex-1">

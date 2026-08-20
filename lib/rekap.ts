@@ -314,3 +314,66 @@ export function nilaiRataRata(
     jumlah: angka.length,
   };
 }
+
+export type RincianHari = {
+  total: number;
+  jumlahPesanan: number;
+  menu: BarisMenuTerlaris[];
+  jam: RentangJam[];
+};
+
+/**
+ * Rincian satu hari saja, dipakai saat batang grafik diketuk.
+ *
+ * Fungsinya sengaja berdiri sendiri alih-alih menambah parameter pada
+ * `menuTerlaris` dan `jamRamai`. Keduanya menjawab "sepanjang beberapa
+ * hari terakhir", sedangkan yang ini menjawab "pada hari itu". Memaksa
+ * satu fungsi melayani dua pertanyaan berbeda lewat parameter tambahan
+ * membuat pemanggilnya harus tahu kombinasi mana yang sah.
+ */
+export function rincianHari(
+  daftar: PesananMasuk[],
+  sekarang: number,
+  offsetHari: number,
+): RincianHari {
+  const hari = awalHari(sekarang, offsetHari);
+  const pada = terhitung(daftar).filter((x) => awalHari(x.waktu) === hari);
+
+  const kumpulan = new Map<string, BarisMenuTerlaris>();
+  const keranjang = new Map<number, number>();
+  let total = 0;
+
+  for (const { waktu, pesanan } of pada) {
+    total += totalBaris(pesanan.baris);
+    const mulai = Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
+    keranjang.set(mulai, (keranjang.get(mulai) ?? 0) + 1);
+
+    for (const b of pesanan.baris) {
+      const ada = kumpulan.get(b.nama);
+      kumpulan.set(b.nama, {
+        nama: b.nama,
+        porsi: (ada?.porsi ?? 0) + b.jumlah,
+        total: (ada?.total ?? 0) + b.harga * b.jumlah,
+      });
+    }
+  }
+
+  return {
+    total,
+    jumlahPesanan: pada.length,
+    menu: [...kumpulan.values()].sort((a, b) => b.porsi - a.porsi || b.total - a.total),
+    jam: [...keranjang.entries()]
+      .map(([mulai, jumlah]) => ({ mulai, selesai: mulai + LEBAR_JAM, jumlah }))
+      .sort((a, b) => b.jumlah - a.jumlah || a.mulai - b.mulai),
+  };
+}
+
+const HARI_PANJANG = [
+  "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu",
+];
+
+/** "Kamis, 20 Agu" dari offset hari. Dipakai judul rincian harian. */
+export function labelHari(sekarang: number, offsetHari: number): string {
+  const d = new Date(awalHari(sekarang, offsetHari));
+  return `${HARI_PANJANG[d.getDay()]}, ${TANGGAL_PENDEK.format(d)}`;
+}

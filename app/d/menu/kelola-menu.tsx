@@ -1,16 +1,19 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
-import { Eye, EyeOff, Plus, Trash2 } from "lucide-react";
+import { Camera, Eye, EyeOff, Plus, RotateCcw, Trash2 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { Kepala } from "@/komponen/ui/kepala";
+import { Gambar } from "@/komponen/ui/gambar";
 import { Tombol } from "@/komponen/ui/tombol";
 import { fotoMenu, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
+import { fotoJadiTeks } from "@/lib/foto";
 import {
+  FOTO_CADANGAN,
   angkaHarga,
+  fotoDariMenu,
   harganRapi,
   idMenuBaru,
   menuBerlaku,
@@ -19,11 +22,6 @@ import {
 } from "@/lib/menu";
 import { useToko } from "@/lib/toko";
 import type { Menu } from "@/lib/tipe";
-
-/** Foto cadangan untuk menu buatan pedagang yang belum punya gambarnya. */
-const FOTO_CADANGAN = "/img/menu/bakso-polos.jpg";
-
-const fotoDari = (id: string) => fotoMenu[id] ?? FOTO_CADANGAN;
 
 /**
  * Kelola menu dari sisi pedagang.
@@ -49,6 +47,7 @@ export function KelolaMenu() {
   const ubahAktifMenu = useToko((s) => s.ubahAktifMenu);
   const simpanMenu = useToko((s) => s.simpanMenu);
   const hapusMenu = useToko((s) => s.hapusMenu);
+  const fotoUnggahan = useToko((s) => s.fotoMenuSaya);
 
   const daftar = menuBerlaku(menuSaya, gerobak.menu);
 
@@ -59,6 +58,14 @@ export function KelolaMenu() {
   const [harga, setHarga] = React.useState("");
   const [salah, setSalah] = React.useState<SalahIsi>({});
   const [konfirmasiHapus, setKonfirmasiHapus] = React.useState(false);
+  /* `undefined` berarti fotonya tidak disentuh selama lembar terbuka,
+     `null` berarti pedagang mengembalikannya ke foto bawaan, teks berarti
+     ada foto baru yang menunggu disimpan. Ketiganya harus dibedakan;
+     kalau tidak, menyimpan perubahan nama saja akan menghapus foto yang
+     sudah diunggah sebelumnya. */
+  const [fotoBaru, setFotoBaru] = React.useState<string | null | undefined>(undefined);
+  const [salahFoto, setSalahFoto] = React.useState("");
+  const berkasRef = React.useRef<HTMLInputElement>(null);
 
   const jumlahAktif = daftar.filter((m) => !nonaktif.includes(m.id)).length;
   /* `sunting` yang null berarti sedang membuat menu baru; formulirnya
@@ -72,6 +79,8 @@ export function KelolaMenu() {
     setHarga(m ? harganRapi(m.harga) : "");
     setSalah({});
     setKonfirmasiHapus(false);
+    setFotoBaru(undefined);
+    setSalahFoto("");
     setLembarBuka(true);
   };
 
@@ -88,9 +97,32 @@ export function KelolaMenu() {
         harga: angkaHarga(harga),
       },
       gerobak.menu,
+      fotoBaru,
     );
     setLembarBuka(false);
   };
+
+  const ambilBerkas = async (berkas: File | undefined) => {
+    if (!berkas) return;
+    setSalahFoto("");
+    const hasil = await fotoJadiTeks(berkas);
+    if ("salah" in hasil) setSalahFoto(hasil.salah);
+    else setFotoBaru(hasil.teks);
+  };
+
+  /* Foto yang sedang ditampilkan di lembar: unggahan yang belum disimpan
+     kalau ada, kalau dikembalikan ke bawaan pakai bawaannya, selebihnya
+     foto yang berlaku sekarang. */
+  const idSunting = sunting?.id ?? "";
+  const fotoBawaan = fotoMenu[idSunting] ?? FOTO_CADANGAN;
+  const fotoLembar =
+    fotoBaru === undefined
+      ? fotoDariMenu(idSunting, fotoUnggahan, fotoMenu)
+      : (fotoBaru ?? fotoBawaan);
+  /* Tombol "kembalikan foto bawaan" hanya masuk akal kalau memang ada
+     foto sendiri yang sedang dipakai atau baru saja dipilih. */
+  const adaFotoSendiri =
+    fotoBaru !== null && (fotoBaru !== undefined || Boolean(fotoUnggahan[idSunting]));
 
   const kolom =
     "mt-1.5 w-full rounded-[14px] border border-garis bg-krem px-3.5 py-2.5 text-[13.5px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau/35";
@@ -111,7 +143,66 @@ export function KelolaMenu() {
               {menambah ? "Tambah Menu" : "Ubah Menu"}
             </h2>
 
-            <label className="mt-4 block">
+            {/* Slot foto. Petaknya sendiri yang jadi tombol, bukan tombol
+                terpisah di sebelahnya: petak fotolah yang paling jelas
+                menunjukkan apa yang akan berubah kalau ditekan. */}
+            <div className="mt-4">
+              <span className={label}>Foto menu</span>
+              <div className="mt-1.5 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => berkasRef.current?.click()}
+                  className="relative size-[84px] shrink-0 overflow-hidden rounded-[16px] border border-garis bg-krem transition-transform active:scale-95"
+                >
+                  <Gambar src={fotoLembar} alt="" penuh sizes="84px" className="object-cover" />
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-tinta/60 py-1 text-[9.5px] font-bold text-white"
+                  >
+                    <Camera size={11} strokeWidth={2.4} />
+                    Ganti
+                  </span>
+                  <span className="khusus-pembaca-layar">Pilih foto untuk menu ini</span>
+                </button>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11.5px] leading-relaxed text-tinta-4">
+                    Ketuk petaknya untuk memilih foto dari galeri. Gambarnya
+                    dikecilkan otomatis sebelum disimpan.
+                  </p>
+                  {adaFotoSendiri && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFotoBaru(null);
+                        setSalahFoto("");
+                      }}
+                      className="mt-1.5 inline-flex items-center gap-1.5 text-[11.5px] font-bold text-tinta-3 underline underline-offset-2"
+                    >
+                      <RotateCcw size={12} strokeWidth={2.3} aria-hidden />
+                      Kembalikan foto bawaan
+                    </button>
+                  )}
+                </div>
+              </div>
+              {salahFoto && <p className="mt-1.5 text-[11px] text-merah">{salahFoto}</p>}
+
+              <input
+                ref={berkasRef}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  void ambilBerkas(e.target.files?.[0]);
+                  /* Nilainya dikosongkan supaya memilih berkas yang sama
+                     dua kali berturut-turut tetap memicu peristiwanya. */
+                  e.target.value = "";
+                }}
+                className="khusus-pembaca-layar"
+                aria-label="Berkas foto menu"
+              />
+            </div>
+
+            <label className="mt-3 block">
               <span className={label}>Nama menu</span>
               <input
                 value={nama}
@@ -234,15 +325,12 @@ export function KelolaMenu() {
                   onClick={() => bukaLembar(m)}
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
-                  <Image
-                    src={fotoDari(m.id)}
+                  <Gambar
+                    src={fotoDariMenu(m.id, fotoUnggahan, fotoMenu)}
                     alt=""
-                    width={60}
-                    height={60}
-                    className={`size-15 shrink-0 rounded-[14px] object-cover ${
-                      aktif ? "" : "grayscale"
-                    }`}
-                    style={{ width: 60, height: 60 }}
+                    lebar={60}
+                    tinggi={60}
+                    className={`shrink-0 rounded-[14px] object-cover ${aktif ? "" : "grayscale"}`}
                   />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[13.5px] font-bold text-tinta">
