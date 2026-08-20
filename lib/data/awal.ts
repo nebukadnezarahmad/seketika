@@ -116,6 +116,28 @@ export const titikKumpulAwal: TitikKumpul[] = [
     kedaluwarsa: jamDepan(15),
     jarak: 210,
   },
+  /* Permintaan kedua untuk gerobak sendiri, dan sengaja sudah memenuhi
+     targetnya. Dengan satu permintaan saja, layar pedagang cuma pernah
+     memperlihatkan satu keadaan; dua permintaan dengan keadaan berbeda
+     membuat perbedaan antara "masih mengumpulkan" dan "tercapai" terlihat
+     berdampingan, dan membuat hilangnya satu kotak setelah diselesaikan
+     bisa dibedakan dari daftar yang kosong. */
+  {
+    id: "tk-05",
+    nama: "RT 04 Gang Melati",
+    patokan: "Warung Bu Yani, Gang Melati",
+    pedagangSlug: "bakso-pak-anton",
+    target: 4,
+    peserta: [
+      { id: "w-13", nama: "Bu Yani", inisial: "Y" },
+      { id: "w-14", nama: "Pak Slamet", inisial: "S" },
+      { id: "w-15", nama: "Mbak Rina", inisial: "R" },
+      { id: "w-16", nama: "Bang Udin", inisial: "U" },
+    ],
+    status: "mengumpulkan",
+    kedaluwarsa: jamDepan(6),
+    jarak: 95,
+  },
 ];
 
 export const percakapanAwal: Percakapan[] = [

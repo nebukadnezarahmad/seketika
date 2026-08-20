@@ -12,7 +12,7 @@ import { Lonceng } from "@/komponen/ui/lonceng";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
-import { labelStatusTitik, statusTitik } from "@/lib/kolab";
+import { labelStatusTitik, menungguPedagang, statusTitik } from "@/lib/kolab";
 import { pendapatanHari } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -59,11 +59,14 @@ export function BerandaPedagang() {
      membuat ajakan "ada N permintaan" mengaku ada kerjaan yang sebenarnya
      sudah beres. Kesalahan yang sama pernah ada pada label jumlah
      pedagang aktif di peta. */
-  const menunggu = milikSaya.filter((t) => {
-    const st = statusTitik(t, sekarang);
-    return st === "mengumpulkan" || st === "tercapai";
-  });
-  const permintaan = menunggu.length;
+  const permintaan = milikSaya.filter((t) => menungguPedagang(t, sekarang)).length;
+
+  /* Yang sudah diselesaikan hilang dari daftar. Kotaknya tidak menyisakan
+     tindakan apa pun, dan daftar berjudul "Permintaan" yang memuat
+     permintaan yang sudah dituntaskan lama-lama jadi arsip yang tidak
+     pernah bisa dibersihkan. Yang dijemput tetap ada karena pedagang
+     masih harus menutupnya. */
+  const tampil = milikSaya.filter((t) => statusTitik(t, sekarang) !== "selesai");
 
   return (
     <Layar
@@ -339,7 +342,7 @@ export function BerandaPedagang() {
         </div>
 
         <ul className="mt-2.5 flex flex-col gap-2.5">
-          {milikSaya.map((t) => (
+          {tampil.map((t) => (
               /* Kartunya tautan, bukan kotak diam. Sebelumnya ia
                  memperlihatkan permintaan yang sedang menunggu tapi tidak
                  bisa ditekan, sehingga pedagang tidak punya cara melihat
@@ -369,9 +372,9 @@ export function BerandaPedagang() {
                 </Link>
               </li>
             ))}
-          {milikSaya.length === 0 && (
+          {tampil.length === 0 && (
             <li className="rounded-[14px] border border-dashed border-garis bg-white px-4 py-6 text-center text-[12px] text-tinta-4">
-              Belum ada permintaan titik kumpul untuk gerobak ini.
+              Tidak ada permintaan titik kumpul yang menunggu.
             </li>
           )}
         </ul>
