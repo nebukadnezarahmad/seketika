@@ -1,11 +1,20 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Pintu masuk", () => {
-  test("sambutan menawarkan masuk atau membuat akun", async ({ page }) => {
+  test("sambutan menerangkan aplikasinya, bukan cuma dua tombol", async ({ page }) => {
     await page.goto("/sambutan");
-    await expect(page.getByText("Pedagang Dekat, Hidup Lebih Praktis")).toBeVisible();
+
+    await expect(page.getByRole("heading", { name: /Panggil jajanan/ })).toBeVisible();
     await expect(page.getByText("Mau ngapain hari ini?")).toBeVisible();
+
+    /* Dua keping cara memesan. Keduanya janji yang benar-benar ditepati
+       aplikasinya, bukan hiasan, jadi keberadaannya ikut dikunci. */
+    const keping = page.getByRole("listitem");
+    await expect(keping.filter({ hasText: "Panggil ke lokasimu" })).toBeVisible();
+    await expect(keping.filter({ hasText: "Patungan tetangga" })).toBeVisible();
+
     await expect(page.getByRole("button", { name: "Masuk" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Buat Akun" })).toBeVisible();
   });
 
   test("Buat Akun membuka formulir pendaftaran", async ({ page }) => {
