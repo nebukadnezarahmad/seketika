@@ -35,7 +35,7 @@ export function Sambutan() {
   };
 
   return (
-    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#001c06]">
+    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-white">
       <PanggungSambutan />
 
       <div className="relative flex flex-1 flex-col px-6 pb-[max(20px,env(safe-area-inset-bottom))] pt-[7%]">
@@ -49,12 +49,15 @@ export function Sambutan() {
         </div>
 
         <div className="mt-auto">
-          <h1 className="tulisan-judul text-[28px] font-extrabold leading-[1.12] text-white">
+          <h1 className="tulisan-judul text-[28px] font-extrabold leading-[1.12] text-tinta">
             Panggil jajanan
             <br />
-            <span className="text-hijau-neon">ke depan rumah</span>
+            {/* Barisnya memakai --color-hijau, bukan hijau lambang yang
+                lebih terang. Di atas putih, #00AA13 cuma mencapai 3,1:1
+                dan judul sebesar ini masih terhitung teks. */}
+            <span className="text-hijau">ke depan rumah</span>
           </h1>
-          <p className="mt-3 max-w-[19rem] text-[13px] leading-relaxed text-white/70">
+          <p className="mt-3 max-w-[19rem] text-[13px] leading-relaxed text-tinta-4">
             Lihat gerobak yang sedang lewat di sekitarmu, panggil ke lokasimu,
             atau patungan satu titik kumpul bareng tetangga.
           </p>
@@ -69,7 +72,7 @@ export function Sambutan() {
             ].map(({ Ikon, teks }) => (
               <li
                 key={teks}
-                className="flex items-center gap-1.5 rounded-pil border border-white/20 bg-white/10 px-3 py-1.5 text-[11.5px] font-semibold text-white backdrop-blur-sm"
+                className="flex items-center gap-1.5 rounded-pil bg-hijau-lembut px-3 py-1.5 text-[11.5px] font-semibold text-hijau"
               >
                 <Ikon size={13} strokeWidth={2.2} aria-hidden />
                 {teks}
@@ -80,7 +83,7 @@ export function Sambutan() {
           <button
             type="button"
             onClick={masuk}
-            className="mt-5 h-[52px] w-full rounded-full bg-hijau-neon text-[15.5px] font-extrabold text-hijau-gelap shadow-[0_10px_30px_rgb(74_222_128/0.25)] transition-transform active:scale-[0.98]"
+            className="mt-5 h-[52px] w-full rounded-full bg-hijau text-[15.5px] font-extrabold text-white shadow-[0_10px_28px_rgb(0_134_15/0.28)] transition-transform active:scale-[0.98]"
           >
             Masuk
           </button>
@@ -88,12 +91,12 @@ export function Sambutan() {
           <button
             type="button"
             onClick={() => router.push("/daftar")}
-            className="mt-2.5 h-[52px] w-full rounded-full border border-white/30 bg-white/10 text-[15.5px] font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20 active:scale-[0.98]"
+            className="mt-2.5 h-[52px] w-full rounded-full border-[1.5px] border-hijau/35 bg-white text-[15.5px] font-bold text-hijau transition-colors hover:bg-hijau-lembut active:scale-[0.98]"
           >
             Buat Akun
           </button>
 
-          <p className="mt-3 text-center text-[11px] text-white/45">
+          <p className="mt-3 text-center text-[11px] text-tinta-4">
             Bayar tunai di tempat · tanpa komisi untuk pedagang
           </p>
         </div>

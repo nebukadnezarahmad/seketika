@@ -30,10 +30,10 @@
 <ellipse id="Ellipse 50" cx="63.7502" cy="45" rx="14.9416" ry="15" fill="url(#paint3_linear_0_1)"/>
 </g>
 <rect id="Rectangle 151" y="95" width="128.498" height="6" rx="3" fill="var(--color-hijau-terang, #00AA13)"/>
-<ellipse id="Ellipse 51" cx="48.8087" cy="127" rx="9.96106" ry="10" fill="var(--color-hijau-terang, #00AA13)"/>
-<ellipse id="Ellipse 52" cx="96.6232" cy="127" rx="9.96106" ry="10" fill="var(--color-hijau-terang, #00AA13)"/>
-<rect id="Rectangle 152" x="53.79" y="124" width="34.8637" height="5" fill="var(--color-hijau-terang, #00AA13)"/>
-<ellipse id="Ellipse 53" cx="48.8096" cy="127" rx="4.98053" ry="5" fill="#FFFFFF"/>
-<ellipse id="Ellipse 55" cx="96.6231" cy="127" rx="4.98053" ry="5" fill="#FFFFFF"/>
+<ellipse id="Ellipse 51" cx="40.3418" cy="127" rx="9.96106" ry="10" fill="var(--color-hijau-terang, #00AA13)"/>
+<ellipse id="Ellipse 52" cx="88.1563" cy="127" rx="9.96106" ry="10" fill="var(--color-hijau-terang, #00AA13)"/>
+<rect id="Rectangle 152" x="40.3418" y="124.5" width="47.8145" height="5" fill="var(--color-hijau-terang, #00AA13)"/>
+<ellipse id="Ellipse 53" cx="40.3418" cy="127" rx="4.98053" ry="5" fill="#FFFFFF"/>
+<ellipse id="Ellipse 55" cx="88.1563" cy="127" rx="4.98053" ry="5" fill="#FFFFFF"/>
 </g>
 </svg>

@@ -62,17 +62,24 @@ export function LogoGerak({
       </defs>
 
       {/* Gerobak: batang, dua roda, dan gandarnya. Bagian ini yang datang
-          lebih dulu, karena pin lokasinya nanti mendarat di atasnya. */}
+          lebih dulu, karena pin lokasinya nanti mendarat di atasnya.
+
+          Roda dan gandarnya diluruskan ke sumbu batang (128,498 / 2 =
+          64,249). Pada ekspor Figma aslinya pasangan roda berpusat di
+          72,7 sementara batang dan pinnya di 64,2, dan selisih 8,5 unit
+          itu membuat seluruh gerobak terbaca miring ke kanan — paling
+          kentara pada lambang berukuran besar di layar pembuka. Jarak
+          antar rodanya sendiri tidak diubah. */}
       <g className={g("lg-gerobak")}>
         <rect y="95" width="128.498" height="6" rx="3" fill={hijau} />
-        <rect x="53.79" y="124" width="34.8637" height="5" fill={hijau} />
-        <g className={g("lg-roda")} style={{ transformOrigin: "48.81px 127px" }}>
-          <ellipse cx="48.8087" cy="127" rx="9.96106" ry="10" fill={hijau} />
-          <ellipse cx="48.8096" cy="127" rx="4.98053" ry="5" fill="#FFFFFF" />
+        <rect x="40.3418" y="124.5" width="47.8145" height="5" fill={hijau} />
+        <g className={g("lg-roda")} style={{ transformOrigin: "40.34px 127px" }}>
+          <ellipse cx="40.3418" cy="127" rx="9.96106" ry="10" fill={hijau} />
+          <ellipse cx="40.3418" cy="127" rx="4.98053" ry="5" fill="#FFFFFF" />
         </g>
-        <g className={g("lg-roda")} style={{ transformOrigin: "96.62px 127px" }}>
-          <ellipse cx="96.6232" cy="127" rx="9.96106" ry="10" fill={hijau} />
-          <ellipse cx="96.6231" cy="127" rx="4.98053" ry="5" fill="#FFFFFF" />
+        <g className={g("lg-roda")} style={{ transformOrigin: "88.16px 127px" }}>
+          <ellipse cx="88.1563" cy="127" rx="9.96106" ry="10" fill={hijau} />
+          <ellipse cx="88.1563" cy="127" rx="4.98053" ry="5" fill="#FFFFFF" />
         </g>
       </g>
 
