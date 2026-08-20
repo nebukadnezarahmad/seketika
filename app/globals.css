@@ -325,3 +325,184 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------
+   Koreografi layar pembuka.
+
+   Lambangnya tidak muncul utuh lalu memudar masuk, melainkan dirakit di
+   depan mata: gerobaknya datang lebih dulu, pin lokasi jatuh mendarat di
+   atasnya, lingkaran dan intinya membesar dari tengah, baru sinarnya
+   memancar. Urutan itu menceritakan lambangnya sendiri, dan itu yang
+   membedakan gerak bermakna dari sekadar unsur yang berkedip masuk.
+
+   Seluruh tahapannya diatur lewat penundaan animasi CSS, bukan penghitung
+   di React. Dengan begitu tidak ada satu pun render tambahan sepanjang
+   pembukaan berjalan, dan urutannya tidak bisa meleset karena pewaktu
+   yang tereksekusi terlambat.
+
+   Yang dianimasikan hanya transform dan opacity, dua sifat yang bisa
+   ditangani penyusun gambar tanpa menghitung ulang tata letak pada tiap
+   bingkai. Pada ponsel kelas bawah, menganimasikan lebar atau posisi di
+   layar pembuka justru membuat kesan pertama tersendat.
+   ------------------------------------------------------------------ */
+
+@keyframes lg-gerobak-masuk {
+  from {
+    opacity: 0;
+    transform: translateX(-34px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Rodanya berputar lebih dari satu putaran penuh supaya terbaca sebagai
+   gerobak yang benar-benar didorong, bukan roda yang sekadar bergeser. */
+@keyframes lg-roda-putar {
+  from {
+    transform: rotate(-400deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Pin jatuh melewati titik akhirnya sedikit lalu balik. Pendaratan yang
+   berhenti tepat pada sasaran terasa seperti gambar yang ditempel;
+   lewat sedikit membuatnya terasa punya bobot. */
+@keyframes lg-pin-jatuh {
+  0% {
+    opacity: 0;
+    transform: translateY(-90px) scale(0.86);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6px) scale(1.04);
+  }
+  80% {
+    transform: translateY(-3px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lg-mekar {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Sinar memancar keluar dari pusat pin, jadi ia mengecil dari nol
+   sekaligus bergeser sedikit ke arah luar. */
+@keyframes lg-sinar-pancar {
+  from {
+    opacity: 0;
+    transform: translate(-12px, 8px) scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Gelombang yang menyebar dari pin, memberi kesan sinyal lokasi. */
+@keyframes lg-riak {
+  from {
+    opacity: 0.5;
+    transform: scale(0.35);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes lg-huruf {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes lg-garis-muat {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Bulatan hijau lembut yang mengambang pelan di latar. Geraknya sengaja
+   lambat dan kecil; latar yang ikut sibuk akan merebut perhatian dari
+   lambang yang sedang dirakit di depannya. */
+@keyframes lg-apung {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10px, -16px) scale(1.06);
+  }
+}
+
+@layer utilities {
+  .lg-gerobak {
+    animation: lg-gerobak-masuk 620ms var(--pelan-keluar) 120ms both;
+  }
+  .lg-roda {
+    animation: lg-roda-putar 900ms var(--pelan-keluar) 120ms both;
+  }
+  .lg-pin {
+    animation: lg-pin-jatuh 780ms cubic-bezier(0.34, 1.32, 0.5, 1) 520ms both;
+  }
+  .lg-cincin {
+    animation: lg-mekar 520ms var(--pelan-keluar) 980ms both;
+  }
+  .lg-inti {
+    animation: lg-mekar 520ms cubic-bezier(0.34, 1.5, 0.5, 1) 1120ms both;
+  }
+  .lg-sinar {
+    animation: lg-sinar-pancar 460ms var(--pelan-keluar) both;
+  }
+  .lg-sinar-1 {
+    animation-delay: 1300ms;
+  }
+  .lg-sinar-2 {
+    animation-delay: 1390ms;
+  }
+  .lg-sinar-3 {
+    animation-delay: 1480ms;
+  }
+  .lg-riak {
+    animation: lg-riak 2200ms ease-out infinite;
+  }
+  .lg-huruf {
+    animation: lg-huruf 620ms var(--pelan-keluar) both;
+  }
+  .lg-garis-muat {
+    transform-origin: left;
+    animation: lg-garis-muat var(--durasi-buka, 2600ms) linear 60ms both;
+  }
+  .lg-apung {
+    animation: lg-apung 9s ease-in-out infinite;
+  }
+}
