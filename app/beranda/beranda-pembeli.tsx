@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Map, Receipt, Users, UtensilsCrossed } from "lucide-react";
+import { ArrowRight, Map, Receipt, Users, UtensilsCrossed } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { IkonCari, IkonPin } from "@/komponen/ui/ikon";
 import { AksiCepat, type Pintasan } from "@/komponen/ui/aksi-cepat";
@@ -11,30 +11,58 @@ import { KartuPedagang } from "@/komponen/pedagang/kartu-pedagang";
 import { daftarPedagang, kategoriPenyaring } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
 
-/* Empat jalur yang paling sering dituju warga. Semuanya rute yang memang
-   sudah ada; tidak ada pintasan ke halaman yang belum dibangun. */
-const PINTASAN: readonly Pintasan[] = [
-  { label: "Titik Kumpul", href: "/kolab", Ikon: Users, warna: "bg-hijau-lembut text-hijau" },
-  {
-    label: "Peta Gerobak",
-    href: "/peta",
-    Ikon: Map,
-    warna: "bg-biru-lembut text-biru",
-  },
-  {
-    label: "Jajanan",
-    href: "/hasil",
-    Ikon: UtensilsCrossed,
-    warna: "bg-amber-lembut text-amber-tua",
-  },
-  { label: "Pesanan", href: "/pesanan", Ikon: Receipt, warna: "bg-ungu-lembut text-ungu" },
-];
+/** Harga menu termurah di seluruh gerobak, untuk keping "mulai …". */
+const TERMURAH = Math.min(...daftarPedagang.flatMap((p) => p.menu.map((m) => m.harga)));
 
 export function BerandaPembeli() {
   const [saring, setSaring] = React.useState<string>("Dekat Anda");
   const profil = useToko((s) => s.profil);
+  const titikKumpul = useToko((s) => s.titikKumpul);
+  const pesanan = useToko((s) => s.pesanan);
   const alamat = profil?.alamat ?? "Bumi Marina Emas Selatan No.12";
   const nama = profil?.nama?.split(" ")[0] ?? "Warga";
+
+  /* Keping pada tiap ubin diambil dari keadaan yang sedang berjalan, jadi
+     angkanya ikut berubah begitu pengguna bergabung ke titik kumpul atau
+     memesan. Yang tidak punya angka jujur dibiarkan tanpa keping. */
+  const pintasan: readonly Pintasan[] = React.useMemo(() => {
+    const mengumpulkan = titikKumpul.filter((t) => t.status === "mengumpulkan").length;
+    const buka = daftarPedagang.filter((p) => p.buka).length;
+    const berjalan = pesanan.filter(
+      (p) => p.status === "menunggu" || p.status === "diproses",
+    ).length;
+
+    return [
+      {
+        label: "Titik Kumpul",
+        href: "/kolab",
+        Ikon: Users,
+        warna: "bg-hijau-lembut text-hijau",
+        keping: mengumpulkan > 0 ? `${mengumpulkan} aktif` : undefined,
+      },
+      {
+        label: "Peta Gerobak",
+        href: "/peta",
+        Ikon: Map,
+        warna: "bg-biru-lembut text-biru",
+        keping: buka > 0 ? `${buka} buka` : undefined,
+      },
+      {
+        label: "Jajanan",
+        href: "/hasil",
+        Ikon: UtensilsCrossed,
+        warna: "bg-amber-lembut text-amber-tua",
+        keping: `mulai ${Math.round(TERMURAH / 1000)}rb`,
+      },
+      {
+        label: "Pesanan",
+        href: "/pesanan",
+        Ikon: Receipt,
+        warna: "bg-ungu-lembut text-ungu",
+        keping: berjalan > 0 ? `${berjalan} jalan` : undefined,
+      },
+    ];
+  }, [titikKumpul, pesanan]);
 
   /* "Dekat Anda" bukan kategori, melainkan keadaan tanpa penyaringan.
      Sisanya dicocokkan pada kategori pedagang. */
@@ -52,46 +80,77 @@ export function BerandaPembeli() {
           masuk bagi pengguna yang menjelajah lewat daftar heading. */}
       <h1 className="khusus-pembaca-layar">Beranda</h1>
 
-      {/* Sapaan. Sisi pedagang sudah punya kepala bernama sejak awal;
-          sisi warga langsung menjatuhkan pengguna ke kolom lokasi tanpa
-          menyebut siapa yang sedang masuk. Avatarnya menuju profil, bukan
-          tombol mati: setiap sasaran ketuk di sini harus punya tujuan. */}
-      <header className="flex items-center gap-3 px-4 pb-1 pt-2.5">
-        <div className="min-w-0 flex-1">
-          <p className="text-[11.5px] leading-tight text-tinta-4">Selamat datang,</p>
-          <p className="tulisan-judul truncate text-[17px] font-bold leading-tight text-hijau">
-            {nama}
-          </p>
-        </div>
+      {/* Bilah atas: kolom cari memanjang di kiri, avatar di kanan.
+
+          Susunan ini menggantikan sapaan bertumpuk yang sempat dipakai.
+          Pada aplikasi sejenis, baris teratas dipakai untuk bertindak,
+          bukan untuk menyapa: kolom cari adalah unsur paling sering
+          disentuh, jadi dialah yang berhak atas baris paling mudah
+          dijangkau. Nama pengguna tetap muncul, tapi pindah ke kolom
+          lokasi di bawahnya yang memang menerangkan konteks. */}
+      <header className="flex items-center gap-2.5 px-4 pb-1 pt-2.5">
+        <Link
+          href="/cari"
+          className="flex h-[46px] min-w-0 flex-1 items-center gap-2.5 rounded-full border border-garis bg-white px-4"
+        >
+          <IkonCari size={17} className="shrink-0 text-tinta-3" />
+          <span className="truncate text-[13.5px] text-tinta-4">Mau jajan apa hari ini?</span>
+        </Link>
         <Link
           href="/profil"
           aria-label="Buka profil saya"
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-hijau-lembut text-[14px] font-extrabold text-hijau transition-transform active:scale-90"
+          className="grid size-[46px] shrink-0 place-items-center rounded-full border border-garis bg-white text-[15px] font-extrabold text-hijau transition-transform active:scale-90"
         >
           {nama.slice(0, 1).toUpperCase()}
         </Link>
       </header>
 
-      {/* Kolom lokasi, sekaligus pintu ke pencarian. */}
-      <section className="bg-krem px-4 pb-2.5 pt-2">
-        <Link
-          href="/cari"
-          className="bayang-kendali flex h-[50px] items-center gap-2.5 rounded-[20px] border border-garis bg-white px-[15px]"
-        >
-          <IkonPin size={18} className="shrink-0 text-hijau" />
-          <span className="min-w-0 flex-1">
-            <span className="block text-[12px] font-medium leading-3 text-tinta-4">Lokasi Anda</span>
-            <span className="mt-0.5 block truncate text-[13px] font-semibold leading-[15.6px] text-tinta-2">
-              {alamat}
-            </span>
+      {/* Kolom lokasi. Bukan lagi pintu ke pencarian karena pencarian
+          sudah punya kolomnya sendiri di atas; ini murni menerangkan
+          "dari mana jarak gerobak dihitung", dan mengantar ke layar yang
+          bisa mengubahnya. */}
+      <section className="px-4 pb-1 pt-2">
+        <Link href="/cari" className="flex items-center gap-2 py-1">
+          <IkonPin size={15} className="shrink-0 text-hijau" />
+          <span className="min-w-0 flex-1 truncate text-[12px] leading-tight text-tinta-3">
+            <span className="font-semibold text-tinta-2">{alamat}</span>
           </span>
-          <span className="grid size-[34px] shrink-0 place-items-center rounded-[11px] bg-hijau-lembut text-hijau">
-            <IkonCari size={16} />
+          <span aria-hidden className="shrink-0 text-[11px] font-bold text-hijau">
+            Ubah
           </span>
         </Link>
       </section>
 
-      <AksiCepat pintasan={PINTASAN} />
+      <AksiCepat pintasan={pintasan} />
+
+      {/* Spanduk ajakan.
+
+          Tempat yang di aplikasi rujukan diisi iklan, di sini diisi satu
+          ajakan yang benar-benar mengarah ke fitur andalan aplikasi ini.
+          Isinya tidak menjanjikan diskon atau hadiah yang tidak ada;
+          yang dijanjikan cuma apa yang memang terjadi kalau tombolnya
+          ditekan, yaitu membuat titik kumpul baru. */}
+      <section className="px-4 pt-4">
+        <Link
+          href="/kolab/buat"
+          className="gradasi-kumpul relative flex items-center gap-3 overflow-hidden rounded-[20px] px-4 py-3.5"
+        >
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13.5px] font-extrabold leading-tight text-white">
+              Patungan sama tetangga
+            </span>
+            <span className="mt-1 block text-[11.5px] leading-snug text-white/80">
+              Kumpulin warga di satu titik, gerobak datang sekaligus
+            </span>
+          </span>
+          <span
+            aria-hidden
+            className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-hijau"
+          >
+            <ArrowRight size={17} strokeWidth={2.4} />
+          </span>
+        </Link>
+      </section>
 
       {/* Penyaring kategori. Berada tepat di atas peta karena yang
           disaringnya memang peta dan daftar rekomendasi di bawahnya,
@@ -120,12 +179,19 @@ export function BerandaPembeli() {
         </div>
       </section>
 
-      {/* Peta */}
+      {/* Peta.
+
+          Label "N pedagang aktif" di atasnya menghitung gerobak yang
+          benar-benar buka, bukan semua pin yang tergambar. Sebelumnya ia
+          memakai jumlah seluruh pedagang yang lolos penyaring, sehingga
+          gerobak yang sedang tutup ikut disebut aktif. Selisihnya baru
+          ketahuan setelah keping "N buka" muncul di pintasan layanan dan
+          kedua angka itu bertengkar di layar yang sama. */}
       <section className="bg-krem px-4">
         <Link href="/peta" className="bayang-peta block overflow-hidden rounded-[24px]">
           <Peta
             tinggi={300}
-            jumlahAktif={terlihat.length}
+            jumlahAktif={terlihat.filter((p) => p.buka).length}
             saya={{ x: 50.11, y: 42.72 }}
             tanda={terlihat.map((p) => ({ id: p.id, x: p.posisi.x, y: p.posisi.y }))}
           />
@@ -136,7 +202,12 @@ export function BerandaPembeli() {
       <section className="pb-2 pt-[18px]">
         <div className="flex items-center justify-between px-4">
           <div className="min-w-0">
-            <h2 className="tulisan-judul text-[16px] font-extrabold leading-6 tracking-[-0.16px] text-hijau">
+            {/* Judul bagian memakai tinta pekat, bukan hijau merek.
+                Kalau judul ikut hijau, warna merek kehilangan artinya
+                sebagai penanda "ini bisa ditekan" — dan di layar ini
+                justru "Lihat semua" di sebelahnya yang perlu terbaca
+                sebagai tautan. */}
+            <h2 className="tulisan-judul text-[17px] font-extrabold leading-6 tracking-[-0.2px] text-tinta">
               Rekomendasi Terdekat
             </h2>
             <p className="mt-0.5 text-[12px] leading-[18px] text-tinta-4">

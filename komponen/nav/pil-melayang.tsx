@@ -84,7 +84,7 @@ export function PilMelayang({
           </span>
 
           <span className="flex shrink-0 flex-col items-center rounded-[12px] bg-white/15 px-2.5 py-1.5">
-            <span className="text-[16px] font-extrabold leading-4 text-hijau-neon">{menit}</span>
+            <span className="text-[16px] font-extrabold leading-4 text-white">{menit}</span>
             <span className="pt-px text-[9px] font-semibold leading-[13.5px] text-white/85">
               menit
             </span>

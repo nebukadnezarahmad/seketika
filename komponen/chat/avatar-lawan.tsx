@@ -44,7 +44,7 @@ export function AvatarLawan({
       {titikDaring && rupa.daring && (
         <span
           aria-label="Sedang aktif"
-          className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-krem bg-hijau-neon"
+          className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-krem bg-hijau-terang"
         />
       )}
     </span>

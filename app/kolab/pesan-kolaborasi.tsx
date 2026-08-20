@@ -46,7 +46,12 @@ export function PesanKolaborasi() {
           <p className="relative mt-1.5 max-w-[15rem] text-[12.5px] leading-snug text-white/70">
             Pesan bareng tetangga agar pedagang datang ke lingkunganmu.
           </p>
-          <span className="relative mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-bold text-hijau-neon">
+          {/* Pil putih, bukan teks hijau menyala seperti sebelumnya.
+              Waktu latarnya masih hijau tua, teks neon di atasnya masih
+              terbaca; setelah latarnya ikut jadi hijau terang, keduanya
+              nyaris menyatu. Pil putih juga membuat ajakan ini terbaca
+              sebagai tombol, bukan sekadar tulisan berwarna. */}
+          <span className="relative mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 text-[12.5px] font-bold text-hijau">
             Mulai sekarang
             <ArrowRight size={15} strokeWidth={2.6} />
           </span>

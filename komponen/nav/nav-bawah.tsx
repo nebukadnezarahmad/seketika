@@ -29,10 +29,14 @@ const tabPedagang: Tab[] = [
 /**
  * Navigasi bawah, empat tab, sama untuk kedua peran tapi tujuannya beda.
  *
- * Penanda aktifnya dua lapis seperti di desain: warna ikon dan label
- * berubah, lalu ada batang kecil di bawah label. Batangnya selalu ada
- * di pohon, hanya lebarnya yang nol saat tidak aktif, supaya tinggi
- * setiap tab tetap sama dan barisnya tidak bergeser.
+ * Penanda aktifnya tiga lapis: batang hijau menempel di tepi atas tab,
+ * pil hijau muda di belakang ikonnya, lalu label yang menebal dan ikut
+ * menghijau. Pil di belakang ikon itu yang paling cepat tertangkap mata
+ * dari ujung jempol, jauh sebelum orang membaca labelnya.
+ *
+ * Ketiganya selalu ada di pohon dan hanya berganti kelas, bukan muncul
+ * dan hilang. Kalau unsurnya ikut hilang saat tidak aktif, tinggi tiap
+ * tab jadi tidak sama dan seluruh baris bergeser tiap kali pindah tab.
  */
 export function NavBawah({ peran = "pembeli" }: { peran?: "pembeli" | "pedagang" }) {
   const jalur = usePathname();
@@ -54,22 +58,28 @@ export function NavBawah({ peran = "pembeli" }: { peran?: "pembeli" | "pedagang"
             key={href}
             href={href}
             aria-current={aktif ? "page" : undefined}
-            className="flex h-[60px] flex-col items-center gap-[3px] pt-3 transition-colors"
+            className="relative flex h-[62px] flex-col items-center gap-[3px] pt-2.5 transition-colors"
           >
-            <Ikon size={22} className={aktif ? "text-hijau" : "text-tinta-3"} />
             <span
-              className={`text-[10px] leading-[15px] tracking-[0.1px] ${
-                aktif ? "font-bold text-hijau" : "font-normal text-tinta-3"
+              aria-hidden
+              className={`absolute inset-x-0 top-0 mx-auto h-[3px] rounded-b-pil bg-hijau transition-all ${
+                aktif ? "w-9" : "w-0"
+              }`}
+            />
+            <span
+              className={`grid h-7 w-14 place-items-center rounded-pil transition-colors ${
+                aktif ? "bg-hijau-lembut" : "bg-transparent"
+              }`}
+            >
+              <Ikon size={21} className={aktif ? "text-hijau" : "text-tinta-3"} />
+            </span>
+            <span
+              className={`text-[10px] leading-[14px] tracking-[0.1px] ${
+                aktif ? "font-bold text-hijau" : "font-medium text-tinta-3"
               }`}
             >
               {label}
             </span>
-            <span
-              aria-hidden
-              className={`mt-0.5 h-[3px] rounded-pil bg-hijau transition-all ${
-                aktif ? "w-4" : "w-0"
-              }`}
-            />
           </Link>
         );
       })}
