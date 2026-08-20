@@ -61,6 +61,7 @@ harus berjalan.
 | Pesanan masuk | Disaring menurut status, dengan rincian dan total |
 | Terima & berangkat | Membuka navigasi dengan panduan arah |
 | Rekap harian | Ringkasan pesanan yang sudah dilayani |
+| Buku Kas | Pendapatan harian, grafik tujuh hari, menu terlaris, dan jam paling ramai |
 | Halaman toko | Kelola menu, area jangkauan, dan jam operasional |
 
 ## Teknologi
@@ -148,7 +149,7 @@ lalu tiga langkah pengenalan sebelum masuk ke beranda sesuai peran.
 
 | | |
 |---|---|
-| Nama tim | _(diisi sebelum pengumpulan)_ |
+| Nama tim | INGKER |
 | Institusi | Institut Teknologi PLN |
 | Subtema | Digitalisasi UMKM dan Ekonomi Kreatif |
 

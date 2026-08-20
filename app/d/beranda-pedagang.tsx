@@ -7,9 +7,13 @@ import { useRouter } from "next/navigation";
 import { Bell, ChevronDown, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
+import { TombolTaut } from "@/komponen/ui/tombol";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
+import { rp } from "@/lib/format";
+import { pendapatanHari } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
+import { useSekarang } from "@/lib/waktu";
 
 /** Perkiraan sisa waktu tempuh dari lama pesanan sudah berjalan. */
 function sisaMenit(menitLalu: number): number {
@@ -40,6 +44,13 @@ export function BerandaPedagang() {
   const selesai = pesananMasuk.filter((p) => p.status === "selesai");
   const permintaan = titikKumpul.filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA).length;
 
+  /* Pemasukan hari ini, dihitung dari pesanan yang sudah ditandai selesai
+     hari ini saja. Riwayat hari sebelumnya sengaja tidak ikut: lembar ini
+     judulnya "Pesanan Hari Ini", dan angka yang mengaku hari ini tapi
+     memuat kemarin adalah angka yang berbohong. */
+  const sekarang = useSekarang();
+  const masukHariIni = sekarang === null ? 0 : pendapatanHari(pesananMasuk, sekarang, 0);
+
   return (
     <Layar
       nav
@@ -60,7 +71,10 @@ export function BerandaPedagang() {
         <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul="Pesanan Hari Ini">
           <div className="px-4 pb-6">
             <h2 className="tulisan-judul text-[16px] font-extrabold text-tinta">Pesanan Hari Ini</h2>
-            <p className="mt-0.5 text-[11.5px] text-tinta-4">{selesai.length} pesanan berhasil</p>
+            <p className="mt-0.5 text-[11.5px] text-tinta-4">
+              {selesai.length} pesanan berhasil ·{" "}
+              <strong className="font-bold text-hijau">{rp(masukHariIni)}</strong>
+            </p>
 
             <ul className="mt-3 flex flex-col gap-2">
               {pesananMasuk.map((p) => (
@@ -96,6 +110,10 @@ export function BerandaPedagang() {
                 </li>
               ))}
             </ul>
+
+            <TombolTaut href="/d/rekap" penuh className="mt-4">
+              Lihat Buku Kas
+            </TombolTaut>
           </div>
         </Lembar>
       }
