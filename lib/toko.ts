@@ -94,6 +94,16 @@ type Keadaan = {
   /** Catatan sisa stok per menu. Fitur langganan berbayar. */
   stok: Record<string, number>;
 
+  /**
+   * Foto menu yang diunggah pedagang, dikunci pada id menu.
+   *
+   * Isinya data URL yang sudah dikecilkan lewat `lib/foto.ts`. Terpisah
+   * dari `menuSaya` karena foto jauh lebih besar dari kolom lainnya, dan
+   * memisahnya membuat menu yang dihapus bisa membuang fotonya tanpa
+   * menyentuh apa pun yang lain.
+   */
+  fotoMenuSaya: Record<string, string>;
+
   /** Langganan SEKETIKA Pro sedang menyala. */
   pro: boolean;
 };
@@ -147,7 +157,7 @@ type Tindakan = {
 
   tandaiNotifikasiDibaca: (id: string[]) => void;
 
-  simpanMenu: (menu: Menu, bawaan: Menu[]) => void;
+  simpanMenu: (menu: Menu, bawaan: Menu[], foto?: string | null) => void;
   hapusMenu: (menuId: string, bawaan: Menu[]) => void;
   aturStok: (menuId: string, sisa: number) => void;
   setPro: (nyala: boolean) => void;
@@ -174,6 +184,7 @@ const awal: Keadaan = {
   notifikasiDibaca: [],
   menuSaya: null,
   stok: {},
+  fotoMenuSaya: {},
   pro: false,
 };
 
@@ -362,11 +373,26 @@ export const useToko = create<Keadaan & Tindakan>()(
          Keduanya satu tindakan karena bedanya cuma apakah idnya sudah ada
          di daftar; memisahnya jadi dua tindakan berarti dua jalur yang
          harus sama-sama benar dalam menyalin daftar bawaan. */
-      simpanMenu: (menu, bawaan) =>
+      simpanMenu: (menu, bawaan, foto) =>
         set((s) => {
           const dasar = s.menuSaya ?? bawaan;
           const ada = dasar.some((m) => m.id === menu.id);
+          /* `foto` yang undefined berarti tidak disentuh, null berarti
+             dikembalikan ke foto bawaan. Membedakan keduanya perlu karena
+             menyimpan menu tanpa mengganti fotonya adalah hal yang paling
+             sering terjadi, dan itu tidak boleh menghapus foto yang sudah
+             ada. */
+          const fotoMenuSaya =
+            foto === undefined
+              ? s.fotoMenuSaya
+              : foto === null
+                ? Object.fromEntries(
+                    Object.entries(s.fotoMenuSaya).filter(([id]) => id !== menu.id),
+                  )
+                : { ...s.fotoMenuSaya, [menu.id]: foto };
+
           return {
+            fotoMenuSaya,
             menuSaya: ada ? dasar.map((m) => (m.id === menu.id ? menu : m)) : [...dasar, menu],
           };
         }),
@@ -382,6 +408,9 @@ export const useToko = create<Keadaan & Tindakan>()(
                dengan stok orang lain. */
             menuNonaktif: s.menuNonaktif.filter((id) => id !== menuId),
             stok: Object.fromEntries(Object.entries(s.stok).filter(([id]) => id !== menuId)),
+            fotoMenuSaya: Object.fromEntries(
+              Object.entries(s.fotoMenuSaya).filter(([id]) => id !== menuId),
+            ),
           };
         }),
 

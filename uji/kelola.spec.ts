@@ -139,3 +139,97 @@ test("permintaan titik kumpul di beranda pedagang bisa dibuka", async ({ page })
   await page.waitForURL(/\/kolab\/tk-/);
   await expect(page.getByRole("heading", { name: "Detail Titik Kumpul" })).toBeVisible();
 });
+
+test.describe("Slot foto menu", () => {
+  /* PNG 1x1 piksel, cukup untuk membuktikan berkasnya benar-benar dibaca,
+     dikecilkan lewat kanvas, lalu disimpan sebagai data URL. */
+  const PIKSEL = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+    "base64",
+  );
+
+  test("foto yang diunggah terpakai di sisi pedagang dan warga", async ({ page }) => {
+    await lewatiPengenalan(page, "pedagang", "Pak Anton");
+    await page.goto("/d/menu");
+
+    await page.getByRole("button", { name: /Bakso Polos/ }).click();
+    const lembar = page.getByRole("dialog");
+    await expect(lembar.getByText("Foto menu")).toBeVisible();
+
+    await lembar.getByLabel("Berkas foto menu").setInputFiles({
+      name: "bakso.png",
+      mimeType: "image/png",
+      buffer: PIKSEL,
+    });
+    /* Setelah ada foto sendiri, jalan kembali ke bawaan ikut muncul. */
+    await expect(lembar.getByRole("button", { name: /Kembalikan foto bawaan/ })).toBeVisible();
+    await lembar.getByRole("button", { name: "Simpan Perubahan" }).click();
+
+    const fotoTersimpan = await page.evaluate(() => {
+      const s = JSON.parse(localStorage.getItem("seketika") ?? "{}");
+      return Object.values(s.state?.fotoMenuSaya ?? {})[0] as string | undefined;
+    });
+    expect(fotoTersimpan?.startsWith("data:image/jpeg")).toBe(true);
+
+    /* Dikecilkan, bukan disimpan mentah: satu foto tidak boleh mendekati
+       kuota penyimpanan peramban yang cuma sekitar lima megabita. */
+    expect(fotoTersimpan!.length).toBeLessThan(200_000);
+
+    await page.goto("/pedagang/bakso-pak-anton/menu");
+    await page.getByRole("button", { name: /Bakso Polos/ }).click();
+    await expect(page.getByRole("dialog").getByRole("img")).toBeVisible();
+  });
+
+  test("berkas bukan gambar ditolak dengan alasan", async ({ page }) => {
+    await lewatiPengenalan(page, "pedagang", "Pak Anton");
+    await page.goto("/d/menu");
+    await page.getByRole("button", { name: /Tambah Menu/ }).click();
+
+    const lembar = page.getByRole("dialog");
+    await lembar.getByLabel("Berkas foto menu").setInputFiles({
+      name: "catatan.txt",
+      mimeType: "text/plain",
+      buffer: Buffer.from("bukan gambar"),
+    });
+    await expect(lembar.getByText("Berkasnya harus berupa gambar.")).toBeVisible();
+  });
+});
+
+test.describe("Grafik tujuh hari bisa diketuk", () => {
+  test("memilih satu hari mengubah rincian di bawahnya", async ({ page }) => {
+    await lewatiPengenalan(page, "pedagang", "Pak Anton");
+    await page.goto("/d/rekap");
+
+    const grafik = page.locator("section").filter({ hasText: "Tujuh Hari Terakhir" });
+    await expect(page.getByText("Menu Terlaris7 hari")).toBeVisible();
+
+    /* Batang paling kiri adalah hari terjauh, enam hari ke belakang. */
+    await grafik.getByRole("button").first().click();
+
+    /* Judul bagian di bawahnya ikut berganti jadi tanggal hari itu, bukan
+       tetap menulis tujuh hari. */
+    await expect(page.getByText("Menu Terlaris7 hari")).toHaveCount(0);
+    await expect(grafik.getByRole("button").first()).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("button", { name: "Kembali ke tujuh hari" })).toBeVisible();
+
+    await page.getByRole("button", { name: "Kembali ke tujuh hari" }).click();
+    await expect(page.getByText("Menu Terlaris7 hari")).toBeVisible();
+  });
+
+  test("mengetuk batang yang sama dua kali kembali ke rangkuman", async ({ page }) => {
+    await lewatiPengenalan(page, "pedagang", "Pak Anton");
+    await page.goto("/d/rekap");
+
+    const batang = page
+      .locator("section")
+      .filter({ hasText: "Tujuh Hari Terakhir" })
+      .getByRole("button")
+      .last();
+
+    await batang.click();
+    await expect(batang).toHaveAttribute("aria-pressed", "true");
+    await batang.click();
+    await expect(batang).toHaveAttribute("aria-pressed", "false");
+    await expect(page.getByText("Menu Terlaris7 hari")).toBeVisible();
+  });
+});

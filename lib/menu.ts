@@ -69,3 +69,18 @@ export function angkaHarga(teks: string): number {
 export function harganRapi(nilai: number): string {
   return nilai ? new Intl.NumberFormat("id-ID").format(nilai) : "";
 }
+
+/** Foto bawaan untuk menu buatan pedagang yang belum punya gambarnya. */
+export const FOTO_CADANGAN = "/img/menu/bakso-polos.jpg";
+
+/**
+ * Sumber foto satu menu, dengan urutan yang jelas: unggahan pedagang
+ * lebih dulu, lalu foto bawaan dari data contoh, baru gambar cadangan.
+ */
+export function fotoDariMenu(
+  menuId: string,
+  unggahan: Record<string, string>,
+  bawaan: Record<string, string>,
+): string {
+  return unggahan[menuId] ?? bawaan[menuId] ?? FOTO_CADANGAN;
+}
