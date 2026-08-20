@@ -54,17 +54,21 @@ export function menungguPedagang(titik: TitikKumpul, sekarang: number | null): b
   return statusTitik(titik, sekarang) === "tercapai";
 }
 
+/** Jarak dibagi kecepatan jalan kaki, dibulatkan ke menit terdekat. */
+const KELOK = 1.35;
+const METER_PER_MENIT = 85;
+
 /**
- * Layak muncul di daftar permintaan pedagang.
+ * Perkiraan lama tempuh ke satu titik kumpul, dalam menit.
  *
- * Lebih longgar dari `menungguPedagang` karena memuat yang sedang
- * dijemput. Kalau daftarnya hanya menampilkan yang tercapai, kotaknya
- * lenyap tepat setelah pedagang menekan "Terima & Berangkat", dan tidak
- * ada lagi jalan untuk kembali menutupnya.
+ * Ditaruh di sini supaya kartu melayang di beranda pedagang dan layar
+ * rute memakai angka yang sama. Dua tempat yang menghitung perjalanan
+ * yang sama dengan rumus masing-masing akan menyebut dua angka berbeda
+ * untuk satu perjalanan, dan itu terlihat justru saat aplikasinya
+ * diperagakan.
  */
-export function tampilBagiPedagang(titik: TitikKumpul, sekarang: number | null): boolean {
-  const keadaan = statusTitik(titik, sekarang);
-  return keadaan === "tercapai" || keadaan === "dijemput";
+export function menitTempuh(jarak: number): number {
+  return Math.max(1, Math.round((Math.round((jarak * KELOK) / 10) * 10) / METER_PER_MENIT));
 }
 
 /** Masih menerima peserta baru. */

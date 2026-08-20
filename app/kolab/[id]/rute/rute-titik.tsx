@@ -6,10 +6,8 @@ import { Kepala } from "@/komponen/ui/kepala";
 import { Peta } from "@/komponen/peta/peta";
 import { Pin } from "@/komponen/peta/pin";
 import { cariPedagang, SLUG_GEROBAK_SAYA } from "@/lib/data/pedagang";
+import { menitTempuh } from "@/lib/kolab";
 import { useToko } from "@/lib/toko";
-
-/** Panjang rute berjalan kaki, sedikit lebih jauh dari jarak lurus. */
-const KELOK = 1.35;
 
 /**
  * Rute menuju satu titik kumpul.
@@ -39,9 +37,13 @@ export function RuteTitik({ id }: { id: string }) {
   }
 
   const pedagang = cariPedagang(titik.pedagangSlug);
-  const lurus = pedagang?.jarak ?? 150;
-  const rute = Math.round((lurus * KELOK) / 10) * 10;
-  const menit = Math.max(1, Math.round(rute / 85));
+  /* Jaraknya diambil dari titik kumpulnya, bukan dari jarak gerobak ke
+     warga. Keduanya angka yang berbeda, dan memakai yang kedua membuat
+     layar ini menyebut jarak yang tidak cocok dengan yang baru saja
+     dibaca orang di layar sebelumnya. */
+  const lurus = titik.jarak;
+  const rute = Math.round((lurus * 1.35) / 10) * 10;
+  const menit = menitTempuh(titik.jarak);
 
   const sayaPemilik = sisiPedagang && titik.pedagangSlug === SLUG_GEROBAK_SAYA;
 

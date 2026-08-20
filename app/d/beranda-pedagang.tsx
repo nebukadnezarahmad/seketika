@@ -12,7 +12,7 @@ import { Lonceng } from "@/komponen/ui/lonceng";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
-import { labelStatusTitik, menungguPedagang, statusTitik, tampilBagiPedagang } from "@/lib/kolab";
+import { labelStatusTitik, menitTempuh, menungguPedagang, statusTitik } from "@/lib/kolab";
 import { pendapatanHari } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -31,6 +31,7 @@ export function BerandaPedagang() {
   const setGerobak = useToko((s) => s.setGerobak);
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const ubahStatusMasuk = useToko((s) => s.ubahStatusMasuk);
+  const ubahStatusTitik = useToko((s) => s.ubahStatusTitik);
   const titikKumpul = useToko((s) => s.titikKumpul);
   const profil = useToko((s) => s.profil);
 
@@ -61,19 +62,24 @@ export function BerandaPedagang() {
      pedagang aktif di peta. */
   const permintaan = milikSaya.filter((t) => menungguPedagang(t, sekarang)).length;
 
-  /* Yang tampil cuma yang sudah tercapai dan yang sedang dijemput.
-     Titik kumpul yang masih mengumpulkan belum jadi urusan pedagang, dan
-     yang sudah diselesaikan tidak menyisakan tindakan apa pun; daftar
-     berjudul "Permintaan" yang memuat keduanya lama-lama jadi arsip yang
-     tidak pernah bisa dibersihkan. */
-  const tampil = milikSaya.filter((t) => tampilBagiPedagang(t, sekarang));
+  /* Daftarnya cuma memuat yang sudah tercapai, jadi setiap kotak yang
+     terlihat adalah permintaan yang benar-benar bisa diketuk dan
+     diterima. Begitu diterima, kotaknya keluar dari daftar dan pindah ke
+     kartu melayang di bawah, tempat yang sama dengan pesanan yang sedang
+     diantar. Tanpa kartu itu, menerima berarti kehilangan jejaknya:
+     "Selesaikan" tidak akan bisa dijangkau lagi. */
+  const tampil = milikSaya.filter((t) => menungguPedagang(t, sekarang));
+  const sedangDijemput = milikSaya.find((t) => statusTitik(t, sekarang) === "dijemput");
 
   return (
     <Layar
       nav
       peran="pedagang"
+      /* Pesanan perorangan didahulukan kalau keduanya berjalan: ia punya
+         satu warga yang menunggu di alamatnya sendiri, sedangkan titik
+         kumpul sudah berkumpul dan bisa menunggu sebentar. */
       melayang={
-        sedangDiantar && (
+        sedangDiantar ? (
           <PilMelayang
             judul={`Menuju Lokasi ${sedangDiantar.warga}`}
             keterangan={`Sedang menuju · ${sisaMenit(sedangDiantar.menitLalu)} mnt lagi`}
@@ -81,7 +87,15 @@ export function BerandaPedagang() {
             href={`/d/antar/${sedangDiantar.id}`}
             aksi={() => ubahStatusMasuk(sedangDiantar.id, "selesai")}
           />
-        )
+        ) : sedangDijemput ? (
+          <PilMelayang
+            judul={`Menuju ${sedangDijemput.nama}`}
+            keterangan={`${sedangDijemput.peserta.length} warga menunggu · ${sedangDijemput.patokan}`}
+            menit={menitTempuh(sedangDijemput.jarak)}
+            href={`/kolab/${sedangDijemput.id}/rute`}
+            aksi={() => ubahStatusTitik(sedangDijemput.id, "selesai")}
+          />
+        ) : null
       }
       /* Rekap pesanan hari ini. */
       lembar={
@@ -153,7 +167,15 @@ export function BerandaPedagang() {
         <Lonceng />
       </header>
 
-      <div className="px-4 pb-4 data-[melayang]:pb-32" data-melayang={sedangDiantar ? "" : undefined}>
+      {/* Bantalan bawah dipasang untuk KEDUA jenis pil melayang. Pil itu
+          menumpang di atas isi halaman, jadi tanpa bantalan ini kartu
+          terakhir berhenti di bawahnya dan tidak bisa digulung lepas.
+          Tinggi pilnya 111px ditambah jarak 12px dari navigasi; pb-32
+          (128px) menyisakan ruang lebih. */}
+      <div
+        className="px-4 pb-4 data-[melayang]:pb-32"
+        data-melayang={sedangDiantar || sedangDijemput ? "" : undefined}
+      >
         {/* Status gerobak */}
         <section
           className={`relative overflow-hidden rounded-[18px] p-4 ${
@@ -374,7 +396,7 @@ export function BerandaPedagang() {
             ))}
           {tampil.length === 0 && (
             <li className="rounded-[14px] border border-dashed border-garis bg-white px-4 py-6 text-center text-[12px] text-tinta-4">
-              Tidak ada permintaan titik kumpul yang menunggu.
+              Tidak ada permintaan titik kumpul yang menunggu keputusanmu.
             </li>
           )}
         </ul>
