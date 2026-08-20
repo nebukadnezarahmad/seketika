@@ -41,7 +41,15 @@ export function Sambutan() {
           tenda, mangkuk, dan orangnya berubah jadi noda hijau yang tidak
           menggambarkan apa pun. Pada layar yang terlalu pendek untuk
           memuat semuanya, layarnya bergulir sedikit, dan itu lebih baik
-          daripada ilustrasi seukuran perangko. */}
+          daripada ilustrasi seukuran perangko.
+
+          Wadahnya yang menentukan bidang, lalu `object-contain` yang
+          memuatkan gambarnya di dalam bidang itu. Versi sebelumnya
+          memakai `h-full w-auto`, dan itu menyesatkan: `max-width: 100%`
+          bawaan Tailwind tetap mengunci lebarnya di 342px, jadi kotak
+          gambarnya berakhir 342x266 sementara gambarnya sendiri
+          tergambar 342x240 — rasionya tidak pernah benar-benar dijaga
+          oleh `w-auto` seperti yang terbaca. */}
       <div className="flex min-h-[160px] flex-1 shrink-0 items-center justify-center py-4">
         <Image
           src="/img/ilustrasi-warung.svg"
@@ -51,10 +59,10 @@ export function Sambutan() {
              selama beberapa detik sebelum sampai ke judul dan tombol,
              tanpa satu pun keterangan baru. */
           alt=""
-          width={261}
-          height={183}
+          width={130}
+          height={91}
           priority
-          className="h-full w-auto object-contain"
+          className="size-full object-contain"
         />
       </div>
 
