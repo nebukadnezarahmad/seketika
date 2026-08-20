@@ -41,19 +41,61 @@ test.describe("Titik kumpul di sisi pedagang", () => {
     await expect(page.getByText("Dijemput").first()).toBeVisible();
   });
 
-  test("yang diselesaikan hilang dari daftar, yang lain tetap tinggal", async ({ page }) => {
+  test("yang diterima keluar dari daftar dan pindah ke kartu melayang", async ({ page }) => {
     await page.getByRole("button", { name: /Terima & Berangkat/ }).click();
     await page.waitForURL(/\/rute/);
-    await page.goBack();
-    await page.getByRole("button", { name: /Selesaikan Titik Kumpul/ }).click();
-    await expect(page.getByText("Titik kumpul ini sudah selesai")).toBeVisible();
 
     await page.goto("/d");
-    /* Yang diselesaikan hilang, yang belum tetap ada. Menguji keduanya
-       sekaligus penting: daftar yang menghilangkan semuanya juga akan
-       lolos kalau yang diperiksa cuma hilangnya satu kotak. */
-    await expect(page.getByRole("link", { name: /RT 02 Taman Bermain/ })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: /RT 04 Gang Melati/ })).toBeVisible();
+    /* Dicocokkan lewat pola kartu daftarnya ("N/M warga · patokan"),
+       bukan lewat nama titiknya saja: kartu melayang juga sebuah tautan
+       dan namanya memuat nama titik yang sama, jadi memeriksa namanya
+       saja akan menghitung kartu melayang itu juga.
+
+       Menguji keduanya sekaligus penting: daftar yang menghilangkan
+       semuanya juga akan lolos kalau yang diperiksa cuma hilangnya satu
+       kotak. */
+    const kartu = page.getByRole("link", { name: /warga ·/ });
+    await expect(kartu).toHaveCount(1);
+    await expect(kartu).toContainText("RT 04 Gang Melati");
+
+    /* Jejaknya tidak hilang: yang sedang dijemput pindah ke kartu
+       melayang, tempat yang sama dengan pesanan yang sedang diantar. */
+    await expect(page.getByText("Menuju RT 02 Taman Bermain")).toBeVisible();
+    await expect(page.getByText(/6 warga menunggu/)).toBeVisible();
+  });
+
+  test("kartu permintaan sisa tidak tertutup kartu melayang", async ({ page }) => {
+    await page.getByRole("button", { name: /Terima & Berangkat/ }).click();
+    await page.waitForURL(/\/rute/);
+    await page.goto("/d");
+
+    /* Digulung sampai dasar lewat wadahnya sendiri. Kartu melayang
+       menumpang di atas isi halaman, jadi tanpa bantalan bawah kartu
+       terakhir berhenti di bawahnya dan tidak bisa digulung lepas. */
+    await page.locator(".isi-layar").evaluate((e) => {
+      e.scrollTop = e.scrollHeight;
+    });
+    await page.waitForTimeout(300);
+
+    const kartu = await page.getByRole("link", { name: /warga ·/ }).boundingBox();
+    const pil = await page.getByText("Menuju RT 02 Taman Bermain").boundingBox();
+    expect(kartu!.y + kartu!.height).toBeLessThan(pil!.y);
+
+    await page.getByRole("link", { name: /warga ·/ }).click();
+    await page.waitForURL(/\/kolab\/tk-05/);
+  });
+
+  test("kartu melayang menutup titik kumpul yang sudah dijemput", async ({ page }) => {
+    await page.getByRole("button", { name: /Terima & Berangkat/ }).click();
+    await page.waitForURL(/\/rute/);
+    await page.goto("/d");
+
+    await page.getByRole("button", { name: /Tandai Selesai/ }).click();
+
+    await expect(page.getByText("Menuju RT 02 Taman Bermain")).toHaveCount(0);
+    const sisa = page.getByRole("link", { name: /warga ·/ });
+    await expect(sisa).toHaveCount(1);
+    await expect(sisa).toContainText("RT 04 Gang Melati");
   });
 
   test("dua permintaan yang tampil keduanya sudah tercapai", async ({ page }) => {
@@ -110,11 +152,9 @@ test.describe("Titik kumpul di sisi pedagang", () => {
     await expect(page.getByText(/1 permintaan titik kumpul/)).toBeVisible();
   });
 
-  test("menyelesaikan satu permintaan menurunkan hitungan, bukan menghapusnya", async ({ page }) => {
+  test("menerima satu permintaan menurunkan hitungan, bukan menghapusnya", async ({ page }) => {
     await page.getByRole("button", { name: /Terima & Berangkat/ }).click();
     await page.waitForURL(/\/rute/);
-    await page.goBack();
-    await page.getByRole("button", { name: /Selesaikan Titik Kumpul/ }).click();
 
     await page.goto("/d");
     await page.getByRole("checkbox", { name: "Buka gerobak" }).uncheck({ force: true });
