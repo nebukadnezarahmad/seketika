@@ -55,7 +55,7 @@ export function DetailTitikKumpul({ id }: { id: string }) {
             </p>
             <span
               className={`flex shrink-0 items-center gap-1.5 rounded-pil px-2.5 py-1 text-[10.5px] font-bold ${
-                penuh ? "bg-hijau-neon text-hijau" : "bg-hijau-neon/90 text-hijau"
+                penuh ? "bg-hijau-neon text-hijau-gelap" : "bg-hijau-neon/90 text-hijau-gelap"
               }`}
             >
               <span aria-hidden className="size-1.5 rounded-pil bg-hijau" />

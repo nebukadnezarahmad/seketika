@@ -45,7 +45,7 @@ export function PetaPenuh() {
           <ChevronLeft size={19} strokeWidth={2.4} />
         </button>
 
-        <div className="absolute left-1/2 top-4 flex -translate-x-1/2 items-center gap-1.5 rounded-pil bg-hijau px-3.5 py-2 shadow-[0_4px_10px_rgb(26_77_46/0.3)]">
+        <div className="absolute left-1/2 top-4 flex -translate-x-1/2 items-center gap-1.5 rounded-pil bg-hijau px-3.5 py-2 shadow-[0_4px_10px_rgb(0_134_15/0.3)]">
           <span aria-hidden className="size-1.5 rounded-pil bg-hijau-neon" />
           <span className="whitespace-nowrap text-[11px] font-bold text-white">
             {daftarPedagang.length} pedagang aktif

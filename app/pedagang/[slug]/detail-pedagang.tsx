@@ -97,7 +97,7 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
               <span className="min-w-0 flex-1">
                 <span className="flex items-center gap-2">
                   <span className="text-[14px] font-bold text-white">Pesan dengan Kolaborasi</span>
-                  <span className="rounded-pil bg-hijau-neon px-1.5 py-0.5 text-[9px] font-extrabold tracking-[0.06em] text-hijau">
+                  <span className="rounded-pil bg-hijau-neon px-1.5 py-0.5 text-[9px] font-extrabold tracking-[0.06em] text-hijau-gelap">
                     BARU
                   </span>
                 </span>

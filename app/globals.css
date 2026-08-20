@@ -23,7 +23,16 @@
   --color-hijau: #00860f;
   --color-hijau-terang: #00aa13;
   --color-hijau-lembut: #e6f8e8;
-  --color-hijau-neon: #17c93b;
+  /* Hijau menyala, dan ini SELALU dipakai di atas latar hijau: titik
+     "sedang aktif", sakelar gerobak buka, keping "BARU". Karena itu ia
+     harus jauh lebih terang dari warna merek, bukan sekadar lebih
+     jenuh. Sempat disetel #17c93b dan hasilnya nyaris menyatu dengan
+     --color-hijau; keping yang memakainya sebagai latar bahkan cuma
+     mencapai 2:1 terhadap teks hijaunya. #4ade80 mengembalikan jarak
+     terang itu: sebagai latar dengan teks --color-hijau-gelap ia lolos
+     4,76:1. Jangan memakainya sebagai teks di atas putih, di sana ia
+     tidak terbaca; untuk itu ada --color-hijau. */
+  --color-hijau-neon: #4ade80;
 
   /* Netral sejuk. Latarnya abu-putih, bukan krem hangat seperti versi
      pertama — pola super-app modern: kartu putih mengambang di atas

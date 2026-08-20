@@ -4,16 +4,15 @@ import type { LucideIcon } from "lucide-react";
 /**
  * Deret pintasan layanan di beranda.
  *
- * Ini pola yang dipakai hampir semua super-app: satu kartu putih berisi
- * grid ikon persegi-membulat berwarna lembut, tiap ikon satu layanan.
- * Gunanya bukan sekadar hiasan — jalur ke fitur andalan tidak boleh
- * bersembunyi di balik gulir. "Titik Kumpul" ditaruh paling kiri karena
- * itu pembeda utama aplikasi ini, dan sebelumnya hanya bisa dicapai
- * lewat tautan di dalam halaman lain.
+ * Bentuknya mengikuti pola super-app: ubin persegi-membulat berlatar
+ * warna lembut, label tebal gelap di bawahnya, dan keping kecil gelap
+ * menempel di pojok kiri atas ubin.
  *
- * Empat kolom, bukan lima: pada lebar 390px lima kolom menyisakan
- * label sempit yang terpaksa dipotong, sedangkan sebagian besar nama
- * layanan di sini dua kata.
+ * Keping itu di aplikasi aslinya berisi promo. Di sini isinya angka
+ * sungguhan dari keadaan aplikasi (berapa titik kumpul sedang berjalan,
+ * berapa gerobak sedang buka, harga termurah yang ada) — bukan tempelan
+ * hiasan. Kalau tidak ada angka yang jujur untuk ditampilkan, kepingnya
+ * memang tidak digambar; itu sebabnya `keping` boleh kosong.
  */
 export type Pintasan = {
   label: string;
@@ -21,30 +20,43 @@ export type Pintasan = {
   Ikon: LucideIcon;
   /** Kelas latar dan warna ikon, dipasangkan dari token tema. */
   warna: string;
+  /** Angka atau kata pendek pada keping pojok. Kosong berarti tanpa keping. */
+  keping?: string;
 };
 
 export function AksiCepat({ pintasan }: { pintasan: readonly Pintasan[] }) {
   return (
-    <nav aria-label="Pintasan layanan" className="px-4 pt-3">
-      <ul className="bayang-kartu grid grid-cols-4 items-start gap-1 rounded-[20px] border border-garis bg-white px-2 py-3.5">
-        {pintasan.map(({ label, href, Ikon, warna }) => (
+    <nav aria-label="Pintasan layanan" className="px-4 pt-3.5">
+      <ul className="grid grid-cols-4 items-start gap-y-3">
+        {pintasan.map(({ label, href, Ikon, warna, keping }) => (
           <li key={href}>
             <Link
               href={href}
-              className="flex flex-col items-center gap-1.5 rounded-[14px] py-1 transition-transform active:scale-95"
+              className="flex flex-col items-center gap-1.5 rounded-[14px] transition-transform active:scale-95"
             >
-              <span
-                aria-hidden
-                className={`grid size-11 place-items-center rounded-[16px] ${warna}`}
-              >
-                <Ikon size={21} strokeWidth={2.1} />
+              <span className="relative">
+                <span
+                  aria-hidden
+                  className={`grid size-[58px] place-items-center rounded-[19px] ${warna}`}
+                >
+                  <Ikon size={26} strokeWidth={1.9} />
+                </span>
+                {keping && (
+                  /* Keping menumpang di tepi ubin, bukan di dalamnya, persis
+                     seperti label promo pada aplikasi rujukan. Karena ia
+                     mengulang angka yang juga terbaca di halaman tujuan,
+                     matanya saja yang perlu melihatnya; pembaca layar akan
+                     membacakan label ubin dua kali kalau keping ini ikut
+                     disuarakan. */
+                  <span
+                    aria-hidden
+                    className="absolute -left-1.5 -top-1.5 rounded-[8px] bg-tinta px-1.5 py-[3px] text-[8.5px] font-bold leading-[10px] text-white"
+                  >
+                    {keping}
+                  </span>
+                )}
               </span>
-              {/* Tinggi minimum satu baris, bukan tinggi tetap dua baris.
-                  Dengan tinggi tetap, label yang semuanya muat satu baris
-                  menyisakan satu baris kosong di bawah kartu. Label yang
-                  memang membungkus tetap boleh memanjang; `items-start`
-                  pada butirnya yang menjaga baris ikon tetap sejajar. */}
-              <span className="flex min-h-[13px] items-start text-center text-[10.5px] font-semibold leading-[13px] text-tinta-2">
+              <span className="max-w-[76px] text-center text-[11px] font-bold leading-[14px] text-tinta">
                 {label}
               </span>
             </Link>
