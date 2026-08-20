@@ -5,20 +5,32 @@ import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { Peta } from "@/komponen/peta/peta";
 import { Pin } from "@/komponen/peta/pin";
-import { cariPedagang } from "@/lib/data/pedagang";
+import { cariPedagang, SLUG_GEROBAK_SAYA } from "@/lib/data/pedagang";
 import { useToko } from "@/lib/toko";
 
 /** Panjang rute berjalan kaki, sedikit lebih jauh dari jarak lurus. */
 const KELOK = 1.35;
 
+/**
+ * Rute menuju satu titik kumpul.
+ *
+ * Tujuannya sama untuk kedua peran, yang berbeda titik berangkatnya:
+ * pedagang mendorong gerobaknya dari lapaknya, warga berjalan dari
+ * rumahnya. Sebelumnya layar ini campur aduk — judul dan petunjuk
+ * arahnya ditulis dari sisi pedagang, sementara kartu ringkasannya
+ * menyebut pembacanya "Pembeli" dan navigasinya navigasi warga.
+ */
 export function RuteTitik({ id }: { id: string }) {
   const titik = useToko((s) => s.titikKumpul.find((t) => t.id === id));
   const namaSaya = useToko((s) => s.profil?.nama) ?? "Anda";
+  const peran = useToko((s) => s.profil?.peran);
+
+  const sisiPedagang = peran === "pedagang";
 
   if (!titik) {
     return (
-      <Layar nav>
-        <Kepala judul="Rute Lokasi Pembeli" />
+      <Layar nav peran={sisiPedagang ? "pedagang" : "pembeli"}>
+        <Kepala judul="Rute ke Titik Kumpul" />
         <p className="px-6 py-16 text-center text-[13px] text-tinta-4">
           Titik kumpul tidak ditemukan.
         </p>
@@ -31,16 +43,20 @@ export function RuteTitik({ id }: { id: string }) {
   const rute = Math.round((lurus * KELOK) / 10) * 10;
   const menit = Math.max(1, Math.round(rute / 85));
 
+  const sayaPemilik = sisiPedagang && titik.pedagangSlug === SLUG_GEROBAK_SAYA;
+
   const langkah = [
-    `Keluar dari lokasi ${pedagang?.nama ?? "pedagang"} menuju jalan utama.`,
+    sayaPemilik
+      ? "Keluar dari lapak gerobakmu menuju jalan utama."
+      : `Keluar dari rumahmu menuju jalan utama.`,
     `Lurus terus sejauh ${Math.round(rute * 0.6)} meter mengikuti jalan.`,
     `Belok mengikuti papan penunjuk ke arah ${titik.nama}.`,
     `Titik kumpul berada di ${titik.patokan}.`,
   ];
 
   return (
-    <Layar nav>
-      <Kepala judul="Rute Lokasi Pembeli" />
+    <Layar nav peran={sisiPedagang ? "pedagang" : "pembeli"}>
+      <Kepala judul="Rute ke Titik Kumpul" />
 
       <div className="px-4 pb-4 pt-3">
         {/* Dua ujung rute */}
@@ -59,13 +75,15 @@ export function RuteTitik({ id }: { id: string }) {
             <div className="min-w-0 flex-1">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
-                  Lokasi Penjual
+                  Titik Berangkat
                 </p>
-                <p className="mt-0.5 truncate text-[14px] font-bold text-tinta">{pedagang?.nama}</p>
+                <p className="mt-0.5 truncate text-[14px] font-bold text-tinta">
+                  {sayaPemilik ? `Gerobak ${pedagang?.nama}` : "Rumahmu"}
+                </p>
               </div>
               <div className="mt-4">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
-                  Lokasi Pembeli
+                  Titik Kumpul
                 </p>
                 <p className="mt-0.5 truncate text-[14px] font-bold text-tinta">
                   {titik.nama}, {titik.patokan}
@@ -120,7 +138,9 @@ export function RuteTitik({ id }: { id: string }) {
             </span>
             <div className="min-w-0">
               <p className="truncate text-[15px] font-extrabold text-hijau">{namaSaya}</p>
-              <p className="text-[11.5px] text-tinta-4">Pembeli · Titik Kumpul {titik.nama}</p>
+              <p className="text-[11.5px] text-tinta-4">
+                {sayaPemilik ? "Pedagang" : "Pembeli"} · Titik Kumpul {titik.nama}
+              </p>
             </div>
           </div>
 

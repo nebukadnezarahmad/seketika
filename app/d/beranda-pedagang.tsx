@@ -12,6 +12,7 @@ import { Lonceng } from "@/komponen/ui/lonceng";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
+import { labelStatusTitik, statusTitik } from "@/lib/kolab";
 import { pendapatanHari } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -43,7 +44,7 @@ export function BerandaPedagang() {
      tidak ada yang perlu dinavigasikan kalau gerobaknya belum jalan. */
   const sedangDiantar = pesananMasuk.find((p) => p.status === "diantar");
   const selesai = pesananMasuk.filter((p) => p.status === "selesai");
-  const permintaan = titikKumpul.filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA).length;
+  const milikSaya = titikKumpul.filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA);
 
   /* Pemasukan hari ini, dihitung dari pesanan yang sudah ditandai selesai
      hari ini saja. Riwayat hari sebelumnya sengaja tidak ikut: lembar ini
@@ -51,6 +52,18 @@ export function BerandaPedagang() {
      memuat kemarin adalah angka yang berbohong. */
   const sekarang = useSekarang();
   const masukHariIni = sekarang === null ? 0 : pendapatanHari(pesananMasuk, sekarang, 0);
+
+  /* Yang dihitung cuma permintaan yang masih menunggu pedagang. Titik
+     kumpul yang sudah dijemput, sudah selesai, atau hangus karena tidak
+     memenuhi target bukan lagi pekerjaan yang tersisa, dan menghitungnya
+     membuat ajakan "ada N permintaan" mengaku ada kerjaan yang sebenarnya
+     sudah beres. Kesalahan yang sama pernah ada pada label jumlah
+     pedagang aktif di peta. */
+  const menunggu = milikSaya.filter((t) => {
+    const st = statusTitik(t, sekarang);
+    return st === "mengumpulkan" || st === "tercapai";
+  });
+  const permintaan = menunggu.length;
 
   return (
     <Layar
@@ -326,9 +339,7 @@ export function BerandaPedagang() {
         </div>
 
         <ul className="mt-2.5 flex flex-col gap-2.5">
-          {titikKumpul
-            .filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA)
-            .map((t) => (
+          {milikSaya.map((t) => (
               /* Kartunya tautan, bukan kotak diam. Sebelumnya ia
                  memperlihatkan permintaan yang sedang menunggu tapi tidak
                  bisa ditekan, sehingga pedagang tidak punya cara melihat
@@ -348,11 +359,17 @@ export function BerandaPedagang() {
                       {t.peserta.length}/{t.target} warga · {t.patokan}
                     </span>
                   </span>
+                  {/* Statusnya ikut ditulis supaya yang sudah dijemput atau
+                      selesai tidak terlihat sama dengan yang masih menunggu
+                      keputusan. */}
+                  <span className="shrink-0 rounded-pil bg-hijau-lembut px-2 py-0.5 text-[10px] font-bold text-hijau">
+                    {labelStatusTitik[statusTitik(t, sekarang)]}
+                  </span>
                   <ChevronRight size={16} className="shrink-0 text-tinta-5" aria-hidden />
                 </Link>
               </li>
             ))}
-          {permintaan === 0 && (
+          {milikSaya.length === 0 && (
             <li className="rounded-[14px] border border-dashed border-garis bg-white px-4 py-6 text-center text-[12px] text-tinta-4">
               Belum ada permintaan titik kumpul untuk gerobak ini.
             </li>

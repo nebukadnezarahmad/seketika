@@ -137,7 +137,11 @@ test("permintaan titik kumpul di beranda pedagang bisa dibuka", async ({ page })
   await lewatiPengenalan(page, "pedagang", "Pak Anton");
   await page.getByRole("link", { name: /RT 02 Taman Bermain/ }).click();
   await page.waitForURL(/\/kolab\/tk-/);
-  await expect(page.getByRole("heading", { name: "Detail Titik Kumpul" })).toBeVisible();
+  /* Judulnya "Permintaan", bukan "Detail": yang membuka adalah pedagang
+     pemilik gerobaknya, dan baginya ini pekerjaan yang menunggu diputus,
+     bukan lapak yang sedang ditimbang untuk diikuti. Sisi warga tetap
+     memakai "Detail Titik Kumpul", dikunci di uji/titik-kumpul.spec.ts. */
+  await expect(page.getByRole("heading", { name: "Permintaan Titik Kumpul" })).toBeVisible();
 });
 
 test.describe("Slot foto menu", () => {
