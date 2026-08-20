@@ -1,14 +1,20 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Info, MapPin, Navigation, TriangleAlert, Users } from "lucide-react";
+import {
+  CheckCircle2, Info, MapPin, MessagesSquare, Navigation, TriangleAlert, Users,
+} from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
+import { Lembar } from "@/komponen/ui/lembar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { Tombol } from "@/komponen/ui/tombol";
 import { BatangKemajuan, TumpukanPeserta } from "@/komponen/kolab/kemajuan";
+import { ObrolanTitik } from "@/komponen/kolab/obrolan-titik";
 import { cariPedagang } from "@/lib/data/pedagang";
 import { sisaWaktu } from "@/lib/format";
+import { statusTitik } from "@/lib/kolab";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
 
@@ -17,7 +23,9 @@ export function DetailTitikKumpul({ id }: { id: string }) {
   const titik = useToko((s) => s.titikKumpul.find((t) => t.id === id));
   const gabung = useToko((s) => s.gabungTitikKumpul);
   const namaSaya = useToko((s) => s.profil?.nama) ?? "Anda";
+  const jumlahObrolan = useToko((s) => (id in s.obrolanTitik ? s.obrolanTitik[id].length : 0));
   const sekarang = useSekarang();
+  const [obrolanBuka, setObrolanBuka] = React.useState(false);
 
   if (!titik) {
     return (
@@ -34,13 +42,25 @@ export function DetailTitikKumpul({ id }: { id: string }) {
   const ikut = titik.peserta.some((p) => p.id === "saya");
   const kurang = Math.max(0, titik.target - titik.peserta.length);
   const penuh = kurang === 0;
-  /* Sebelum peramban menghidupkan komponennya, waktu belum diketahui.
-     Dalam keadaan itu titik kumpul dianggap belum habis supaya peringatan
-     tidak berkedip muncul lalu hilang. */
-  const habis = sekarang !== null && new Date(titik.kedaluwarsa).getTime() <= sekarang;
+  /* Kehangusan disimpulkan dari jam lewat `statusTitik`, bukan dibaca
+     dari status tersimpan. Sebelum peramban menghidupkan komponennya
+     waktu belum diketahui, dan di sana `statusTitik` mengembalikan status
+     tersimpan supaya peringatan tidak berkedip muncul lalu hilang. */
+  const habis = statusTitik(titik, sekarang) === "hangus";
 
   return (
-    <Layar nav>
+    <Layar
+      nav
+      lembar={
+        <Lembar
+          buka={obrolanBuka}
+          tutup={() => setObrolanBuka(false)}
+          judul={`Obrolan ${titik.nama}`}
+        >
+          <ObrolanTitik titikId={titik.id} nama={namaSaya} />
+        </Lembar>
+      }
+    >
       <Kepala judul="Detail Titik Kumpul" />
 
       <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
@@ -123,6 +143,33 @@ export function DetailTitikKumpul({ id }: { id: string }) {
           </div>
         </div>
 
+        {/* Obrolan warga. Ditaruh setelah kemajuan karena yang pertama
+            dicari orang di layar ini adalah berapa lagi yang kurang;
+            berunding jam berapa berkumpul datang sesudahnya. */}
+        <button
+          type="button"
+          aria-haspopup="dialog"
+          onClick={() => setObrolanBuka(true)}
+          className="bayang-kartu mt-3 flex items-center gap-3 rounded-[16px] border border-garis bg-white p-3.5 text-left transition-transform active:scale-[0.99]"
+        >
+          <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-hijau-lembut text-hijau">
+            <MessagesSquare size={18} strokeWidth={1.9} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13.5px] font-bold text-tinta">Obrolan Warga</span>
+            <span className="mt-0.5 block text-[11.5px] text-tinta-4">
+              {jumlahObrolan > 0
+                ? `${jumlahObrolan} pesan · janjian jam berkumpul`
+                : "Belum ada pesan · mulai duluan"}
+            </span>
+          </span>
+          {jumlahObrolan > 0 && (
+            <span className="grid min-w-[22px] shrink-0 place-items-center rounded-full bg-hijau px-1.5 py-0.5 text-[11px] font-bold text-white">
+              {jumlahObrolan}
+            </span>
+          )}
+        </button>
+
         {titik.catatan && (
           <p className="mt-3 rounded-[14px] border border-garis bg-white px-3.5 py-3 text-[12px] leading-relaxed text-tinta-3">
             <span className="mb-0.5 block text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
@@ -159,6 +206,11 @@ export function DetailTitikKumpul({ id }: { id: string }) {
               <Navigation size={16} strokeWidth={2.3} />
               Arahkan Saya ke Lokasi Titik Kumpul
             </Tombol>
+          ) : habis ? (
+            <p className="flex items-center justify-center gap-2 rounded-[14px] bg-tinta-5/12 py-3.5 text-[13px] font-semibold text-tinta-3">
+              <Info size={15} />
+              Sudah lewat batas waktu
+            </p>
           ) : ikut ? (
             <p className="flex items-center justify-center gap-2 rounded-[14px] bg-tinta-5/12 py-3.5 text-[13px] font-semibold text-tinta-3">
               <Info size={15} />

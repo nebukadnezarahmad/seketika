@@ -12,6 +12,7 @@ const rupaStatus: Record<PesananMasuk["status"], { label: string; kelas: string 
   diproses: { label: "Diproses", kelas: "bg-amber/15 text-amber-tua" },
   diantar: { label: "Sedang Diantar", kelas: "bg-hijau/12 text-hijau" },
   selesai: { label: "Selesai", kelas: "bg-hijau-lembut text-hijau" },
+  ditolak: { label: "Ditolak", kelas: "bg-merah-lembut text-merah" },
 };
 
 /** Yang masih berjalan, dilihat dari sisi penyaring. */
@@ -31,6 +32,7 @@ export function PesananMasukLayar() {
     baru: pesananMasuk.filter((p) => p.status === "baru").length,
     diproses: pesananMasuk.filter((p) => berjalan(p.status)).length,
     selesai: pesananMasuk.filter((p) => p.status === "selesai").length,
+    ditolak: pesananMasuk.filter((p) => p.status === "ditolak").length,
   };
 
   const tab = [
@@ -38,6 +40,7 @@ export function PesananMasukLayar() {
     { kunci: "baru", label: "Baru" },
     { kunci: "diproses", label: "Diproses" },
     { kunci: "selesai", label: "Selesai" },
+    { kunci: "ditolak", label: "Ditolak" },
   ] as const;
 
   const terlihat = pesananMasuk.filter((p) => {
@@ -173,7 +176,7 @@ export function PesananMasukLayar() {
                     </span>
                   </p>
 
-                  {p.status !== "selesai" && (
+                  {p.status !== "selesai" && p.status !== "ditolak" && (
                     <button
                       type="button"
                       onClick={() => ubahStatusMasuk(p.id, "selesai")}

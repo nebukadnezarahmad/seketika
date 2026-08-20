@@ -6,6 +6,7 @@ import type {
   BarisPesanan,
   Percakapan,
   Peran,
+  Pesan,
   Pesanan,
   PesananMasuk,
   Profil,
@@ -57,6 +58,25 @@ type Keadaan = {
   percakapanPedagang: Percakapan[];
   /** Keranjang sementara, dikunci pada satu pedagang. */
   keranjang: { pedagangSlug: string | null; baris: BarisPesanan[] };
+
+  /**
+   * Menu gerobak sendiri yang sedang dimatikan pedagang.
+   *
+   * Disimpan sebagai daftar yang dimatikan, bukan daftar yang menyala.
+   * Menu datang dari data statis dan bisa bertambah; kalau yang disimpan
+   * daftar menyala, setiap menu baru akan lahir dalam keadaan mati sampai
+   * seseorang menyalakannya satu per satu.
+   */
+  menuNonaktif: string[];
+
+  /** Bintang yang sudah diberikan warga, dikunci pada id pesanan. */
+  penilaian: Record<string, number>;
+
+  /** Obrolan di dalam tiap titik kumpul, dikunci pada id titik. */
+  obrolanTitik: Record<string, Pesan[]>;
+
+  /** Id pemberitahuan yang sudah dibuka, supaya lencananya berhenti. */
+  notifikasiDibaca: string[];
 };
 
 type Tindakan = {
@@ -89,6 +109,16 @@ type Tindakan = {
 
   kirimPesan: (percakapanId: string, isi: string, peran?: Peran) => void;
 
+  /** Menyalakan atau mematikan satu menu gerobak sendiri. */
+  ubahAktifMenu: (menuId: string, aktif: boolean) => void;
+
+  /** Memberi bintang pada satu pesanan yang sudah selesai. */
+  beriNilai: (pesananId: string, nilai: number) => void;
+
+  kirimPesanTitik: (titikId: string, isi: string, nama: string) => void;
+
+  tandaiNotifikasiDibaca: (id: string[]) => void;
+
   /** Kembalikan semuanya ke keadaan contoh. Dipakai tombol di profil. */
   setelUlang: () => void;
 };
@@ -105,6 +135,10 @@ const awal: Keadaan = {
   percakapan: percakapanAwal,
   percakapanPedagang: percakapanPedagangAwal,
   keranjang: { pedagangSlug: null, baris: [] },
+  menuNonaktif: [],
+  penilaian: {},
+  obrolanTitik: {},
+  notifikasiDibaca: [],
 };
 
 const jam = () =>
@@ -245,6 +279,44 @@ export const useToko = create<Keadaan & Tindakan>()(
           return peran === "pedagang"
             ? { percakapanPedagang: tambah(s.percakapanPedagang) }
             : { percakapan: tambah(s.percakapan) };
+        }),
+
+      ubahAktifMenu: (menuId, aktif) =>
+        set((s) => ({
+          menuNonaktif: aktif
+            ? s.menuNonaktif.filter((id) => id !== menuId)
+            : s.menuNonaktif.includes(menuId)
+              ? s.menuNonaktif
+              : [...s.menuNonaktif, menuId],
+        })),
+
+      /* Sekali dinilai tidak bisa diubah. Bintang yang bisa diputar-putar
+         setelah dikirim membuat angkanya kehilangan arti, dan pedagang
+         yang sudah melihat nilainya akan bingung kenapa berubah. */
+      beriNilai: (pesananId, nilai) =>
+        set((s) =>
+          s.penilaian[pesananId] ? {} : { penilaian: { ...s.penilaian, [pesananId]: nilai } },
+        ),
+
+      kirimPesanTitik: (titikId, isi, nama) =>
+        set((s) => ({
+          obrolanTitik: {
+            ...s.obrolanTitik,
+            [titikId]: [
+              ...(s.obrolanTitik[titikId] ?? []),
+              { id: `pt-${Date.now()}`, saya: true, isi: `${nama}: ${isi}`, waktu: jam() },
+            ],
+          },
+        })),
+
+      /* Mengembalikan objek kosong kalau tidak ada yang benar-benar baru.
+         Tanpa penjagaan ini, tiap pemanggilan melahirkan larik baru,
+         larik baru mengubah rujukan keadaan, dan setiap komponen yang
+         menyimaknya ikut digambar ulang tanpa ada yang berubah. */
+      tandaiNotifikasiDibaca: (id) =>
+        set((s) => {
+          const baru = id.filter((x) => !s.notifikasiDibaca.includes(x));
+          return baru.length === 0 ? {} : { notifikasiDibaca: [...s.notifikasiDibaca, ...baru] };
         }),
 
       setelUlang: () => set(awal),

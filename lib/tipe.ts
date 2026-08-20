@@ -46,7 +46,22 @@ export type Pesanan = {
   alamat: string;
 };
 
-export type StatusTitik = "mengumpulkan" | "tercapai" | "dijemput" | "selesai";
+/**
+ * `hangus` tidak pernah disimpan, hanya disimpulkan.
+ *
+ * Titik kumpul yang lewat tenggatnya tanpa memenuhi target berubah jadi
+ * hangus dengan sendirinya. Kalau keadaan itu ditulis ke penyimpanan, ia
+ * butuh sesuatu yang berjalan untuk menuliskannya, dan aplikasi yang
+ * tidak dibuka berarti tidak ada yang menulis; titik kumpul dari minggu
+ * lalu akan tetap mengaku aktif. Karena itu `statusTitik()` di
+ * `lib/kolab.ts` yang menyimpulkannya dari jam, bukan penyimpanan.
+ */
+export type StatusTitik =
+  | "mengumpulkan"
+  | "tercapai"
+  | "dijemput"
+  | "selesai"
+  | "hangus";
 
 export type Peserta = {
   id: string;
@@ -114,13 +129,19 @@ export type PesananMasuk = {
    * `diproses` sudah diterima, sedang disiapkan
    * `diantar`  pedagang sudah berangkat menuju pembeli
    * `selesai`  sudah sampai
+   * `ditolak`  pedagang tidak sanggup melayaninya
+   *
+   * `ditolak` wajib terpisah dari `selesai`. Sebelumnya tombol tolak
+   * menyetel `selesai`, dan sejak Buku Kas ada, pesanan yang ditolak ikut
+   * terhitung sebagai pemasukan hari itu. Menolak pesanan justru menaikkan
+   * omzet.
    *
    * `diantar` sengaja dipisah dari `diproses`. Hanya satu pesanan yang
    * bisa berstatus `diantar`, karena satu gerobak hanya bisa menuju satu
    * tempat, dan hanya status itu yang memunculkan kartu navigasi
    * melayang.
    */
-  status: "baru" | "diproses" | "diantar" | "selesai";
+  status: "baru" | "diproses" | "diantar" | "selesai" | "ditolak";
   /** Menit sejak pesanan masuk, dipakai untuk teks "5 mnt lalu". */
   menitLalu: number;
   /**
