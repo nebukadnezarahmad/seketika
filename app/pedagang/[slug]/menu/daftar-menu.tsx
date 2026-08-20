@@ -10,6 +10,7 @@ import { Kepala } from "@/komponen/ui/kepala";
 import { Tombol } from "@/komponen/ui/tombol";
 import { SLUG_GEROBAK_SAYA, fotoMenu } from "@/lib/data/pedagang";
 import { jarakSingkat, rp } from "@/lib/format";
+import { menuTampil } from "@/lib/menu";
 import { useToko } from "@/lib/toko";
 import type { Menu, Pedagang } from "@/lib/tipe";
 
@@ -33,13 +34,15 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
   const buatPesanan = useToko((s) => s.buatPesanan);
   const alamat = useToko((s) => s.profil?.alamat) ?? "Bumi Marina Emas Selatan No.12";
 
-  /* Menu yang dimatikan pedagang tidak ditampilkan ke warga. Daftar itu
-     hanya berlaku untuk gerobak sendiri; gerobak lain datang dari data
-     contoh dan tidak punya pemiliknya di aplikasi ini. */
+  /* Suntingan pedagang hanya berlaku untuk gerobak sendiri; gerobak lain
+     datang dari data contoh dan tidak punya pemiliknya di aplikasi ini.
+     Untuk gerobak sendiri, yang ditampilkan adalah daftar yang sudah
+     disuntingnya dikurangi menu yang sedang dimatikan. */
   const menuNonaktif = useToko((s) => s.menuNonaktif);
+  const menuSaya = useToko((s) => s.menuSaya);
   const menu =
     pedagang.slug === SLUG_GEROBAK_SAYA
-      ? pedagang.menu.filter((m) => !menuNonaktif.includes(m.id))
+      ? menuTampil(menuSaya, pedagang.menu, menuNonaktif)
       : pedagang.menu;
 
   const [dipilih, setDipilih] = React.useState<Menu | null>(null);
@@ -78,7 +81,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                   sulit dibedakan dari isi gambarnya. */}
               <div className="relative mx-4 mt-6 h-[190px] overflow-hidden rounded-[18px]">
                 <Image
-                  src={fotoMenu[dipilih.id]}
+                  src={fotoMenu[dipilih.id] ?? "/img/menu/bakso-polos.jpg"}
                   alt={dipilih.nama}
                   fill
                   sizes="358px"
@@ -147,7 +150,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                     menempel, sudut foto yang siku bertabrakan dengan sudut
                     kartu yang membulat dan tepinya terlihat tercuil. */}
                 <Image
-                  src={fotoMenu[m.id]}
+                  src={fotoMenu[m.id] ?? "/img/menu/bakso-polos.jpg"}
                   alt={m.nama}
                   width={84}
                   height={84}

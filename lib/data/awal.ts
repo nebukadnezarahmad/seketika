@@ -332,6 +332,71 @@ export const balasanCepat = ["Oke, segera!", "Sudah habis hari ini", "Sekitar 10
  * `menitLalu` diisi nol karena tidak dipakai untuk data riwayat; yang
  * menentukan penempatan pada grafik adalah `selesaiPada`.
  */
+/**
+ * Riwayat yang lebih tua, hari ke-7 sampai ke-29.
+ *
+ * Dibangkitkan, bukan diketik satu per satu: dua puluh sembilan hari
+ * pesanan yang ditulis tangan akan memakan ribuan baris dan tidak lebih
+ * benar daripada pola yang sama yang dijalankan berulang. Yang dipakai
+ * Buku Kas hanya tujuh hari terakhir, jadi bagian ini semata bahan untuk
+ * laporan bulanan pada langganan berbayar.
+ *
+ * Tidak ada satu pun angka acak di sini. `Math.random()` akan
+ * menghasilkan riwayat yang berbeda setiap kali halaman dimuat, sehingga
+ * laporan bulanan berubah sendiri tanpa ada yang memesan apa pun, dan
+ * penyajian di server tidak akan pernah cocok dengan peramban. Semuanya
+ * diturunkan dari nomor harinya.
+ */
+function riwayatLama(): PesananMasuk[] {
+  const menu = [
+    { menuId: "m-01", nama: "Bakso Komplit", harga: 25000 },
+    { menuId: "m-02", nama: "Bakso Mercon", harga: 15000 },
+    { menuId: "m-03", nama: "Bakso Polos", harga: 13000 },
+    { menuId: "m-04", nama: "Bakso Telur", harga: 15000 },
+    { menuId: "m-08", nama: "Es Teh Manis", harga: 5000 },
+  ];
+  const warga = [
+    ["Bu Rahma", "R"], ["Pak Dedi", "D"], ["Bu Sri", "S"], ["Mas Yudi", "Y"],
+    ["Bu Lina", "L"], ["Pak Soni", "S"], ["Bu Ratna", "R"], ["Kak Nia", "N"],
+    ["Pak Ito", "I"], ["Mas Fajar", "F"], ["Bu Endah", "E"], ["Bu Wati", "W"],
+  ];
+  const titik = [
+    "RT 05 Blok C · Pos Ronda",
+    "RT 05 Blok C · Pos 2",
+    "RT 07 Taman Asri · Pos Satpam",
+    "RT 02 Taman Bermain",
+  ];
+  /* Jamnya tetap berkelompok pagi, siang, dan sore dengan sore paling
+     padat, sama seperti minggu terakhir yang ditulis tangan. Pola itulah
+     yang nanti ditemukan sendiri oleh prediksi jam ramai. */
+  const jam = [8, 12, 16, 17, 17, 18];
+
+  const hasil: PesananMasuk[] = [];
+  for (let hari = 7; hari <= 29; hari += 1) {
+    const banyak = 3 + ((hari * 7) % 4);
+    for (let i = 0; i < banyak; i += 1) {
+      const n = hari * 5 + i;
+      const [nama, inisial] = warga[n % warga.length];
+      const utama = menu[n % menu.length];
+      const ikut = menu[4];
+      hasil.push({
+        id: `rl-${hari}-${i}`,
+        warga: nama,
+        inisial,
+        titik: titik[n % titik.length],
+        baris: [
+          { ...utama, jumlah: 1 + (n % 3) },
+          ...(n % 3 === 0 ? [{ ...ikut, jumlah: 1 + (n % 2) }] : []),
+        ],
+        status: "selesai",
+        menitLalu: 0,
+        selesaiPada: hariLalu(hari, jam[n % jam.length], (n * 7) % 60),
+      });
+    }
+  }
+  return hasil;
+}
+
 export const riwayatPedagangAwal: PesananMasuk[] = [
   /* Kemarin */
   {
@@ -518,4 +583,6 @@ export const riwayatPedagangAwal: PesananMasuk[] = [
     ],
     status: "selesai", menitLalu: 0, selesaiPada: hariLalu(6, 17, 45),
   },
+
+  ...riwayatLama(),
 ];

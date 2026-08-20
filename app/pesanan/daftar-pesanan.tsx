@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { LencanaStatus, TahapPesanan } from "@/komponen/pesanan/lencana";
 import { cariPedagang } from "@/lib/data/pedagang";
@@ -18,6 +18,7 @@ const tab = [
 ] as const;
 
 export function DaftarPesanan() {
+  const nilai = useToko((s) => s.penilaian);
   const [aktif, setAktif] = React.useState<(typeof tab)[number]["kunci"]>("semua");
   const pesanan = useToko((s) => s.pesanan);
 
@@ -82,6 +83,37 @@ export function DaftarPesanan() {
               <div className="mt-3.5">
                 <TahapPesanan status={p.status} />
               </div>
+
+              {/* Bintang yang sudah diberikan ikut tampil di daftar, bukan
+                  cuma tersimpan di layar rincian. Tanpa ini warga tidak
+                  punya cara mengingat pesanan mana yang sudah dinilai
+                  selain membuka satu per satu. */}
+              {p.status === "selesai" && (
+                <div className="mt-3 flex items-center gap-2">
+                  {nilai[p.id] ? (
+                    <>
+                      <span aria-hidden className="flex gap-0.5">
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <Star
+                            key={n}
+                            size={13}
+                            strokeWidth={1.9}
+                            className={n <= nilai[p.id] ? "fill-amber text-amber" : "text-tinta-5"}
+                          />
+                        ))}
+                      </span>
+                      <span className="text-[11.5px] font-semibold text-tinta-3">
+                        Kamu beri {nilai[p.id]} dari 5
+                      </span>
+                    </>
+                  ) : (
+                    <span className="flex items-center gap-1.5 rounded-pil bg-amber-lembut px-2.5 py-1 text-[11px] font-bold text-amber-tua">
+                      <Star size={12} strokeWidth={2.2} aria-hidden />
+                      Belum dinilai
+                    </span>
+                  )}
+                </div>
+              )}
 
               <div className="mt-3 flex justify-end">
                 <Link

@@ -55,19 +55,50 @@ test.describe("Buku Kas", () => {
     expect(angka(await nominal.innerText())).toBe(angka(sebelum) + 105_000);
   });
 
-  test("kartu SEKETIKA Pro tampil dengan fitur dalam keadaan terkunci", async ({ page }) => {
-    const pro = page.locator("section", { hasText: "SEKETIKA Pro" }).last();
-    await expect(pro.getByText("SEKETIKA Pro")).toBeVisible();
+  test("langganan Pro bisa dinyalakan dan dimatikan lagi", async ({ page }) => {
+    const kartu = page.locator("section").filter({ hasText: "SEKETIKA Pro" }).last();
+    await expect(kartu.getByText("Nonaktif")).toBeVisible();
 
+    /* Selama mati, ketiga isinya terkunci dan cuma jadi tawaran. */
     for (const fitur of [
       "Laporan bulanan lengkap",
-      "Prediksi kawasan & jam ramai",
+      "Prakiraan kawasan & jam ramai",
       "Catatan stok dagangan",
     ]) {
-      await expect(pro.getByText(fitur)).toBeVisible();
+      await expect(kartu.getByText(fitur)).toBeVisible();
     }
+    await expect(page.getByRole("heading", { name: /Laporan 30 Hari/ })).toHaveCount(0);
 
-    await expect(pro.getByRole("button", { name: "Pelajari" })).toBeDisabled();
+    await kartu.getByRole("button", { name: "Aktifkan SEKETIKA Pro" }).click();
+
+    await expect(kartu.getByText("Aktif", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Laporan 30 Hari/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Prakiraan Kawasan/ })).toBeVisible();
+
+    /* Dimatikan lagi, isinya ikut menutup. Langganan yang cuma bisa
+       dinyalakan bukan langganan. */
+    await kartu.getByRole("button", { name: "Nonaktifkan Langganan" }).click();
+    await expect(page.getByRole("heading", { name: /Laporan 30 Hari/ })).toHaveCount(0);
+  });
+
+  test("catatan stok terkunci sebelum langganan menyala", async ({ page }) => {
+    await page.goto("/d/stok");
+    await expect(page.getByText("Fitur langganan")).toBeVisible();
+
+    await page.goto("/d/rekap");
+    await page
+      .locator("section")
+      .filter({ hasText: "SEKETIKA Pro" })
+      .last()
+      .getByRole("button", { name: "Aktifkan SEKETIKA Pro" })
+      .click();
+
+    await page.goto("/d/stok");
+    await expect(page.getByText("Fitur langganan")).toHaveCount(0);
+    /* Stoknya benar-benar bisa dicatat, bukan sekadar layar yang terbuka. */
+    await page.getByRole("button", { name: "Tambah stok Bakso Komplit" }).click();
+    await page.getByRole("button", { name: "Tambah stok Bakso Komplit" }).click();
+    await expect(page.getByText("Tinggal sedikit · 2 porsi")).toBeVisible();
   });
 
   test("dijangkau dari lembar pesanan hari ini dan dari halaman toko", async ({ page }) => {

@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type {
   BarisPesanan,
+  Menu,
   Percakapan,
   Peran,
   Pesan,
@@ -77,11 +78,38 @@ type Keadaan = {
 
   /** Id pemberitahuan yang sudah dibuka, supaya lencananya berhenti. */
   notifikasiDibaca: string[];
+
+  /**
+   * Daftar menu gerobak sendiri setelah disunting pedagang.
+   *
+   * `null` berarti belum pernah disentuh dan yang berlaku adalah menu
+   * bawaan dari data contoh. Begitu pedagang menambah, mengubah, atau
+   * menghapus satu menu, seluruh daftarnya disalin ke sini dan sejak itu
+   * inilah sumbernya. Menyimpan hanya selisihnya terhadap data bawaan
+   * terdengar lebih hemat, tapi selisih atas penghapusan dan penambahan
+   * sekaligus jauh lebih mudah salah daripada menyimpan daftar utuh.
+   */
+  menuSaya: Menu[] | null;
+
+  /** Catatan sisa stok per menu. Fitur langganan berbayar. */
+  stok: Record<string, number>;
+
+  /** Langganan SEKETIKA Pro sedang menyala. */
+  pro: boolean;
 };
 
 type Tindakan = {
   simpanDraf: (d: { nama: string; email: string }) => void;
   simpanProfil: (p: Profil) => void;
+  /**
+   * Mengubah sebagian isi profil tanpa menyentuh sisanya.
+   *
+   * Terpisah dari `simpanProfil` yang menimpa seluruh profil sekaligus.
+   * Layar pengaturan mengubah satu dua kolom saja, dan menimpa seluruh
+   * profil dari sana berarti tiap layar harus ingat menyalin ulang kolom
+   * yang tidak disentuhnya; satu yang lupa, isinya hilang.
+   */
+  perbaruiProfil: (bagian: Partial<Profil>) => void;
   gantiPeran: (peran: Peran) => void;
   setIzin: (i: Partial<Keadaan["izin"]>) => void;
 
@@ -119,6 +147,11 @@ type Tindakan = {
 
   tandaiNotifikasiDibaca: (id: string[]) => void;
 
+  simpanMenu: (menu: Menu, bawaan: Menu[]) => void;
+  hapusMenu: (menuId: string, bawaan: Menu[]) => void;
+  aturStok: (menuId: string, sisa: number) => void;
+  setPro: (nyala: boolean) => void;
+
   /** Kembalikan semuanya ke keadaan contoh. Dipakai tombol di profil. */
   setelUlang: () => void;
 };
@@ -139,6 +172,9 @@ const awal: Keadaan = {
   penilaian: {},
   obrolanTitik: {},
   notifikasiDibaca: [],
+  menuSaya: null,
+  stok: {},
+  pro: false,
 };
 
 const jam = () =>
@@ -156,6 +192,9 @@ export const useToko = create<Keadaan & Tindakan>()(
       /* Draf dibuang begitu profil jadi; menyimpan dua sumber untuk nama
          yang sama hanya mengundang keduanya menyimpang. */
       simpanProfil: (profil) => set({ profil, draf: null }),
+
+      perbaruiProfil: (bagian) =>
+        set((s) => (s.profil ? { profil: { ...s.profil, ...bagian } } : {})),
 
       gantiPeran: (peran) =>
         set((s) => (s.profil ? { profil: { ...s.profil, peran } } : {})),
@@ -318,6 +357,38 @@ export const useToko = create<Keadaan & Tindakan>()(
           const baru = id.filter((x) => !s.notifikasiDibaca.includes(x));
           return baru.length === 0 ? {} : { notifikasiDibaca: [...s.notifikasiDibaca, ...baru] };
         }),
+
+      /* Menyunting menu yang sudah ada sekaligus menambah yang baru.
+         Keduanya satu tindakan karena bedanya cuma apakah idnya sudah ada
+         di daftar; memisahnya jadi dua tindakan berarti dua jalur yang
+         harus sama-sama benar dalam menyalin daftar bawaan. */
+      simpanMenu: (menu, bawaan) =>
+        set((s) => {
+          const dasar = s.menuSaya ?? bawaan;
+          const ada = dasar.some((m) => m.id === menu.id);
+          return {
+            menuSaya: ada ? dasar.map((m) => (m.id === menu.id ? menu : m)) : [...dasar, menu],
+          };
+        }),
+
+      hapusMenu: (menuId, bawaan) =>
+        set((s) => {
+          const dasar = s.menuSaya ?? bawaan;
+          return {
+            menuSaya: dasar.filter((m) => m.id !== menuId),
+            /* Menu yang dihapus tidak boleh meninggalkan jejak di daftar
+               yang dimatikan maupun di catatan stok; kalau menu dengan id
+               sama dibuat lagi nanti, ia akan lahir dalam keadaan mati
+               dengan stok orang lain. */
+            menuNonaktif: s.menuNonaktif.filter((id) => id !== menuId),
+            stok: Object.fromEntries(Object.entries(s.stok).filter(([id]) => id !== menuId)),
+          };
+        }),
+
+      aturStok: (menuId, sisa) =>
+        set((s) => ({ stok: { ...s.stok, [menuId]: Math.max(0, sisa) } })),
+
+      setPro: (pro) => set({ pro }),
 
       setelUlang: () => set(awal),
     }),
