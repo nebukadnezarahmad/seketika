@@ -1,128 +1,168 @@
 "use client";
 
+import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Minus, Plus } from "lucide-react";
+import { ChevronRight, Phone } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
+import { Lembar } from "@/komponen/ui/lembar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { Tombol } from "@/komponen/ui/tombol";
 import { fotoMenu } from "@/lib/data/pedagang";
-import { jarakSingkat, rp, totalBaris } from "@/lib/format";
+import { jarakSingkat, rp } from "@/lib/format";
 import { useToko } from "@/lib/toko";
-import type { Pedagang } from "@/lib/tipe";
+import type { Menu, Pedagang } from "@/lib/tipe";
 
+/**
+ * Daftar menu satu gerobak.
+ *
+ * Layar ini tidak lagi menumpuk pesanan butir demi butir lewat tombol
+ * tambah dan kurang. Yang dijual di sini pedagang keliling, bukan restoran:
+ * warga memanggil gerobaknya lalu memilih setelah gerobak sampai di depan
+ * rumah. Karena itu daftarnya bersifat menerangkan — apa saja yang dijual
+ * dan berapa harganya — dan satu-satunya tindakan yang tersedia adalah
+ * memanggil penjualnya.
+ *
+ * Mengetuk satu menu menaikkan lembar berisi fotonya utuh dan keterangan
+ * lengkapnya. Pada daftar, keterangan itu terpotong dua baris; lembar ini
+ * tempat membacanya sampai habis sebelum memutuskan.
+ */
 export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
   const router = useRouter();
-  const keranjang = useToko((s) => s.keranjang);
-  const ubahJumlah = useToko((s) => s.ubahJumlah);
+  const siapkanPanggilan = useToko((s) => s.siapkanPanggilan);
   const buatPesanan = useToko((s) => s.buatPesanan);
   const alamat = useToko((s) => s.profil?.alamat) ?? "Bumi Marina Emas Selatan No.12";
 
-  /* Keranjang milik pedagang lain tidak boleh ikut terhitung di layar ini. */
-  const baris = keranjang.pedagangSlug === pedagang.slug ? keranjang.baris : [];
-  const total = totalBaris(baris);
-  const butir = baris.reduce((n, b) => n + b.jumlah, 0);
+  const [dipilih, setDipilih] = React.useState<Menu | null>(null);
+  const [lembarBuka, setLembarBuka] = React.useState(false);
 
-  const jumlahDari = (menuId: string) => baris.find((b) => b.menuId === menuId)?.jumlah ?? 0;
+  /**
+   * Memanggil penjual ke lokasi warga.
+   *
+   * `menu` yang kosong berarti dipanggil tanpa pesanan awal, yaitu ketika
+   * tombolnya ditekan dari atas daftar. Dari dalam lembar, menu yang
+   * sedang dibaca ikut disertakan satu porsi sebagai ancar-ancar, dan
+   * sisanya tetap bisa ditambah waktu gerobaknya sampai.
+   */
+  const panggil = (menu?: Menu) => {
+    siapkanPanggilan(
+      pedagang.slug,
+      menu ? [{ menuId: menu.id, nama: menu.nama, harga: menu.harga, jumlah: 1 }] : [],
+    );
+    router.push(`/pesanan/${buatPesanan(alamat)}`);
+  };
 
   return (
-    <Layar nav>
+    <Layar
+      nav
+      lembar={
+        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
+          {dipilih && (
+            <div className="pb-6">
+              {/* Foto memenuhi lebar lembar. Pada daftar ia cuma petak
+                  84 piksel yang sulit dinilai; di sini gunanya memang
+                  supaya orang bisa melihat isi mangkuknya.
+
+                  Jarak atasnya menghindari tombol tutup milik lembar, yang
+                  menggantung sedikit lebih rendah dari pegangannya. Tanpa
+                  jarak ini tombol itu jatuh menindih pojok foto dan jadi
+                  sulit dibedakan dari isi gambarnya. */}
+              <div className="relative mx-4 mt-6 h-[190px] overflow-hidden rounded-[18px]">
+                <Image
+                  src={fotoMenu[dipilih.id]}
+                  alt={dipilih.nama}
+                  fill
+                  sizes="358px"
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="px-4 pt-4">
+                <h2 className="tulisan-judul text-[19px] font-extrabold leading-tight text-tinta">
+                  {dipilih.nama}
+                </h2>
+                <p className="mt-1 text-[17px] font-extrabold text-hijau">{rp(dipilih.harga)}</p>
+                <p className="mt-3 text-[13px] leading-relaxed text-tinta-3">
+                  {dipilih.deskripsi}
+                </p>
+
+                <Tombol penuh className="mt-5" onClick={() => panggil(dipilih)}>
+                  <Phone size={16} strokeWidth={2.3} aria-hidden />
+                  Panggil Penjual
+                </Tombol>
+                <p className="mt-2 text-center text-[11px] leading-snug text-tinta-4">
+                  {pedagang.nama} akan menuju {alamat}
+                </p>
+              </div>
+            </div>
+          )}
+        </Lembar>
+      }
+    >
       <Kepala
         judul={pedagang.nama}
         subjudul={`${jarakSingkat(pedagang.jarak)} · ${pedagang.jenis}`}
       />
 
       <div className="px-4 pb-4 pt-3">
-        <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
+        {/* Tombol utama berada di atas daftar, bukan di bawahnya. Yang
+            dicari warga di layar ini adalah memanggil gerobaknya; daftar
+            menu di bawahnya keterangan pendukung. Menaruhnya di bawah
+            berarti menyembunyikan tindakan utama di balik gulir. */}
+        <Tombol penuh onClick={() => panggil()}>
+          <Phone size={16} strokeWidth={2.3} aria-hidden />
+          Panggil Penjual
+        </Tombol>
+        <p className="mt-2 text-center text-[11px] leading-snug text-tinta-4">
+          Panggil sekarang, pilih menunya setelah gerobak sampai
+        </p>
+
+        <p className="mb-2.5 mt-5 text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
           Menu
         </p>
 
         <ul className="rentet flex flex-col gap-2.5">
-          {pedagang.menu.map((m) => {
-            const n = jumlahDari(m.id);
-            return (
-              <li
-                key={m.id}
-                className="bayang-kartu flex gap-3 overflow-hidden rounded-[20px] border border-garis bg-white"
+          {pedagang.menu.map((m) => (
+            <li key={m.id}>
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  setDipilih(m);
+                  setLembarBuka(true);
+                }}
+                className="bayang-kartu flex w-full items-center gap-3 rounded-[20px] border border-garis bg-white p-2.5 text-left transition-transform active:scale-[0.99]"
               >
+                {/* Fotonya dibulatkan sendiri dan diberi jarak dari tepi
+                    kartu, bukan dijejalkan menempel ke sudutnya. Waktu
+                    menempel, sudut foto yang siku bertabrakan dengan sudut
+                    kartu yang membulat dan tepinya terlihat tercuil. */}
                 <Image
                   src={fotoMenu[m.id]}
                   alt={m.nama}
-                  width={88}
-                  height={88}
-                  className="size-[88px] shrink-0 object-cover"
+                  width={84}
+                  height={84}
+                  className="size-[84px] shrink-0 rounded-[15px] object-cover"
                 />
 
-                <div className="flex min-w-0 flex-1 flex-col justify-center py-2.5 pr-2.5">
-                  <p className="text-[14px] font-bold leading-tight text-tinta">{m.nama}</p>
-                  <p className="mt-1 line-clamp-2 text-[11.5px] leading-snug text-tinta-4">
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="truncate text-[14px] font-bold leading-tight text-tinta">
+                    {m.nama}
+                  </span>
+                  <span className="mt-1 line-clamp-2 text-[11.5px] leading-snug text-tinta-4">
                     {m.deskripsi}
-                  </p>
+                  </span>
+                  <span className="mt-1.5 text-[14px] font-extrabold text-hijau">
+                    {rp(m.harga)}
+                  </span>
+                </span>
 
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <span className="text-[14px] font-extrabold text-hijau">{rp(m.harga)}</span>
-
-                    {n === 0 ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          ubahJumlah(pedagang.slug, { menuId: m.id, nama: m.nama, harga: m.harga }, 1)
-                        }
-                        className="flex shrink-0 items-center gap-1 rounded-full bg-hijau-lembut px-2.5 py-1.5 text-[11.5px] font-bold text-hijau transition-transform active:scale-95"
-                      >
-                        <Plus size={13} strokeWidth={2.6} />
-                        Tambah
-                      </button>
-                    ) : (
-                      <span className="flex shrink-0 items-center gap-1 rounded-full bg-hijau-lembut p-1">
-                        <button
-                          type="button"
-                          aria-label={`Kurangi ${m.nama}`}
-                          onClick={() =>
-                            ubahJumlah(pedagang.slug, { menuId: m.id, nama: m.nama, harga: m.harga }, -1)
-                          }
-                          className="grid size-6 place-items-center rounded-full text-hijau transition-transform active:scale-90"
-                        >
-                          <Minus size={13} strokeWidth={2.6} />
-                        </button>
-                        <span className="min-w-5 text-center text-[12px] font-bold tabular-nums text-hijau">
-                          {n}
-                        </span>
-                        <button
-                          type="button"
-                          aria-label={`Tambah ${m.nama}`}
-                          onClick={() =>
-                            ubahJumlah(pedagang.slug, { menuId: m.id, nama: m.nama, harga: m.harga }, 1)
-                          }
-                          className="grid size-6 place-items-center rounded-full bg-hijau text-white transition-transform active:scale-90"
-                        >
-                          <Plus size={13} strokeWidth={2.6} />
-                        </button>
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </li>
-            );
-          })}
+                <ChevronRight size={17} className="shrink-0 text-tinta-5" aria-hidden />
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
-
-      {/* Bilah pemesanan hanya muncul setelah ada yang dipilih, jadi ia
-          tidak menutupi daftar saat pengguna masih menimbang-nimbang. */}
-      {butir > 0 && (
-        <div className="sticky bottom-0 z-20 border-t border-garis bg-krem/95 px-4 py-3 backdrop-blur-sm">
-          <Tombol
-            penuh
-            onClick={() => {
-              const id = buatPesanan(alamat);
-              router.push(`/pesanan/${id}`);
-            }}
-          >
-            Pesan {butir} item · {rp(total)}
-          </Tombol>
-        </div>
-      )}
     </Layar>
   );
 }

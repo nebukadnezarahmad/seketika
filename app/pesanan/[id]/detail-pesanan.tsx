@@ -93,9 +93,26 @@ export function DetailPesanan({ id }: { id: string }) {
               </li>
             ))}
           </ul>
+
+          {/* Penjual bisa dipanggil tanpa memesan apa pun dulu; warga
+              memilih dagangannya setelah gerobak sampai. Tanpa baris ini
+              layarnya cuma memperlihatkan daftar kosong dan Rp 0, yang
+              terbaca seperti pesanan gagal padahal justru begitu memang
+              cara kerjanya. */}
+          {pesanan.baris.length === 0 && (
+            <p className="text-[12.5px] leading-relaxed text-tinta-4">
+              Belum ada rincian. Penjual dipanggil lebih dulu, menunya dipilih
+              setelah gerobak sampai.
+            </p>
+          )}
+
           <p className="mt-3 flex items-baseline justify-between border-t border-garis pt-3">
-            <span className="text-[12px] text-tinta-4">Total · bayar di tempat</span>
-            <span className="text-[15px] font-extrabold tabular-nums text-hijau">{rp(total)}</span>
+            <span className="text-[12px] text-tinta-4">
+              {pesanan.baris.length === 0 ? "Dihitung di tempat" : "Total · bayar di tempat"}
+            </span>
+            <span className="text-[15px] font-extrabold tabular-nums text-hijau">
+              {pesanan.baris.length === 0 ? "—" : rp(total)}
+            </span>
           </p>
         </div>
 
