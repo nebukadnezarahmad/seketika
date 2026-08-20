@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { Logo } from "@/komponen/ui/logo";
+import { KepalaMerek, PanggungSambutan } from "@/komponen/ui/panggung-sambutan";
 import { IkonFacebook, IkonGoogle } from "@/komponen/ui/ikon-sosial";
 import { useToko } from "@/lib/toko";
 
@@ -43,42 +42,32 @@ export function Daftar() {
     "flex h-[42px] w-full items-center justify-center gap-2.5 rounded-full border border-garis bg-krem text-[14px] font-medium text-tinta transition-transform active:scale-[0.98]";
 
   return (
-    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-krem">
-      {/* Lewat next/image, bukan latar CSS. Sebagai latar CSS berkasnya
-          dikirim mentah 79 KB; lewat pengoptimal Next ia jadi WebP 16 KB
-          pada lebar yang benar-benar dipakai. Ini gambar terbesar di layar
-          pertama, jadi selisihnya terasa pada pemuatan dingin. */}
-      <Image
-        src="/img/ilustrasi-sambutan.jpg"
-        alt=""
-        aria-hidden
-        fill
-        sizes="390px"
-        priority
-        className="object-cover object-top"
-      />
+    <main className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#001c06]">
+      {/* Latarnya sama dengan layar sambutan, digambar di kode. Kalau
+          layar ini kembali memakai ilustrasi lama, menekan "Buat Akun"
+          akan melompat dari layar gelap yang mewah ke gambar yang sama
+          sekali berbeda wataknya, dan alur mendaftar terasa seperti
+          keluar dari aplikasi. */}
+      <PanggungSambutan />
 
       <button
         type="button"
         onClick={() => router.back()}
         aria-label="Kembali"
-        className="absolute left-4 top-[62px] z-10 grid size-9 place-items-center rounded-full text-tinta transition-transform active:scale-90"
+        className="absolute left-4 top-[54px] z-10 grid size-10 place-items-center rounded-full border border-white/25 bg-white/12 text-white backdrop-blur-sm transition-transform active:scale-90"
       >
-        <ArrowLeft size={22} strokeWidth={2.2} />
+        <ArrowLeft size={20} strokeWidth={2.2} />
       </button>
 
-      <div className="relative flex shrink-0 flex-col items-center pt-[6.2%]">
-        <Logo size={112} />
-        <p className="tulisan-gradasi mt-[8px] font-[family-name:var(--font-lambang)] text-[44px] font-bold leading-none tracking-[0.01em]">
-          SEKETIKA
-        </p>
+      <div className="relative flex shrink-0 flex-col items-center pt-[7%]">
+        <KepalaMerek sapaan={false} />
       </div>
 
       {/* Lembar formulir. Ia bergulir sendiri supaya isinya tetap dapat
           dijangkau di ponsel pendek ketika papan ketik terbuka. */}
       <form
         onSubmit={kirim}
-        className="relative mt-auto max-h-[76%] overflow-y-auto rounded-t-[39px] bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-[29px] shadow-[0_-3px_7px_rgb(0_0_0/0.15)]"
+        className="bayang-lembar relative mt-auto max-h-[74%] overflow-y-auto rounded-t-[30px] bg-krem px-6 pb-[env(safe-area-inset-bottom)] pt-6"
       >
         <h1 className="tulisan-judul text-[20px] font-bold text-tinta">Perjalanan Anda dimulai di sini.</h1>
         <p className="mt-[9px] text-[16px] font-normal text-tinta">Masukkan Detail Anda di bawah</p>

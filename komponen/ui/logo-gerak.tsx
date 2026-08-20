@@ -2,6 +2,13 @@
  * Lambang SEKETIKA sebagai SVG sebaris, supaya bagian-bagiannya bisa
  * digerakkan sendiri-sendiri.
  *
+ * Hijaunya kini hijau terang merek, bukan hijau hutan seperti versi
+ * pertama. Selama palet aplikasinya masih krem dan hijau tua, lambang
+ * gelap itu memang cocok; setelah seluruh aplikasi beralih ke hijau
+ * terang, ia jadi satu-satunya unsur yang tertinggal di palet lama dan
+ * terbaca seperti lambang aplikasi lain yang kebetulan ditempel di
+ * sini.
+ *
  * Berbeda dari `Logo` yang memuat berkas lewat `next/image`. Gambar yang
  * dimuat sebagai berkas adalah satu kotak buram bagi CSS: pin, roda, dan
  * sinarnya tidak bisa disentuh terpisah, jadi yang bisa dianimasikan
@@ -17,11 +24,19 @@
 export function LogoGerak({
   size = 132,
   bergerak = true,
+  hijau = "#00AA13",
   className = "",
 }: {
   size?: number;
   /** Matikan untuk memakainya sebagai lambang diam. */
   bergerak?: boolean;
+  /**
+   * Warna badan lambang. Bisa disetel untuk latar yang menuntut
+   * perlakuan lain, misalnya putih di atas hijau pekat. Intinya yang
+   * oranye tidak ikut berubah; itu satu-satunya aksen merek yang
+   * membedakannya dari pin lokasi mana pun.
+   */
+  hijau?: string;
   className?: string;
 }) {
   const g = (nama: string) => (bergerak ? nama : "");
@@ -49,24 +64,24 @@ export function LogoGerak({
       {/* Gerobak: batang, dua roda, dan gandarnya. Bagian ini yang datang
           lebih dulu, karena pin lokasinya nanti mendarat di atasnya. */}
       <g className={g("lg-gerobak")}>
-        <rect y="95" width="128.498" height="6" rx="3" fill="#1A4D2E" />
-        <rect x="53.79" y="124" width="34.8637" height="5" fill="#1A4D2E" />
+        <rect y="95" width="128.498" height="6" rx="3" fill={hijau} />
+        <rect x="53.79" y="124" width="34.8637" height="5" fill={hijau} />
         <g className={g("lg-roda")} style={{ transformOrigin: "48.81px 127px" }}>
-          <ellipse cx="48.8087" cy="127" rx="9.96106" ry="10" fill="#1A4D2E" />
-          <ellipse cx="48.8096" cy="127" rx="4.98053" ry="5" fill="#FDFBF7" />
+          <ellipse cx="48.8087" cy="127" rx="9.96106" ry="10" fill={hijau} />
+          <ellipse cx="48.8096" cy="127" rx="4.98053" ry="5" fill="#FFFFFF" />
         </g>
         <g className={g("lg-roda")} style={{ transformOrigin: "96.62px 127px" }}>
-          <ellipse cx="96.6232" cy="127" rx="9.96106" ry="10" fill="#1A4D2E" />
-          <ellipse cx="96.6231" cy="127" rx="4.98053" ry="5" fill="#FDFBF7" />
+          <ellipse cx="96.6232" cy="127" rx="9.96106" ry="10" fill={hijau} />
+          <ellipse cx="96.6231" cy="127" rx="4.98053" ry="5" fill="#FFFFFF" />
         </g>
       </g>
 
       {/* Pin lokasi, jatuh dari atas lalu mendarat memantul sedikit. */}
       <g className={g("lg-pin")} style={{ transformOrigin: "63.75px 100px" }}>
-        <ellipse cx="63.7503" cy="45.4099" rx="44.3773" ry="45.4099" fill="#1A4D2E" />
+        <ellipse cx="63.7503" cy="45.4099" rx="44.3773" ry="45.4099" fill={hijau} />
         <path
           d="M76.2492 106.455C70.3156 115.396 57.1868 115.396 51.2532 106.455L29.1773 73.1919C22.5603 63.2215 29.709 49.8973 41.6753 49.8973L85.8272 49.8973C97.7935 49.8973 104.942 63.2215 98.3251 73.1919L76.2492 106.455Z"
-          fill="#1A4D2E"
+          fill={hijau}
         />
       </g>
 
@@ -78,7 +93,7 @@ export function LogoGerak({
         cy="44.5"
         rx="27.3929"
         ry="27.5"
-        fill="#FDFBF7"
+        fill="#FFFFFF"
       />
       <ellipse
         className={g("lg-inti")}
