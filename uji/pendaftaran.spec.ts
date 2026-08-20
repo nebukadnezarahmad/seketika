@@ -20,7 +20,9 @@ test.describe("Pintu masuk", () => {
        hilang tanpa akibat: tanpa itu layar pertama cuma teks dan dua
        tombol. Tingginya ikut dikunci supaya tidak menyusut jadi
        perangko kalau tata letaknya berubah lagi. */
-    const gambar = page.getByRole("img", { name: /Warung jajanan keliling/ });
+    /* Dicari lewat sumbernya, bukan peran gambar: alt-nya sengaja
+       dikosongkan karena isinya sudah diucapkan teks di sekitarnya. */
+    const gambar = page.locator('img[src*="ilustrasi-warung"]');
     await expect(gambar).toBeVisible();
     const kotak = await gambar.boundingBox();
     expect(kotak!.height).toBeGreaterThan(120);
