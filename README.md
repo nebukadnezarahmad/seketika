@@ -206,7 +206,7 @@ lalu tiga langkah pengenalan sebelum masuk ke beranda sesuai peran.
 
 | | |
 |---|---|
-| Nama tim | INGKER |
+| Nama tim | INGKER MAU DAPET POIN |
 | Institusi | Institut Teknologi PLN |
 | Subtema | Digitalisasi UMKM dan Ekonomi Kreatif |
 
