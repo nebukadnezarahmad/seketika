@@ -59,6 +59,53 @@ test.describe("Bisa dipasang sebagai aplikasi", () => {
   });
 });
 
+test.describe("Bilah status di aplikasi terpasang", () => {
+  /* Playwright tidak bisa memalsukan `display-mode`, dan CDP pun tidak
+     menyediakannya. Yang bisa dikunci di sini: aturannya benar-benar
+     ikut terkirim dengan isi yang benar, dan di peramban biasa keadaan
+     bawaannya tetap seperti sebelumnya. Kalau blok CSS-nya terhapus atau
+     nama kelasnya berubah, uji ini gagal. */
+  test("aturan penyembunyian ikut terkirim dengan isi yang benar", async ({ page }) => {
+    await lewatiPengenalan(page, "pembeli", "Dewi");
+
+    const aturan = await page.evaluate(() => {
+      for (const lembar of document.styleSheets) {
+        let daftar: CSSRuleList;
+        try {
+          daftar = lembar.cssRules;
+        } catch {
+          continue;
+        }
+        for (const r of daftar) {
+          const syarat = (r as CSSMediaRule).conditionText;
+          if (syarat?.includes("display-mode")) {
+            return {
+              syarat,
+              isi: [...(r as CSSMediaRule).cssRules].map((x) => x.cssText),
+            };
+          }
+        }
+      }
+      return null;
+    });
+
+    expect(aturan, "blok @media display-mode hilang dari CSS").not.toBeNull();
+    expect(aturan!.syarat).toContain("standalone");
+    expect(aturan!.isi.join(" ")).toContain(".bilah-tiruan");
+    expect(aturan!.isi.join(" ")).toContain("display: none");
+    expect(aturan!.isi.join(" ")).toContain(".ruang-status");
+  });
+
+  test("di peramban biasa bilah tiruannya tetap tampil", async ({ page }) => {
+    await lewatiPengenalan(page, "pembeli", "Dewi");
+
+    await expect(page.locator(".bilah-tiruan").first()).toBeVisible();
+    /* Ruang penggantinya tidak boleh ikut memakan tinggi di peramban;
+       kalau ikut, setiap layar bergeser turun tanpa alasan. */
+    await expect(page.locator(".ruang-status").first()).toBeHidden();
+  });
+});
+
 test.describe("Setel ulang di aplikasi terpasang", () => {
   test("memuat ulang halaman penuh, bukan sekadar pindah layar", async ({ page }) => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");

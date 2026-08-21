@@ -514,3 +514,31 @@
     animation: lg-apung 9s ease-in-out infinite;
   }
 }
+
+/* ------------------------------------------------------------------
+   Aplikasi terpasang.
+
+   Aturan-aturan ini sengaja ditulis di luar @layer. Lapisan bernama
+   selalu kalah dari CSS tanpa lapisan, jadi menaruhnya di sini menjamin
+   ia menang atas utilitas Tailwind pada elemen yang sama tanpa perlu
+   menaikkan kekhususan pemilihnya.
+   ------------------------------------------------------------------ */
+
+/* Ruang pengganti bilah status tiruan. Tidak ada di peramban biasa. */
+.ruang-status {
+  display: none;
+}
+
+@media (display-mode: standalone) {
+  /* Sistem operasi sudah menggambar bilah statusnya sendiri di atas
+     jendela; bilah tiruan dari rancangan akan jadi yang kedua. */
+  .bilah-tiruan {
+    display: none;
+  }
+
+  .ruang-status {
+    display: block;
+    flex-shrink: 0;
+    height: max(10px, env(safe-area-inset-top));
+  }
+}
