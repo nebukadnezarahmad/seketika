@@ -14,6 +14,19 @@ import { IkonSinyal, IkonWifi, IkonBaterai } from "./ikon";
  * Nilai awalnya sengaja dikosongkan, bukan diisi jam server. Jam server
  * hampir pasti beda zona waktu dengan penggunanya, dan perbedaan itu
  * memicu galat hidrasi React.
+ *
+ * Bilah ini masuk akal di peramban, tempat ia membuat halaman terasa
+ * seperti layar ponsel. Di aplikasi yang sudah dipasang ia justru salah:
+ * Android dan iOS sudah menggambar bilah status sungguhan di atas
+ * jendela, jadi yang terlihat pengguna adalah dua bilah status
+ * bertumpuk, lengkap dengan dua jam yang menunjukkan waktu sama.
+ *
+ * Penyembunyiannya lewat CSS `display-mode: standalone`, bukan lewat
+ * pemeriksaan di JavaScript. Pemeriksaan JavaScript baru tahu jawabannya
+ * setelah komponen hidup, jadi bilah tiruannya sempat terlukis satu
+ * bingkai lalu hilang, dan kedipan itu terjadi di setiap perpindahan
+ * layar. Penggantinya berupa ruang kosong setipis area aman perangkat
+ * supaya isi layar tidak menempel ke tepi atas.
  */
 export function BilahStatus({ gelap = false }: { gelap?: boolean }) {
   const [jam, setJam] = React.useState<string | null>(null);
@@ -72,17 +85,22 @@ export function BilahStatus({ gelap = false }: { gelap?: boolean }) {
   const warna = gelap ? "text-white" : "text-hijau";
 
   return (
-    <div className={`flex shrink-0 items-center justify-between px-6 pb-1 pt-4 ${warna}`}>
-      <p className="text-[12px] font-semibold leading-[18px] tracking-[0.2px] tabular-nums">
-        {/* Sebelum efek berjalan tidak ada teks apa pun, jadi tata
-            letaknya tidak melompat begitu jam muncul. */}
-        <span className="inline-block min-w-[35px]">{jam ?? ""}</span>
-      </p>
-      <div className="flex items-center gap-1.5">
-        <IkonSinyal size={16} />
-        <IkonWifi size={16} />
-        <IkonBaterai size={24} isi={daya} />
+    <>
+      <div aria-hidden className="ruang-status" />
+      <div
+        className={`bilah-tiruan flex shrink-0 items-center justify-between px-6 pb-1 pt-4 ${warna}`}
+      >
+        <p className="text-[12px] font-semibold leading-[18px] tracking-[0.2px] tabular-nums">
+          {/* Sebelum efek berjalan tidak ada teks apa pun, jadi tata
+              letaknya tidak melompat begitu jam muncul. */}
+          <span className="inline-block min-w-[35px]">{jam ?? ""}</span>
+        </p>
+        <div className="flex items-center gap-1.5">
+          <IkonSinyal size={16} />
+          <IkonWifi size={16} />
+          <IkonBaterai size={24} isi={daya} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
