@@ -109,14 +109,23 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* Dokumen luar dikunci setinggi layar dan tidak boleh bergulir sama
+     sekali. Tiap layar sudah punya wadah gulirnya sendiri di dalam;
+     tanpa kunci ini, menyeret layar di aplikasi terpasang menarik
+     seluruh dokumen ikut naik dan menyingkap latar kosong di baliknya —
+     yang di ponsel terlihat seperti "layar bisa keangkat". */
+  html {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
+    height: 100%;
+    overflow: hidden;
     background: var(--color-krem);
     color: var(--color-tinta);
     font-family: var(--font-sans);
-    /* Layar aplikasi dirancang setinggi persis satu layar ponsel dan
-       menggulung di dalam wadahnya sendiri, jadi halaman luar tidak
-       boleh ikut bergulir. */
-    overscroll-behavior-y: none;
+    overscroll-behavior: none;
   }
 
   /* Tombol dan tautan di aplikasi ini tidak pernah memakai serif
@@ -524,21 +533,13 @@
    menaikkan kekhususan pemilihnya.
    ------------------------------------------------------------------ */
 
-/* Ruang pengganti bilah status tiruan. Tidak ada di peramban biasa. */
-.ruang-status {
-  display: none;
-}
-
 @media (display-mode: standalone) {
   /* Sistem operasi sudah menggambar bilah statusnya sendiri di atas
-     jendela; bilah tiruan dari rancangan akan jadi yang kedua. */
+     jendela; bilah tiruan dari rancangan akan jadi yang kedua, lengkap
+     dengan jam yang menunjukkan waktu sama. Isi halaman sudah otomatis
+     mulai di bawah bilah status sistem, jadi tidak ada ruang pengganti
+     yang perlu ditambahkan. */
   .bilah-tiruan {
     display: none;
-  }
-
-  .ruang-status {
-    display: block;
-    flex-shrink: 0;
-    height: max(10px, env(safe-area-inset-top));
   }
 }
