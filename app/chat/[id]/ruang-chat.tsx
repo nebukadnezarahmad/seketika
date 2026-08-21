@@ -90,7 +90,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
         )}
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
         <ul className="flex flex-col gap-3">
           {percakapan.pesan.map((p) => (
             <li key={p.id} className={p.saya ? "flex justify-end" : "flex gap-2"}>

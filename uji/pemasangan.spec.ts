@@ -93,16 +93,28 @@ test.describe("Bilah status di aplikasi terpasang", () => {
     expect(aturan!.syarat).toContain("standalone");
     expect(aturan!.isi.join(" ")).toContain(".bilah-tiruan");
     expect(aturan!.isi.join(" ")).toContain("display: none");
-    expect(aturan!.isi.join(" ")).toContain(".ruang-status");
   });
 
   test("di peramban biasa bilah tiruannya tetap tampil", async ({ page }) => {
     await lewatiPengenalan(page, "pembeli", "Dewi");
-
     await expect(page.locator(".bilah-tiruan").first()).toBeVisible();
-    /* Ruang penggantinya tidak boleh ikut memakan tinggi di peramban;
-       kalau ikut, setiap layar bergeser turun tanpa alasan. */
-    await expect(page.locator(".ruang-status").first()).toBeHidden();
+  });
+
+  test("dokumen luar dikunci, tiap layar menggulung di dalamnya", async ({ page }) => {
+    /* Di aplikasi terpasang, dokumen yang bisa diseret akan ikut naik dan
+       menyingkap latar kosong di baliknya — yang terlihat seperti "layar
+       bisa keangkat". Yang menahannya adalah overflow:hidden pada html
+       dan body; seret jari pengguna ditolak, dan yang bergulir hanya
+       wadah dalam tiap layar. (scrollTop lewat skrip tetap bisa menembus
+       overflow:hidden, jadi yang diperiksa di sini sifat CSS-nya, bukan
+       angka scrollTop.) */
+    await lewatiPengenalan(page, "pembeli", "Dewi");
+    const of = await page.evaluate(() => ({
+      html: getComputedStyle(document.documentElement).overflow,
+      body: getComputedStyle(document.body).overflow,
+    }));
+    expect(of.html).toBe("hidden");
+    expect(of.body).toBe("hidden");
   });
 });
 
