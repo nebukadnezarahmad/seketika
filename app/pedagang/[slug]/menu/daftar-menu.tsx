@@ -14,30 +14,15 @@ import { fotoDariMenu, menuTampil } from "@/lib/menu";
 import { useToko } from "@/lib/toko";
 import type { Menu, Pedagang } from "@/lib/tipe";
 
-/**
- * Daftar menu satu gerobak.
- *
- * Layar ini tidak lagi menumpuk pesanan butir demi butir lewat tombol
- * tambah dan kurang. Yang dijual di sini pedagang keliling, bukan restoran:
- * warga memanggil gerobaknya lalu memilih setelah gerobak sampai di depan
- * rumah. Karena itu daftarnya bersifat menerangkan — apa saja yang dijual
- * dan berapa harganya — dan satu-satunya tindakan yang tersedia adalah
- * memanggil penjualnya.
- *
- * Mengetuk satu menu menaikkan lembar berisi fotonya utuh dan keterangan
- * lengkapnya. Pada daftar, keterangan itu terpotong dua baris; lembar ini
- * tempat membacanya sampai habis sebelum memutuskan.
- */
+/** Daftar menu satu gerobak. */
 export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
   const router = useRouter();
   const siapkanPanggilan = useToko((s) => s.siapkanPanggilan);
   const buatPesanan = useToko((s) => s.buatPesanan);
-  const alamat = useToko((s) => s.profil?.alamat) ?? "Bumi Marina Emas Selatan No.12";
+  const alamat =
+    useToko((s) => s.profil?.alamat) ?? "Bumi Marina Emas Selatan No.12";
 
-  /* Suntingan pedagang hanya berlaku untuk gerobak sendiri; gerobak lain
-     datang dari data contoh dan tidak punya pemiliknya di aplikasi ini.
-     Untuk gerobak sendiri, yang ditampilkan adalah daftar yang sudah
-     disuntingnya dikurangi menu yang sedang dimatikan. */
+  /* Suntingan pedagang hanya berlaku untuk gerobak sendiri; gerobak lain datang dari data contoh dan tidak punya pemiliknya di aplikasi ini. */
   const menuNonaktif = useToko((s) => s.menuNonaktif);
   const menuSaya = useToko((s) => s.menuSaya);
   const fotoUnggahan = useToko((s) => s.fotoMenuSaya);
@@ -49,18 +34,13 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
   const [dipilih, setDipilih] = React.useState<Menu | null>(null);
   const [lembarBuka, setLembarBuka] = React.useState(false);
 
-  /**
-   * Memanggil penjual ke lokasi warga.
-   *
-   * `menu` yang kosong berarti dipanggil tanpa pesanan awal, yaitu ketika
-   * tombolnya ditekan dari atas daftar. Dari dalam lembar, menu yang
-   * sedang dibaca ikut disertakan satu porsi sebagai ancar-ancar, dan
-   * sisanya tetap bisa ditambah waktu gerobaknya sampai.
-   */
+  /** Memanggil penjual ke lokasi warga. */
   const panggil = (menu?: Menu) => {
     siapkanPanggilan(
       pedagang.slug,
-      menu ? [{ menuId: menu.id, nama: menu.nama, harga: menu.harga, jumlah: 1 }] : [],
+      menu
+        ? [{ menuId: menu.id, nama: menu.nama, harga: menu.harga, jumlah: 1 }]
+        : [],
     );
     router.push(`/pesanan/${buatPesanan(alamat)}`);
   };
@@ -69,17 +49,14 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
     <Layar
       nav
       lembar={
-        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
+        <Lembar
+          buka={lembarBuka}
+          tutup={() => setLembarBuka(false)}
+          judul={dipilih?.nama}
+        >
           {dipilih && (
             <div className="pb-6">
-              {/* Foto memenuhi lebar lembar. Pada daftar ia cuma petak
-                  84 piksel yang sulit dinilai; di sini gunanya memang
-                  supaya orang bisa melihat isi mangkuknya.
-
-                  Jarak atasnya menghindari tombol tutup milik lembar, yang
-                  menggantung sedikit lebih rendah dari pegangannya. Tanpa
-                  jarak ini tombol itu jatuh menindih pojok foto dan jadi
-                  sulit dibedakan dari isi gambarnya. */}
+              {/* Foto memenuhi lebar lembar. */}
               <div className="relative mx-4 mt-6 h-[190px] overflow-hidden rounded-[18px]">
                 <Gambar
                   src={fotoDariMenu(dipilih.id, fotoUnggahan, fotoMenu)}
@@ -94,7 +71,9 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                 <h2 className="tulisan-judul text-[19px] font-extrabold leading-tight text-tinta">
                   {dipilih.nama}
                 </h2>
-                <p className="mt-1 text-[17px] font-extrabold text-hijau">{rp(dipilih.harga)}</p>
+                <p className="mt-1 text-[17px] font-extrabold text-hijau">
+                  {rp(dipilih.harga)}
+                </p>
                 <p className="mt-3 text-[13px] leading-relaxed text-tinta-3">
                   {dipilih.deskripsi}
                 </p>
@@ -118,10 +97,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
       />
 
       <div className="px-4 pb-4 pt-3">
-        {/* Tombol utama berada di atas daftar, bukan di bawahnya. Yang
-            dicari warga di layar ini adalah memanggil gerobaknya; daftar
-            menu di bawahnya keterangan pendukung. Menaruhnya di bawah
-            berarti menyembunyikan tindakan utama di balik gulir. */}
+        {/* Tombol utama berada di atas daftar, bukan di bawahnya. */}
         <Tombol penuh onClick={() => panggil()}>
           <Phone size={16} strokeWidth={2.3} aria-hidden />
           Panggil Penjual
@@ -146,10 +122,7 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                 }}
                 className="bayang-kartu flex w-full items-center gap-3 rounded-[20px] border border-garis bg-white p-2.5 text-left transition-transform active:scale-[0.99]"
               >
-                {/* Fotonya dibulatkan sendiri dan diberi jarak dari tepi
-                    kartu, bukan dijejalkan menempel ke sudutnya. Waktu
-                    menempel, sudut foto yang siku bertabrakan dengan sudut
-                    kartu yang membulat dan tepinya terlihat tercuil. */}
+                {/* Fotonya dibulatkan sendiri dan diberi jarak dari tepi kartu, bukan dijejalkan menempel ke sudutnya. */}
                 <Gambar
                   src={fotoDariMenu(m.id, fotoUnggahan, fotoMenu)}
                   alt={m.nama}
@@ -170,7 +143,11 @@ export function DaftarMenu({ pedagang }: { pedagang: Pedagang }) {
                   </span>
                 </span>
 
-                <ChevronRight size={17} className="shrink-0 text-tinta-5" aria-hidden />
+                <ChevronRight
+                  size={17}
+                  className="shrink-0 text-tinta-5"
+                  aria-hidden
+                />
               </button>
             </li>
           ))}

@@ -2,14 +2,7 @@ import type { BarisPesanan } from "@/lib/tipe";
 
 /** Pemformat yang dipakai berulang di seluruh layar. */
 
-/**
- * Total satu pesanan.
- *
- * Dikumpulkan di sini karena ini logika uang, bukan tampilan. Sebelumnya
- * rumus yang sama diketik ulang di tiga layar, dan begitu perhitungannya
- * berubah, satu layar yang terlewat akan menampilkan total berbeda dari
- * dua lainnya.
- */
+/** Total satu pesanan. */
 export function totalBaris(baris: BarisPesanan[]): number {
   return baris.reduce((jumlah, b) => jumlah + b.harga * b.jumlah, 0);
 }
@@ -46,7 +39,8 @@ export function kapan(iso: string): string {
     hour12: false,
   }).format(t);
 
-  const nol = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const nol = (d: Date) =>
+    new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
   const selisih = Math.round((nol(new Date()) - nol(t)) / 86_400_000);
 
   if (selisih <= 0) return `Hari ini · ${jam}`;
@@ -54,15 +48,7 @@ export function kapan(iso: string): string {
   return `${selisih} hari lalu · ${jam}`;
 }
 
-/**
- * Sisa waktu menuju sebuah tenggat, misalnya "22 jam lagi".
- *
- * `sekarang` sengaja jadi parameter, bukan dibaca dari `Date.now()` di
- * dalam. Komponen yang menampilkannya harus menyuplai waktu dari
- * `useSekarang()` supaya angkanya benar-benar berdetak; kalau waktunya
- * dibaca diam-diam di sini, hitung mundurnya membeku sampai kebetulan
- * ada render ulang karena sebab lain.
- */
+/** Sisa waktu menuju sebuah tenggat, misalnya "22 jam lagi". */
 export function sisaWaktu(iso: string, sekarang: number | null): string {
   if (sekarang === null) return "";
   const selisih = new Date(iso).getTime() - sekarang;

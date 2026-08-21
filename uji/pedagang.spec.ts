@@ -6,14 +6,17 @@ test.describe("Sisi pedagang", () => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
   });
 
-  test("menutup gerobak memunculkan ajakan yang beralasan", async ({ page }) => {
+  test("menutup gerobak memunculkan ajakan yang beralasan", async ({
+    page,
+  }) => {
     await expect(page.getByText(/Sedang BUKA/)).toBeVisible();
 
-    await page.getByRole("checkbox", { name: "Buka gerobak" }).uncheck({ force: true });
+    await page
+      .getByRole("checkbox", { name: "Buka gerobak" })
+      .uncheck({ force: true });
 
     await expect(page.getByText(/Sedang TUTUP/)).toBeVisible();
-    /* Ajakannya menyebut jumlah permintaan yang sedang menunggu, bukan
-       sekadar mengimbau membuka gerobak. */
+    /* Ajakannya menyebut jumlah permintaan yang sedang menunggu, bukan sekadar mengimbau membuka gerobak. */
     await expect(page.getByText(/permintaan titik kumpul/)).toBeVisible();
   });
 
@@ -46,10 +49,14 @@ test.describe("Sisi pedagang", () => {
 
     /* Bakso Komplit 25.000 x3 ditambah Bakso Mercon 15.000 x2. */
     await expect(kartu.getByText("Rp 105.000")).toBeVisible();
-    await expect(kartu.getByRole("button", { name: "Tandai Selesai" })).toBeVisible();
+    await expect(
+      kartu.getByRole("button", { name: "Tandai Selesai" }),
+    ).toBeVisible();
   });
 
-  test("menandai selesai memindahkan pesanan keluar dari kelompok baru", async ({ page }) => {
+  test("menandai selesai memindahkan pesanan keluar dari kelompok baru", async ({
+    page,
+  }) => {
     await page.goto("/d/pesanan");
     await page.getByRole("button", { name: /^Baru/ }).click();
     await expect(page.getByRole("listitem")).toHaveCount(2);
@@ -67,17 +74,23 @@ test.describe("Berpindah peran", () => {
     await lewatiPengenalan(page, "pembeli", "Dewi");
 
     await page.goto("/profil");
-    await page.getByRole("button", { name: /Beralih ke Mode Pedagang/ }).click();
+    await page
+      .getByRole("button", { name: /Beralih ke Mode Pedagang/ })
+      .click();
     await page.waitForURL("**/d");
     await expect(page.getByText("Status Gerobak")).toBeVisible();
 
     await page.goto("/d/profil");
     await page.getByRole("button", { name: /Beralih ke Mode Pembeli/ }).click();
     await page.waitForURL("**/beranda");
-    await expect(page.getByRole("heading", { name: "Rekomendasi Terdekat" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Rekomendasi Terdekat" }),
+    ).toBeVisible();
   });
 
-  test("setel ulang mengembalikan aplikasi ke keadaan contoh", async ({ page }) => {
+  test("setel ulang mengembalikan aplikasi ke keadaan contoh", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pembeli", "Dewi");
     await page.goto("/kolab/tk-01");
     await page.getByRole("button", { name: /Ikut Pesan Sekarang/ }).click();
@@ -85,8 +98,7 @@ test.describe("Berpindah peran", () => {
 
     await page.goto("/profil");
     await page.getByRole("button", { name: /Setel Ulang Data/ }).click();
-    /* Setelah data dihapus aplikasi kembali ke pintu masuk, bukan langsung
-       ke pemilihan peran. */
+    /* Setelah data dihapus aplikasi kembali ke pintu masuk, bukan langsung ke pemilihan peran. */
     await page.waitForURL("**/sambutan", { timeout: 10_000 });
 
     await lewatiPengenalan(page, "pembeli", "Dewi");
@@ -102,14 +114,25 @@ test.describe("Kotak masuk pedagang", () => {
   });
 
   test("berisi warga, bukan sesama pedagang", async ({ page }) => {
-    await expect(page.getByRole("heading", { name: /Pesan Masuk/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Pesan Masuk/ }),
+    ).toBeVisible();
     await expect(page.getByText("Pesan dari calon pembeli Anda")).toBeVisible();
 
-    for (const warga of ["Pak Dedi", "Bu Rahma", "Rizki Pratama", "Sinta Maharani"]) {
+    for (const warga of [
+      "Pak Dedi",
+      "Bu Rahma",
+      "Rizki Pratama",
+      "Sinta Maharani",
+    ]) {
       await expect(page.getByText(warga, { exact: true })).toBeVisible();
     }
     /* Nama pedagang lain tidak boleh muncul di kotak masuk pedagang. */
-    for (const pedagang of ["Bakso Pak Anton", "Sayur Kang Ucup", "Donat Bu Jasmin"]) {
+    for (const pedagang of [
+      "Bakso Pak Anton",
+      "Sayur Kang Ucup",
+      "Donat Bu Jasmin",
+    ]) {
       await expect(page.getByText(pedagang, { exact: true })).toHaveCount(0);
     }
   });

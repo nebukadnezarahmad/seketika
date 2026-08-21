@@ -4,7 +4,14 @@ import * as React from "react";
 
 import { useRouter } from "next/navigation";
 import {
-  Bell, CircleHelp, Info, MapPin, RotateCcw, ShieldCheck, Store, History,
+  Bell,
+  CircleHelp,
+  Info,
+  MapPin,
+  RotateCcw,
+  ShieldCheck,
+  Store,
+  History,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Kolom, LembarUbah } from "@/komponen/ui/lembar-ubah";
@@ -20,12 +27,11 @@ export function ProfilPembeli() {
   const gantiPeran = useToko((s) => s.gantiPeran);
   const setelUlang = useToko((s) => s.setelUlang);
 
-  const kolaborasi = titikKumpul.filter((t) => t.peserta.some((p) => p.id === "saya")).length;
+  const kolaborasi = titikKumpul.filter((t) =>
+    t.peserta.some((p) => p.id === "saya"),
+  ).length;
 
-  /* Satu keadaan untuk seluruh lembar, bukan satu penanda buka-tutup per
-     baris menu. Dengan satu keadaan, hanya satu lembar yang mungkin
-     terbuka pada satu waktu, dan itu memang satu-satunya keadaan yang
-     masuk akal. */
+  /* Satu keadaan untuk seluruh lembar, bukan satu penanda buka-tutup per baris menu. */
   const [lembar, setLembar] = React.useState<
     "diri" | "alamat" | "bantuan" | "tentang" | null
   >(null);
@@ -60,7 +66,12 @@ export function ProfilPembeli() {
               perbaruiProfil({ nama: nama.trim(), telepon: telepon.trim() });
             }}
           >
-            <Kolom label="Nama lengkap" nilai={nama} ubah={setNama} contoh="Dewi Anggraini" />
+            <Kolom
+              label="Nama lengkap"
+              nilai={nama}
+              ubah={setNama}
+              contoh="Dewi Anggraini"
+            />
             <Kolom
               label="Nomor telepon"
               nilai={telepon}
@@ -75,7 +86,9 @@ export function ProfilPembeli() {
             tutup={() => setLembar(null)}
             judul="Alamat Tersimpan"
             keterangan="Ke sinilah pedagang menuju saat kamu memanggilnya. Patokan membantu gerobak menemukan rumahmu."
-            simpan={() => perbaruiProfil({ alamat: alamat.trim(), patokan: patokan.trim() })}
+            simpan={() =>
+              perbaruiProfil({ alamat: alamat.trim(), patokan: patokan.trim() })
+            }
           >
             <Kolom
               label="Alamat"
@@ -115,9 +128,14 @@ export function ProfilPembeli() {
                   i: "Seluruhnya di peramban perangkat ini. Menekan Setel Ulang Data menghapusnya sampai bersih.",
                 },
               ].map((f) => (
-                <li key={f.t} className="rounded-[14px] border border-garis bg-white p-3.5">
+                <li
+                  key={f.t}
+                  className="rounded-[14px] border border-garis bg-white p-3.5"
+                >
                   <p className="text-[12.5px] font-bold text-tinta">{f.t}</p>
-                  <p className="mt-1 text-[11.5px] leading-relaxed text-tinta-4">{f.i}</p>
+                  <p className="mt-1 text-[11.5px] leading-relaxed text-tinta-4">
+                    {f.i}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -132,8 +150,8 @@ export function ProfilPembeli() {
               <p className="text-[12.5px] leading-relaxed text-tinta-3">
                 SEKETIKA mempertemukan pedagang keliling dengan warga di
                 sekitarnya. Warga bisa memanggil gerobak ke depan rumah, atau
-                patungan lewat Titik Kumpul supaya pedagang datang sekali
-                untuk beberapa tetangga sekaligus.
+                patungan lewat Titik Kumpul supaya pedagang datang sekali untuk
+                beberapa tetangga sekaligus.
               </p>
             </div>
             <dl className="rounded-[14px] border border-garis bg-white p-3.5 text-[12px]">
@@ -159,9 +177,14 @@ export function ProfilPembeli() {
     >
       {/* Kepala hijau */}
       <header className="gradasi-kumpul relative overflow-hidden rounded-b-[24px] px-4 pb-5 pt-3">
-        <span aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]" />
+        <span
+          aria-hidden
+          className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]"
+        />
 
-        <h1 className="relative text-[19px] font-extrabold text-white">Profil Saya</h1>
+        <h1 className="relative text-[19px] font-extrabold text-white">
+          Profil Saya
+        </h1>
 
         <div className="relative mt-4 flex items-start gap-3.5">
           <span className="relative shrink-0">
@@ -199,23 +222,22 @@ export function ProfilPembeli() {
 
         <dl className="relative mt-4 grid grid-cols-2 rounded-[16px] bg-white/10 py-3">
           <div className="border-r border-white/15 text-center">
-            <dd className="text-[20px] font-extrabold text-white">{pesanan.length}</dd>
+            <dd className="text-[20px] font-extrabold text-white">
+              {pesanan.length}
+            </dd>
             <dt className="mt-0.5 text-[11px] text-white/60">Pesanan</dt>
           </div>
           <div className="text-center">
-            <dd className="text-[20px] font-extrabold text-white">{kolaborasi}</dd>
+            <dd className="text-[20px] font-extrabold text-white">
+              {kolaborasi}
+            </dd>
             <dt className="mt-0.5 text-[11px] text-white/60">Kolaborasi</dt>
           </div>
         </dl>
-
       </header>
 
       <div className="px-4 pb-5">
-        {/* Judul bagian berada di luar kepala hijau, sejajar dengan judul
-            "Lainnya" di bawahnya. Sebelumnya ia terjepit di tepi bawah
-            kepala: ia menerangkan kartu-kartu putih di bawahnya, tapi
-            tergambar di atas latar hijau milik bagian yang lain, sehingga
-            terbaca seperti ekor kepala yang terpotong. */}
+        {/* Judul bagian berada di luar kepala hijau, sejajar dengan judul "Lainnya" di bawahnya. */}
         <p className="mb-2 mt-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
           Akun &amp; Transaksi
         </p>
@@ -262,9 +284,7 @@ export function ProfilPembeli() {
             isi="Versi 1.0 · cara kerja aplikasi"
             onClick={() => buka("tentang")}
           />
-          {/* Tanpa server autentikasi, berpindah peran adalah satu-satunya
-              cara melihat sisi pedagang. Barisnya diletakkan di sini
-              supaya tidak mengubah susunan bagian lain. */}
+          {/* Tanpa server autentikasi, berpindah peran adalah satu-satunya cara melihat sisi pedagang. */}
           <BarisMenu
             Ikon={Store}
             nada="hijau"
@@ -281,10 +301,7 @@ export function ProfilPembeli() {
             judul="Setel Ulang Data"
             isi="Kembalikan ke keadaan contoh"
             onClick={async () => {
-              /* Muat ulang penuh, bukan pindah lewat router: di aplikasi
-                 terpasang tidak ada tombol muat ulang, dan tanpa itu
-                 tombol ini mengembalikan data contoh dari berkas yang
-                 sudah terlanjur berjalan, bukan dari yang sedang tayang. */
+              /* Muat ulang penuh, bukan pindah lewat router: di aplikasi terpasang tidak ada tombol muat ulang, dan tanpa itu tombol ini mengembalikan data contoh dari berkas yang sudah terlanjur berjalan, bukan dari yang sedang tayang. */
               setelUlang();
               await bersihkanSalinan();
               muatUlangKeAwal();

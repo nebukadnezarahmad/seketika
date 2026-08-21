@@ -3,7 +3,15 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronUp, Crosshair, MapPin, MessageSquare, Navigation, Volume2 } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronUp,
+  Crosshair,
+  MapPin,
+  MessageSquare,
+  Navigation,
+  Volume2,
+} from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Peta } from "@/komponen/peta/peta";
 import { Pin } from "@/komponen/peta/pin";
@@ -12,25 +20,13 @@ import { BatangKemajuan } from "@/komponen/kolab/kemajuan";
 import { percakapanPedagangAwal } from "@/lib/data/awal";
 import { useToko } from "@/lib/toko";
 
-/**
- * Percakapan dengan warga tertentu, dicari lewat namanya.
- *
- * Pesanan dan percakapan belum saling menyimpan rujukan, jadi namanya
- * yang jadi jembatan. Kalau warga itu belum pernah mengirim pesan,
- * tombolnya mengantar ke kotak masuk alih-alih ke ruang yang tidak ada.
- */
+/** Percakapan dengan warga tertentu, dicari lewat namanya. */
 function tautChatWarga(nama: string): string {
   const cocok = percakapanPedagangAwal.find((c) => c.nama === nama);
   return cocok ? `/d/chat/${cocok.id}` : "/d/chat";
 }
 
-/**
- * Layar navigasi pengantaran.
- *
- * Kemajuan perjalanan merambat pelan dari nilai awalnya supaya demo
- * terasa hidup tanpa perlu GPS sungguhan. Perambatannya berhenti di 100
- * dan pewaktunya dibersihkan saat layar ditinggalkan.
- */
+/** Layar navigasi pengantaran. */
 export function Antar({ id }: { id: string }) {
   const router = useRouter();
   const pesanan = useToko((s) => s.pesananMasuk.find((p) => p.id === id));
@@ -43,8 +39,7 @@ export function Antar({ id }: { id: string }) {
     return () => clearInterval(t);
   }, []);
 
-  /* Membuka alamat navigasi untuk pesanan yang sudah selesai, atau yang
-     belum diberangkatkan, tidak ada artinya. */
+  /* Membuka alamat navigasi untuk pesanan yang sudah selesai, atau yang belum diberangkatkan, tidak ada artinya. */
   if (pesanan && pesanan.status !== "diantar") {
     return (
       <Layar nav peran="pedagang">
@@ -60,7 +55,9 @@ export function Antar({ id }: { id: string }) {
   if (!pesanan) {
     return (
       <Layar nav peran="pedagang">
-        <p className="px-6 py-16 text-center text-[13px] text-tinta-4">Pesanan tidak ditemukan.</p>
+        <p className="px-6 py-16 text-center text-[13px] text-tinta-4">
+          Pesanan tidak ditemukan.
+        </p>
       </Layar>
     );
   }
@@ -113,25 +110,37 @@ export function Antar({ id }: { id: string }) {
         <div className="absolute left-1/2 top-4 flex -translate-x-1/2 items-center gap-2 rounded-[14px] bg-white px-3.5 py-2 shadow-[0_3px_12px_rgb(0_0_0/0.16)]">
           <Navigation size={16} strokeWidth={2.4} className="text-hijau" />
           <span className="leading-tight">
-            <span className="block text-[15px] font-extrabold text-tinta">{menit} menit</span>
-            <span className="block text-[10px] text-tinta-4">estimasi tiba</span>
+            <span className="block text-[15px] font-extrabold text-tinta">
+              {menit} menit
+            </span>
+            <span className="block text-[10px] text-tinta-4">
+              estimasi tiba
+            </span>
           </span>
         </div>
 
         {/* Panduan suara */}
         <div className="absolute inset-x-4 top-[76px] flex items-center gap-2.5 rounded-[14px] bg-white px-3 py-2.5 shadow-[0_3px_12px_rgb(0_0_0/0.14)]">
-          <Volume2 size={17} strokeWidth={2.1} className="shrink-0 text-hijau" />
+          <Volume2
+            size={17}
+            strokeWidth={2.1}
+            className="shrink-0 text-hijau"
+          />
           {panduanBuka ? (
             <p className="min-w-0 flex-1 truncate text-[12px] font-medium text-tinta-2">
               Lurus terus sejauh {Math.max(20, 350 - maju * 3)} meter.
             </p>
           ) : (
-            <p className="min-w-0 flex-1 text-[12px] text-tinta-4">Panduan suara disembunyikan</p>
+            <p className="min-w-0 flex-1 text-[12px] text-tinta-4">
+              Panduan suara disembunyikan
+            </p>
           )}
           <button
             type="button"
             onClick={() => setPanduanBuka((v) => !v)}
-            aria-label={panduanBuka ? "Sembunyikan panduan" : "Tampilkan panduan"}
+            aria-label={
+              panduanBuka ? "Sembunyikan panduan" : "Tampilkan panduan"
+            }
             aria-expanded={panduanBuka}
             className="grid size-7 shrink-0 place-items-center rounded-full bg-krem text-tinta-4"
           >
@@ -149,7 +158,10 @@ export function Antar({ id }: { id: string }) {
 
         {/* Lembar tujuan */}
         <div className="bayang-lembar absolute inset-x-0 bottom-0 rounded-t-[22px] bg-krem px-4 pb-4 pt-2.5">
-          <span aria-hidden className="mx-auto mb-3 block h-1 w-9 rounded-pil bg-tinta-5/60" />
+          <span
+            aria-hidden
+            className="mx-auto mb-3 block h-1 w-9 rounded-pil bg-tinta-5/60"
+          />
 
           <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
             Tujuan Pengiriman
@@ -160,7 +172,9 @@ export function Antar({ id }: { id: string }) {
               {pesanan.inisial}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[15px] font-extrabold text-tinta">{pesanan.warga}</p>
+              <p className="truncate text-[15px] font-extrabold text-tinta">
+                {pesanan.warga}
+              </p>
               <p className="mt-0.5 flex items-center gap-1 truncate text-[11.5px] text-tinta-4">
                 <MapPin size={11} strokeWidth={2.2} className="shrink-0" />
                 {pesanan.titik}
@@ -177,15 +191,19 @@ export function Antar({ id }: { id: string }) {
 
           <div className="mt-3.5 flex items-baseline justify-between">
             <p className="text-[11.5px] text-tinta-3">Progres perjalanan</p>
-            <p className="text-[12px] font-bold tabular-nums text-tinta">{maju}%</p>
+            <p className="text-[12px] font-bold tabular-nums text-tinta">
+              {maju}%
+            </p>
           </div>
           <div className="mt-1.5">
-            <BatangKemajuan nilai={maju} target={100} label={`Progres perjalanan ${maju} persen`} />
+            <BatangKemajuan
+              nilai={maju}
+              target={100}
+              label={`Progres perjalanan ${maju} persen`}
+            />
           </div>
 
-          {/* Selalu tersedia, tidak menunggu bilah kemajuan penuh. Yang
-              tahu gerobaknya sudah sampai adalah pedagangnya, bukan
-              simulasi perjalanan di layar ini. */}
+          {/* Selalu tersedia, tidak menunggu bilah kemajuan penuh. */}
           <div className="mt-3.5">
             <Tombol
               penuh

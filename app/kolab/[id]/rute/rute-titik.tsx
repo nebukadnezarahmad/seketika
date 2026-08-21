@@ -9,15 +9,7 @@ import { cariPedagang, SLUG_GEROBAK_SAYA } from "@/lib/data/pedagang";
 import { menitTempuh } from "@/lib/kolab";
 import { useToko } from "@/lib/toko";
 
-/**
- * Rute menuju satu titik kumpul.
- *
- * Tujuannya sama untuk kedua peran, yang berbeda titik berangkatnya:
- * pedagang mendorong gerobaknya dari lapaknya, warga berjalan dari
- * rumahnya. Sebelumnya layar ini campur aduk — judul dan petunjuk
- * arahnya ditulis dari sisi pedagang, sementara kartu ringkasannya
- * menyebut pembacanya "Pembeli" dan navigasinya navigasi warga.
- */
+/** Rute menuju satu titik kumpul. */
 export function RuteTitik({ id }: { id: string }) {
   const titik = useToko((s) => s.titikKumpul.find((t) => t.id === id));
   const namaSaya = useToko((s) => s.profil?.nama) ?? "Anda";
@@ -37,10 +29,7 @@ export function RuteTitik({ id }: { id: string }) {
   }
 
   const pedagang = cariPedagang(titik.pedagangSlug);
-  /* Jaraknya diambil dari titik kumpulnya, bukan dari jarak gerobak ke
-     warga. Keduanya angka yang berbeda, dan memakai yang kedua membuat
-     layar ini menyebut jarak yang tidak cocok dengan yang baru saja
-     dibaca orang di layar sebelumnya. */
+  /* Jaraknya diambil dari titik kumpulnya, bukan dari jarak gerobak ke warga. */
   const lurus = titik.jarak;
   const rute = Math.round((lurus * 1.35) / 10) * 10;
   const menit = menitTempuh(titik.jarak);
@@ -126,7 +115,9 @@ export function RuteTitik({ id }: { id: string }) {
             </span>
             <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 items-center gap-2 rounded-pil bg-white px-3 py-1.5 shadow-[0_2px_8px_rgb(0_0_0/0.16)]">
               <span aria-hidden className="size-2 rounded-full bg-biru" />
-              <span className="text-[12px] font-bold text-tinta">{rute} meter</span>
+              <span className="text-[12px] font-bold text-tinta">
+                {rute} meter
+              </span>
               <span className="text-[11px] text-tinta-4">{menit} menit</span>
             </span>
           </Peta>
@@ -139,20 +130,41 @@ export function RuteTitik({ id }: { id: string }) {
               {namaSaya.slice(0, 1).toUpperCase()}
             </span>
             <div className="min-w-0">
-              <p className="truncate text-[15px] font-extrabold text-hijau">{namaSaya}</p>
+              <p className="truncate text-[15px] font-extrabold text-hijau">
+                {namaSaya}
+              </p>
               <p className="text-[11.5px] text-tinta-4">
-                {sayaPemilik ? "Pedagang" : "Pembeli"} · Titik Kumpul {titik.nama}
+                {sayaPemilik ? "Pedagang" : "Pembeli"} · Titik Kumpul{" "}
+                {titik.nama}
               </p>
             </div>
           </div>
 
           <dl className="mt-3.5 grid grid-cols-3 gap-2">
             {[
-              { Ikon: Footprints, nilai: `${lurus}m`, label: "Dari Anda", kelas: "bg-hijau-lembut text-hijau" },
-              { Ikon: Navigation, nilai: `${rute}m`, label: "Total Rute", kelas: "bg-biru-lembut text-biru" },
-              { Ikon: Clock, nilai: `${menit} min`, label: "Estimasi", kelas: "bg-amber/12 text-amber-tua" },
+              {
+                Ikon: Footprints,
+                nilai: `${lurus}m`,
+                label: "Dari Anda",
+                kelas: "bg-hijau-lembut text-hijau",
+              },
+              {
+                Ikon: Navigation,
+                nilai: `${rute}m`,
+                label: "Total Rute",
+                kelas: "bg-biru-lembut text-biru",
+              },
+              {
+                Ikon: Clock,
+                nilai: `${menit} min`,
+                label: "Estimasi",
+                kelas: "bg-amber/12 text-amber-tua",
+              },
             ].map(({ Ikon, nilai, label, kelas }) => (
-              <div key={label} className={`rounded-[13px] px-2 py-3 text-center ${kelas}`}>
+              <div
+                key={label}
+                className={`rounded-[13px] px-2 py-3 text-center ${kelas}`}
+              >
                 <Ikon size={16} strokeWidth={2} className="mx-auto" />
                 <dd className="mt-1.5 text-[14px] font-extrabold">{nilai}</dd>
                 <dt className="mt-0.5 text-[10px] opacity-70">{label}</dt>
@@ -168,7 +180,10 @@ export function RuteTitik({ id }: { id: string }) {
           </p>
           <ol className="mt-3 flex flex-col gap-2.5">
             {langkah.map((l, i) => (
-              <li key={l} className="flex gap-3 text-[12.5px] leading-snug text-tinta-2">
+              <li
+                key={l}
+                className="flex gap-3 text-[12.5px] leading-snug text-tinta-2"
+              >
                 <span className="grid size-5 shrink-0 place-items-center rounded-full bg-hijau-lembut text-[10px] font-bold text-hijau">
                   {i + 1}
                 </span>

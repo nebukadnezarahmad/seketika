@@ -1,13 +1,6 @@
 import type { Menu } from "@/lib/tipe";
 
-/**
- * Menu gerobak sendiri yang berlaku saat ini.
- *
- * Selama pedagang belum pernah menyunting apa pun, yang berlaku adalah
- * menu bawaan dari data contoh. Begitu ia menyentuhnya, daftar tersimpan
- * yang jadi sumbernya. Pemilihan itu dikerjakan di satu tempat ini supaya
- * layar pedagang dan layar warga tidak bisa membaca daftar yang berbeda.
- */
+/** Menu gerobak sendiri yang berlaku saat ini. */
 export function menuBerlaku(menuSaya: Menu[] | null, bawaan: Menu[]): Menu[] {
   return menuSaya ?? bawaan;
 }
@@ -21,15 +14,7 @@ export function menuTampil(
   return menuBerlaku(menuSaya, bawaan).filter((m) => !nonaktif.includes(m.id));
 }
 
-/**
- * Id untuk menu yang baru dibuat.
- *
- * Berawalan berbeda dari menu bawaan yang memakai `m-`, supaya menu
- * buatan pedagang tidak pernah bertabrakan dengan id di data contoh
- * walaupun daftarnya pernah dihapus habis lalu diisi ulang. Waktu dipakai
- * sebagai pembeda karena dua menu tidak mungkin dibuat pada milidetik
- * yang sama lewat satu jempol.
- */
+/** Id untuk menu yang baru dibuat. */
 export function idMenuBaru(): string {
   return `mx-${Date.now().toString(36)}`;
 }
@@ -39,14 +24,7 @@ export const HARGA_MAKS = 500_000;
 
 export type SalahIsi = { nama?: string; harga?: string };
 
-/**
- * Memeriksa isian menu sebelum disimpan.
- *
- * Dikembalikan sebagai kumpulan pesan per kolom, bukan satu pesan
- * gabungan, supaya tiap kesalahan bisa muncul tepat di bawah kolom yang
- * bersangkutan. Pesan tunggal di atas formulir memaksa orang menebak
- * kolom mana yang dimaksud.
- */
+/** Memeriksa isian menu sebelum disimpan. */
 export function periksaMenu(nama: string, harga: string): SalahIsi {
   const salah: SalahIsi = {};
   if (!nama.trim()) salah.nama = "Nama menu belum diisi.";
@@ -73,10 +51,7 @@ export function harganRapi(nilai: number): string {
 /** Foto bawaan untuk menu buatan pedagang yang belum punya gambarnya. */
 export const FOTO_CADANGAN = "/img/menu/bakso-polos.jpg";
 
-/**
- * Sumber foto satu menu, dengan urutan yang jelas: unggahan pedagang
- * lebih dulu, lalu foto bawaan dari data contoh, baru gambar cadangan.
- */
+/** Sumber foto satu menu, dengan urutan yang jelas: unggahan pedagang lebih dulu, lalu foto bawaan dari data contoh, baru gambar cadangan. */
 export function fotoDariMenu(
   menuId: string,
   unggahan: Record<string, string>,

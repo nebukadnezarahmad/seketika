@@ -1,10 +1,6 @@
 import type { ComponentProps, ElementType } from "react";
 
-/**
- * Sebaris isian formulir: label kecil di atas, kotak isian di bawah,
- * dengan ikon di dalam kotak. Bentuk ini berulang di layar isi data
- * pembeli maupun pedagang.
- */
+/** Sebaris isian formulir: label kecil di atas, kotak isian di bawah, dengan ikon di dalam kotak. */
 export function KolomIsian({
   label,
   Ikon,

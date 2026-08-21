@@ -3,13 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 
-/**
- * Kepala halaman dengan tombol kembali di kiri dan judul di tengah.
- *
- * Judulnya benar-benar berada di tengah layar, bukan sekadar di tengah
- * ruang sisa. Itu sebabnya ada elemen kosong selebar tombol di sisi
- * kanan: tanpanya judul akan meleset ke kanan sejauh lebar tombol.
- */
+/** Kepala halaman dengan tombol kembali di kiri dan judul di tengah. */
 export function Kepala({
   judul,
   subjudul,
@@ -33,13 +27,14 @@ export function Kepala({
       </button>
 
       <div className="min-w-0 flex-1 text-center">
-        {/* Judul layar adalah judul halaman, jadi harus berupa heading.
-            Sebagai paragraf biasa, layar-layar ini tidak punya penanda
-            struktur sama sekali dan pembaca layar kehilangan titik
-            masuk untuk melompat ke isinya. */}
-        <h1 className="truncate text-[15px] font-bold leading-tight text-hijau">{judul}</h1>
+        {/* Judul layar adalah judul halaman, jadi harus berupa heading. */}
+        <h1 className="truncate text-[15px] font-bold leading-tight text-hijau">
+          {judul}
+        </h1>
         {subjudul && (
-          <p className="truncate text-[11px] leading-tight text-tinta-4">{subjudul}</p>
+          <p className="truncate text-[11px] leading-tight text-tinta-4">
+            {subjudul}
+          </p>
         )}
       </div>
 

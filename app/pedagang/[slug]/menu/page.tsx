@@ -14,7 +14,9 @@ export async function generateMetadata({
   return { title: `Menu ${cariPedagang(slug)?.nama ?? ""}`.trim() };
 }
 
-export default async function Halaman({ params }: PageProps<"/pedagang/[slug]/menu">) {
+export default async function Halaman({
+  params,
+}: PageProps<"/pedagang/[slug]/menu">) {
   const { slug } = await params;
   const pedagang = cariPedagang(slug);
   if (!pedagang) notFound();

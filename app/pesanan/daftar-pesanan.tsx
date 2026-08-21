@@ -19,20 +19,23 @@ const tab = [
 
 export function DaftarPesanan() {
   const nilai = useToko((s) => s.penilaian);
-  const [aktif, setAktif] = React.useState<(typeof tab)[number]["kunci"]>("semua");
+  const [aktif, setAktif] =
+    React.useState<(typeof tab)[number]["kunci"]>("semua");
   const pesanan = useToko((s) => s.pesanan);
 
   const terlihat = pesanan.filter((p) => {
     if (aktif === "semua") return true;
-    /* Pesanan yang masih menunggu konfirmasi tetap masuk kelompok
-       "Diproses" karena bagi warga keduanya sama-sama belum kelar. */
-    if (aktif === "diproses") return p.status === "diproses" || p.status === "menunggu";
+    /* Pesanan yang masih menunggu konfirmasi tetap masuk kelompok "Diproses" karena bagi warga keduanya sama-sama belum kelar. */
+    if (aktif === "diproses")
+      return p.status === "diproses" || p.status === "menunggu";
     return p.status === aktif;
   });
 
   return (
     <Layar nav>
-      <h1 className="tulisan-judul px-4 pb-3 pt-3 text-center text-[19px] font-extrabold text-hijau">Pesanan</h1>
+      <h1 className="tulisan-judul px-4 pb-3 pt-3 text-center text-[19px] font-extrabold text-hijau">
+        Pesanan
+      </h1>
 
       <div className="rel-gulir flex gap-2 px-4 pb-3">
         {tab.map((t) => {
@@ -74,8 +77,12 @@ export function DaftarPesanan() {
                   />
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13.5px] font-bold text-tinta">{pedagang?.nama}</p>
-                  <p className="text-[11px] text-tinta-4">{kapan(p.dibuatPada)}</p>
+                  <p className="truncate text-[13.5px] font-bold text-tinta">
+                    {pedagang?.nama}
+                  </p>
+                  <p className="text-[11px] text-tinta-4">
+                    {kapan(p.dibuatPada)}
+                  </p>
                 </div>
                 <LencanaStatus status={p.status} />
               </div>
@@ -84,10 +91,7 @@ export function DaftarPesanan() {
                 <TahapPesanan status={p.status} />
               </div>
 
-              {/* Bintang yang sudah diberikan ikut tampil di daftar, bukan
-                  cuma tersimpan di layar rincian. Tanpa ini warga tidak
-                  punya cara mengingat pesanan mana yang sudah dinilai
-                  selain membuka satu per satu. */}
+              {/* Bintang yang sudah diberikan ikut tampil di daftar, bukan cuma tersimpan di layar rincian. */}
               {p.status === "selesai" && (
                 <div className="mt-3 flex items-center gap-2">
                   {nilai[p.id] ? (
@@ -98,7 +102,11 @@ export function DaftarPesanan() {
                             key={n}
                             size={13}
                             strokeWidth={1.9}
-                            className={n <= nilai[p.id] ? "fill-amber text-amber" : "text-tinta-5"}
+                            className={
+                              n <= nilai[p.id]
+                                ? "fill-amber text-amber"
+                                : "text-tinta-5"
+                            }
                           />
                         ))}
                       </span>

@@ -6,7 +6,12 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Bell, MapPin, Volume2 } from "lucide-react";
 import { BilahStatus } from "@/komponen/ui/bilah-status";
 import { Tombol } from "@/komponen/ui/tombol";
-import { JudulLangkah, KakiVersi, Kicker, TitikLangkah } from "@/komponen/ui/langkah";
+import {
+  JudulLangkah,
+  KakiVersi,
+  Kicker,
+  TitikLangkah,
+} from "@/komponen/ui/langkah";
 import { useToko } from "@/lib/toko";
 import type { Peran } from "@/lib/tipe";
 
@@ -33,7 +38,11 @@ const izin = [
 
 export function BeriAkses({ peran }: { peran: Peran }) {
   const router = useRouter();
-  const [nyala, setNyala] = React.useState({ lokasi: false, notifikasi: false, suara: false });
+  const [nyala, setNyala] = React.useState({
+    lokasi: false,
+    notifikasi: false,
+    suara: false,
+  });
   const setIzin = useToko((s) => s.setIzin);
 
   return (
@@ -60,7 +69,8 @@ export function BeriAkses({ peran }: { peran: Peran }) {
           <Kicker anak="LANGKAH 2 DARI 3" />
           <JudulLangkah anak={<>Beri Akses, Nikmati Kemudahan!</>} />
           <p className="mt-2 text-[13px] leading-relaxed text-tinta-3">
-            SEKETIKA butuh beberapa izin agar pengalaman jajan atau jualanmu maksimal.
+            SEKETIKA butuh beberapa izin agar pengalaman jajan atau jualanmu
+            maksimal.
           </p>
         </div>
 
@@ -76,16 +86,19 @@ export function BeriAkses({ peran }: { peran: Peran }) {
 
               <div className="min-w-0 flex-1">
                 <p className="text-[13.5px] font-bold text-tinta">{judul}</p>
-                <p className="mt-0.5 text-[11.5px] leading-snug text-tinta-3">{isi}</p>
+                <p className="mt-0.5 text-[11.5px] leading-snug text-tinta-3">
+                  {isi}
+                </p>
               </div>
 
-              {/* Sakelar dibangun dari checkbox sungguhan supaya tetap bisa
-                  dijangkau papan ketik dan dibaca pembaca layar. */}
+              {/* Sakelar dibangun dari checkbox sungguhan supaya tetap bisa dijangkau papan ketik dan dibaca pembaca layar. */}
               <label className="relative shrink-0 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={nyala[kunci]}
-                  onChange={(e) => setNyala((n) => ({ ...n, [kunci]: e.target.checked }))}
+                  onChange={(e) =>
+                    setNyala((n) => ({ ...n, [kunci]: e.target.checked }))
+                  }
                   className="peer khusus-pembaca-layar"
                 />
                 <span className="sr-only">{judul}</span>

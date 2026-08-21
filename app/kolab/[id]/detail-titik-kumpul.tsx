@@ -4,8 +4,15 @@ import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  CheckCircle2, Info, MapPin, MessagesSquare, Navigation, PackageCheck,
-  Ruler, TriangleAlert, Users,
+  CheckCircle2,
+  Info,
+  MapPin,
+  MessagesSquare,
+  Navigation,
+  PackageCheck,
+  Ruler,
+  TriangleAlert,
+  Users,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
@@ -19,23 +26,7 @@ import { labelStatusTitik, statusTitik } from "@/lib/kolab";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
 
-/**
- * Satu titik kumpul, dilihat dari dua sisi.
- *
- * Layar ini sebelumnya hanya punya satu sudut pandang, yaitu warga, dan
- * pedagang pemilik gerobaknya diantar ke sini juga dari beranda. Yang ia
- * dapat: navigasi warga di bawah layar, dan satu-satunya tombol
- * "Ikut Pesan Sekarang". Menekannya membuat pedagang tercatat sebagai
- * peserta titik kumpulnya sendiri dan menaikkan hitungan pesertanya satu
- * angka — angka yang justru dipakai pedagang untuk memutuskan berangkat
- * atau tidak.
- *
- * Karena itu sisi pedagang dipisah di sini. Ia tidak bergabung; ia
- * menerima, berangkat, lalu menyelesaikan. Tiga tindakan itu memakai
- * `ubahStatusTitik` yang sudah ada di toko tapi selama ini tidak pernah
- * dipanggil dari mana pun, sehingga status "dijemput" dan "selesai"
- * tidak pernah bisa tercapai.
- */
+/** Satu titik kumpul, dilihat dari dua sisi. */
 export function DetailTitikKumpul({ id }: { id: string }) {
   const router = useRouter();
   const titik = useToko((s) => s.titikKumpul.find((t) => t.id === id));
@@ -43,7 +34,9 @@ export function DetailTitikKumpul({ id }: { id: string }) {
   const ubahStatus = useToko((s) => s.ubahStatusTitik);
   const peran = useToko((s) => s.profil?.peran);
   const namaSaya = useToko((s) => s.profil?.nama) ?? "Anda";
-  const jumlahObrolan = useToko((s) => (id in s.obrolanTitik ? s.obrolanTitik[id].length : 0));
+  const jumlahObrolan = useToko((s) =>
+    id in s.obrolanTitik ? s.obrolanTitik[id].length : 0,
+  );
   const sekarang = useSekarang();
   const [obrolanBuka, setObrolanBuka] = React.useState(false);
 
@@ -62,23 +55,17 @@ export function DetailTitikKumpul({ id }: { id: string }) {
   const ikut = titik.peserta.some((p) => p.id === "saya");
   const kurang = Math.max(0, titik.target - titik.peserta.length);
   const penuh = kurang === 0;
-  /* Kehangusan disimpulkan dari jam lewat `statusTitik`, bukan dibaca
-     dari status tersimpan. Sebelum peramban menghidupkan komponennya
-     waktu belum diketahui, dan di sana `statusTitik` mengembalikan status
-     tersimpan supaya peringatan tidak berkedip muncul lalu hilang. */
+  /* Kehangusan disimpulkan dari jam lewat `statusTitik`, bukan dibaca dari status tersimpan. */
   const status = statusTitik(titik, sekarang);
   const habis = status === "hangus";
   const dijemput = status === "dijemput";
   const beres = status === "selesai";
 
-  /* Pemiliknya, bukan sekadar "pengguna berperan pedagang": aplikasi ini
-     hanya mengenal satu gerobak milik sendiri, dan titik kumpul untuk
-     gerobak lain tetap dilihat sebagai warga. */
-  const sayaPemilik = peran === "pedagang" && titik.pedagangSlug === SLUG_GEROBAK_SAYA;
+  /* Pemiliknya, bukan sekadar "pengguna berperan pedagang": aplikasi ini hanya mengenal satu gerobak milik sendiri, dan titik kumpul untuk gerobak lain tetap dilihat sebagai warga. */
+  const sayaPemilik =
+    peran === "pedagang" && titik.pedagangSlug === SLUG_GEROBAK_SAYA;
 
-  /* Menerima berarti dua hal sekaligus: statusnya berubah, lalu rutenya
-     dibuka. Dipisah jadi dua ketukan cuma menambah langkah tanpa menambah
-     pilihan, karena pedagang yang menerima memang sedang mau berangkat. */
+  /* Menerima berarti dua hal sekaligus: statusnya berubah, lalu rutenya dibuka. */
   const terimaLaluBerangkat = () => {
     ubahStatus(titik.id, "dijemput");
     router.push(`/kolab/${titik.id}/rute`);
@@ -98,33 +85,39 @@ export function DetailTitikKumpul({ id }: { id: string }) {
         </Lembar>
       }
     >
-      <Kepala judul={sayaPemilik ? "Permintaan Titik Kumpul" : "Detail Titik Kumpul"} />
+      <Kepala
+        judul={sayaPemilik ? "Permintaan Titik Kumpul" : "Detail Titik Kumpul"}
+      />
 
       <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
         {/* Kartu identitas titik kumpul */}
         <div className="gradasi-kumpul relative overflow-hidden rounded-[18px] p-4">
-          <span aria-hidden className="absolute -right-8 -top-8 size-32 rounded-full bg-white/[0.07]" />
+          <span
+            aria-hidden
+            className="absolute -right-8 -top-8 size-32 rounded-full bg-white/[0.07]"
+          />
 
           <div className="relative flex items-start justify-between gap-2">
             <p className="flex min-w-0 items-center gap-2 text-[19px] font-extrabold text-white">
-              <MapPin size={17} strokeWidth={2.2} className="shrink-0 text-white/80" />
+              <MapPin
+                size={17}
+                strokeWidth={2.2}
+                className="shrink-0 text-white/80"
+              />
               <span className="truncate">{titik.nama}</span>
             </p>
-            {/* Lencananya membaca `statusTitik`, bukan cuma penuh atau
-                belum. Sejak pedagang bisa menerima dan menyelesaikan,
-                "Dijemput" dan "Selesai" adalah keadaan yang benar-benar
-                bisa tercapai dan warga harus melihatnya. */}
+            {/* Lencananya membaca `statusTitik`, bukan cuma penuh atau belum. */}
             <span className="flex shrink-0 items-center gap-1.5 rounded-pil bg-hijau-neon px-2.5 py-1 text-[10.5px] font-bold text-hijau-gelap">
               <span aria-hidden className="size-1.5 rounded-pil bg-hijau" />
               {labelStatusTitik[status]}
             </span>
           </div>
 
-          <p className="relative mt-1.5 text-[12.5px] text-white/65">{titik.patokan}</p>
+          <p className="relative mt-1.5 text-[12.5px] text-white/65">
+            {titik.patokan}
+          </p>
 
-          {/* Warga perlu tahu gerobak mana yang dipanggil. Pedagang tidak:
-              itu gerobaknya sendiri. Yang berguna baginya justru seberapa
-              jauh ia harus mendorong. */}
+          {/* Warga perlu tahu gerobak mana yang dipanggil. */}
           <div className="relative mt-3.5 flex items-center gap-2.5">
             {sayaPemilik ? (
               <span className="grid size-8 shrink-0 place-items-center rounded-[9px] bg-white/15 text-white">
@@ -144,7 +137,8 @@ export function DetailTitikKumpul({ id }: { id: string }) {
             <p className="min-w-0 truncate text-[13px] font-semibold text-white">
               {sayaPemilik ? `${titik.jarak} m dari lokasimu` : pedagang?.nama}
               <span className="ml-2 font-normal text-white/55">
-                · Berakhir dalam {sisaWaktu(titik.kedaluwarsa, sekarang).replace(" lagi", "")}
+                · Berakhir dalam{" "}
+                {sisaWaktu(titik.kedaluwarsa, sekarang).replace(" lagi", "")}
               </span>
             </p>
           </div>
@@ -162,18 +156,21 @@ export function DetailTitikKumpul({ id }: { id: string }) {
           </div>
 
           <div className="mt-3">
-            <BatangKemajuan nilai={titik.peserta.length} target={titik.target} />
+            <BatangKemajuan
+              nilai={titik.peserta.length}
+              target={titik.target}
+            />
           </div>
 
-          {/* Kalimatnya menyapa pembacanya. Versi lama memberi tahu
-              pedagang bahwa dirinya sendiri "segera menuju titik kumpul",
-              kalimat yang cuma masuk akal kalau yang membaca warga. */}
+          {/* Kalimatnya menyapa pembacanya. */}
           <p className="mt-3 text-[12.5px] leading-snug text-tinta-3">
             {sayaPemilik ? (
               penuh ? (
                 <>
                   Target terpenuhi.{" "}
-                  <strong className="font-bold text-hijau">{titik.peserta.length} warga</strong>{" "}
+                  <strong className="font-bold text-hijau">
+                    {titik.peserta.length} warga
+                  </strong>{" "}
                   menunggu di {titik.patokan}.
                 </>
               ) : (
@@ -182,36 +179,47 @@ export function DetailTitikKumpul({ id }: { id: string }) {
                   <strong className="font-bold text-hijau">
                     {titik.peserta.length} dari {titik.target}
                   </strong>
-                  . Permintaan ini masuk ke berandamu begitu targetnya terpenuhi.
+                  . Permintaan ini masuk ke berandamu begitu targetnya
+                  terpenuhi.
                 </>
               )
             ) : penuh ? (
               <>
                 Target sudah terpenuhi.{" "}
-                <strong className="font-bold text-hijau">{pedagang?.nama}</strong> segera menuju
-                titik kumpul.
+                <strong className="font-bold text-hijau">
+                  {pedagang?.nama}
+                </strong>{" "}
+                segera menuju titik kumpul.
               </>
             ) : (
               <>
                 Masih butuh{" "}
-                <strong className="font-bold text-hijau">{kurang} warga lagi</strong> untuk memenuhi
-                target
+                <strong className="font-bold text-hijau">
+                  {kurang} warga lagi
+                </strong>{" "}
+                untuk memenuhi target
               </>
             )}
           </p>
 
           <div className="mt-3.5 flex items-center gap-3">
-            <TumpukanPeserta peserta={titik.peserta} target={titik.target} kosong />
+            <TumpukanPeserta
+              peserta={titik.peserta}
+              target={titik.target}
+              kosong
+            />
             <div className="min-w-0">
-              <p className="text-[13px] font-bold text-tinta">{titik.peserta.length} bergabung</p>
-              {!penuh && <p className="text-[11px] text-tinta-4">butuh {kurang} lagi</p>}
+              <p className="text-[13px] font-bold text-tinta">
+                {titik.peserta.length} bergabung
+              </p>
+              {!penuh && (
+                <p className="text-[11px] text-tinta-4">butuh {kurang} lagi</p>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Obrolan warga. Ditaruh setelah kemajuan karena yang pertama
-            dicari orang di layar ini adalah berapa lagi yang kurang;
-            berunding jam berapa berkumpul datang sesudahnya. */}
+        {/* Obrolan warga. */}
         <button
           type="button"
           aria-haspopup="dialog"
@@ -222,7 +230,9 @@ export function DetailTitikKumpul({ id }: { id: string }) {
             <MessagesSquare size={18} strokeWidth={1.9} />
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[13.5px] font-bold text-tinta">Obrolan Warga</span>
+            <span className="block text-[13.5px] font-bold text-tinta">
+              Obrolan Warga
+            </span>
             <span className="mt-0.5 block text-[11.5px] text-tinta-4">
               {jumlahObrolan > 0
                 ? `${jumlahObrolan} pesan · janjian jam berkumpul`
@@ -249,18 +259,25 @@ export function DetailTitikKumpul({ id }: { id: string }) {
           <p className="mt-3 flex gap-2.5 rounded-[14px] bg-hijau-lembut/70 p-3.5">
             <CheckCircle2 size={15} className="mt-px shrink-0 text-hijau" />
             <span className="text-[11.5px] leading-relaxed text-tinta-3">
-              <strong className="block font-bold text-tinta">Kamu sudah ikut pesan</strong>
-              Menunggu warga lain untuk memenuhi target bersama. Kami akan beri tahu begitu
-              targetnya terpenuhi.
+              <strong className="block font-bold text-tinta">
+                Kamu sudah ikut pesan
+              </strong>
+              Menunggu warga lain untuk memenuhi target bersama. Kami akan beri
+              tahu begitu targetnya terpenuhi.
             </span>
           </p>
         )}
 
         {habis && !penuh && (
           <p className="mt-3 flex gap-2.5 rounded-[14px] bg-amber/12 p-3.5">
-            <TriangleAlert size={15} className="mt-px shrink-0 text-amber-tua" />
+            <TriangleAlert
+              size={15}
+              className="mt-px shrink-0 text-amber-tua"
+            />
             <span className="text-[11.5px] leading-relaxed text-tinta-3">
-              <strong className="block font-bold text-tinta">Waktu habis</strong>
+              <strong className="block font-bold text-tinta">
+                Waktu habis
+              </strong>
               {sayaPemilik
                 ? `Sampai batas waktu cuma ${titik.peserta.length} warga yang bergabung. Permintaan ini ditutup dan tidak perlu didatangi.`
                 : "Target tidak terpenuhi sampai batas waktu. Titik kumpul ini akan ditutup."}
@@ -268,13 +285,7 @@ export function DetailTitikKumpul({ id }: { id: string }) {
           </p>
         )}
 
-        {/* Tindakan di kaki layar.
-
-            Urutan cabangnya memeriksa "dijemput" dan "selesai" lebih dulu
-            daripada `penuh`, karena `penuh` cuma menghitung peserta dan
-            tetap benar setelah pedagang berangkat. Kalau `penuh` diperiksa
-            duluan, titik kumpul yang sudah dijemput akan kembali menawarkan
-            tombol berangkat. */}
+        {/* Tindakan di kaki layar. */}
         <div className="mt-auto pt-5">
           {sayaPemilik ? (
             beres ? (
@@ -303,11 +314,7 @@ export function DetailTitikKumpul({ id }: { id: string }) {
                 Sudah lewat batas waktu
               </p>
             ) : !penuh ? (
-              /* Pedagang baru dipanggil setelah warganya terkumpul cukup,
-                 jadi yang belum tercapai tidak menawarkan tombol berangkat.
-                 Cabang ini tidak dilewati dari beranda, yang memang sudah
-                 menyaringnya; ia menjaga jalan masuk lain, misalnya tautan
-                 lama di kabar atau riwayat peramban. */
+              /* Pedagang baru dipanggil setelah warganya terkumpul cukup, jadi yang belum tercapai tidak menawarkan tombol berangkat. */
               <p className="flex items-center justify-center gap-2 rounded-[14px] bg-tinta-5/12 py-3.5 text-[13px] font-semibold text-tinta-3">
                 <Info size={15} />
                 Menunggu warga terkumpul ({titik.peserta.length}/{titik.target})
@@ -329,13 +336,21 @@ export function DetailTitikKumpul({ id }: { id: string }) {
                 <Navigation size={15} />
                 {pedagang?.nama} sedang menuju lokasi
               </p>
-              <Tombol rupa="garis" penuh onClick={() => router.push(`/kolab/${titik.id}/rute`)}>
+              <Tombol
+                rupa="garis"
+                penuh
+                onClick={() => router.push(`/kolab/${titik.id}/rute`)}
+              >
                 <MapPin size={16} strokeWidth={2.3} />
                 Lihat Lokasi Titik Kumpul
               </Tombol>
             </div>
           ) : penuh ? (
-            <Tombol rupa="amber" penuh onClick={() => router.push(`/kolab/${titik.id}/rute`)}>
+            <Tombol
+              rupa="amber"
+              penuh
+              onClick={() => router.push(`/kolab/${titik.id}/rute`)}
+            >
               <Navigation size={16} strokeWidth={2.3} />
               Arahkan Saya ke Lokasi Titik Kumpul
             </Tombol>

@@ -4,7 +4,15 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronRight, ChevronUp, MapPin, Navigation, Users, Zap } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  MapPin,
+  Navigation,
+  Users,
+  Zap,
+} from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Lembar } from "@/komponen/ui/lembar";
 import { TombolTaut } from "@/komponen/ui/tombol";
@@ -12,7 +20,12 @@ import { Lonceng } from "@/komponen/ui/lonceng";
 import { PilMelayang } from "@/komponen/nav/pil-melayang";
 import { SLUG_GEROBAK_SAYA, gerobakSaya } from "@/lib/data/pedagang";
 import { rp } from "@/lib/format";
-import { labelStatusTitik, menitTempuh, menungguPedagang, statusTitik } from "@/lib/kolab";
+import {
+  labelStatusTitik,
+  menitTempuh,
+  menungguPedagang,
+  statusTitik,
+} from "@/lib/kolab";
 import { pendapatanHari } from "@/lib/rekap";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
@@ -21,7 +34,6 @@ import { useSekarang } from "@/lib/waktu";
 function sisaMenit(menitLalu: number): number {
   return Math.max(1, 10 - Math.floor(menitLalu / 4));
 }
-
 
 export function BerandaPedagang() {
   const router = useRouter();
@@ -39,45 +51,34 @@ export function BerandaPedagang() {
   const [ringkasTerbuka, setRingkasTerbuka] = React.useState(false);
 
   const baru = pesananMasuk.filter((p) => p.status === "baru");
-  /* Kartu navigasi melayang hanya muncul untuk pesanan yang benar-benar
-     sedang diantar, yaitu setelah pedagang menekan "Terima & Berangkat".
-     Pesanan yang baru diterima tapi masih disiapkan tidak menampilkannya:
-     tidak ada yang perlu dinavigasikan kalau gerobaknya belum jalan. */
+  /* Kartu navigasi melayang hanya muncul untuk pesanan yang benar-benar sedang diantar, yaitu setelah pedagang menekan "Terima & Berangkat". */
   const sedangDiantar = pesananMasuk.find((p) => p.status === "diantar");
   const selesai = pesananMasuk.filter((p) => p.status === "selesai");
-  const milikSaya = titikKumpul.filter((t) => t.pedagangSlug === SLUG_GEROBAK_SAYA);
+  const milikSaya = titikKumpul.filter(
+    (t) => t.pedagangSlug === SLUG_GEROBAK_SAYA,
+  );
 
-  /* Pemasukan hari ini, dihitung dari pesanan yang sudah ditandai selesai
-     hari ini saja. Riwayat hari sebelumnya sengaja tidak ikut: lembar ini
-     judulnya "Pesanan Hari Ini", dan angka yang mengaku hari ini tapi
-     memuat kemarin adalah angka yang berbohong. */
+  /* Pemasukan hari ini, dihitung dari pesanan yang sudah ditandai selesai hari ini saja. */
   const sekarang = useSekarang();
-  const masukHariIni = sekarang === null ? 0 : pendapatanHari(pesananMasuk, sekarang, 0);
+  const masukHariIni =
+    sekarang === null ? 0 : pendapatanHari(pesananMasuk, sekarang, 0);
 
-  /* Yang dihitung cuma permintaan yang masih menunggu pedagang. Titik
-     kumpul yang sudah dijemput, sudah selesai, atau hangus karena tidak
-     memenuhi target bukan lagi pekerjaan yang tersisa, dan menghitungnya
-     membuat ajakan "ada N permintaan" mengaku ada kerjaan yang sebenarnya
-     sudah beres. Kesalahan yang sama pernah ada pada label jumlah
-     pedagang aktif di peta. */
-  const permintaan = milikSaya.filter((t) => menungguPedagang(t, sekarang)).length;
+  /* Yang dihitung cuma permintaan yang masih menunggu pedagang. */
+  const permintaan = milikSaya.filter((t) =>
+    menungguPedagang(t, sekarang),
+  ).length;
 
-  /* Daftarnya cuma memuat yang sudah tercapai, jadi setiap kotak yang
-     terlihat adalah permintaan yang benar-benar bisa diketuk dan
-     diterima. Begitu diterima, kotaknya keluar dari daftar dan pindah ke
-     kartu melayang di bawah, tempat yang sama dengan pesanan yang sedang
-     diantar. Tanpa kartu itu, menerima berarti kehilangan jejaknya:
-     "Selesaikan" tidak akan bisa dijangkau lagi. */
+  /* Daftarnya cuma memuat yang sudah tercapai, jadi setiap kotak yang terlihat adalah permintaan yang benar-benar bisa diketuk dan diterima. */
   const tampil = milikSaya.filter((t) => menungguPedagang(t, sekarang));
-  const sedangDijemput = milikSaya.find((t) => statusTitik(t, sekarang) === "dijemput");
+  const sedangDijemput = milikSaya.find(
+    (t) => statusTitik(t, sekarang) === "dijemput",
+  );
 
   return (
     <Layar
       nav
       peran="pedagang"
-      /* Pesanan perorangan didahulukan kalau keduanya berjalan: ia punya
-         satu warga yang menunggu di alamatnya sendiri, sedangkan titik
-         kumpul sudah berkumpul dan bisa menunggu sebentar. */
+      /* Pesanan perorangan didahulukan kalau keduanya berjalan: ia punya satu warga yang menunggu di alamatnya sendiri, sedangkan titik kumpul sudah berkumpul dan bisa menunggu sebentar. */
       melayang={
         sedangDiantar ? (
           <PilMelayang
@@ -99,12 +100,20 @@ export function BerandaPedagang() {
       }
       /* Rekap pesanan hari ini. */
       lembar={
-        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul="Pesanan Hari Ini">
+        <Lembar
+          buka={lembarBuka}
+          tutup={() => setLembarBuka(false)}
+          judul="Pesanan Hari Ini"
+        >
           <div className="px-4 pb-6">
-            <h2 className="tulisan-judul text-[16px] font-extrabold text-tinta">Pesanan Hari Ini</h2>
+            <h2 className="tulisan-judul text-[16px] font-extrabold text-tinta">
+              Pesanan Hari Ini
+            </h2>
             <p className="mt-0.5 text-[11.5px] text-tinta-4">
               {selesai.length} pesanan berhasil ·{" "}
-              <strong className="font-bold text-hijau">{rp(masukHariIni)}</strong>
+              <strong className="font-bold text-hijau">
+                {rp(masukHariIni)}
+              </strong>
             </p>
 
             <ul className="mt-3 flex flex-col gap-2">
@@ -128,7 +137,11 @@ export function BerandaPedagang() {
                               : "bg-biru-lembut text-biru"
                         }`}
                       >
-                        {p.status === "selesai" ? "Selesai" : p.status === "diproses" ? "Diproses" : "Baru"}
+                        {p.status === "selesai"
+                          ? "Selesai"
+                          : p.status === "diproses"
+                            ? "Diproses"
+                            : "Baru"}
                       </span>
                     </p>
                     <p className="mt-0.5 text-[11px] text-tinta-3">
@@ -167,11 +180,7 @@ export function BerandaPedagang() {
         <Lonceng />
       </header>
 
-      {/* Bantalan bawah dipasang untuk KEDUA jenis pil melayang. Pil itu
-          menumpang di atas isi halaman, jadi tanpa bantalan ini kartu
-          terakhir berhenti di bawahnya dan tidak bisa digulung lepas.
-          Tinggi pilnya 111px ditambah jarak 12px dari navigasi; pb-32
-          (128px) menyisakan ruang lebih. */}
+      {/* Bantalan bawah dipasang untuk KEDUA jenis pil melayang. */}
       <div
         className="px-4 pb-4 data-[melayang]:pb-32"
         data-melayang={sedangDiantar || sedangDijemput ? "" : undefined}
@@ -222,26 +231,23 @@ export function BerandaPedagang() {
           {/* Ketika tutup, ajakan berisi alasan konkret untuk membuka. */}
           {!buka && permintaan > 0 && (
             <p className="mt-3 flex items-start gap-2 rounded-[12px] bg-white/10 px-3 py-2.5 text-[11.5px] leading-snug text-white/80">
-              <Zap size={14} strokeWidth={2.2} className="mt-px shrink-0 text-amber" />
+              <Zap
+                size={14}
+                strokeWidth={2.2}
+                className="mt-px shrink-0 text-amber"
+              />
               <span>
-                Ada <strong className="font-bold text-white">{permintaan} permintaan titik kumpul</strong>.
-                Aktifkan gerobak untuk mulai menerima pesanan!
+                Ada{" "}
+                <strong className="font-bold text-white">
+                  {permintaan} permintaan titik kumpul
+                </strong>
+                . Aktifkan gerobak untuk mulai menerima pesanan!
               </span>
             </p>
           )}
         </section>
 
-        {/* Ringkasan pesanan hari ini.
-
-            Sebelumnya kartu ini hanya memuat satu angka besar berisi total
-            pesanan, dan sisanya ruang kosong. Angka itu sendiri tidak
-            memberi tahu apa pun yang bisa ditindaklanjuti: yang ingin
-            diketahui pedagang saat membuka aplikasi adalah berapa yang
-            menunggu dijawab, berapa yang sedang di jalan, dan berapa yang
-            sudah kelar. Ketiganya sudah ada di data yang sama, jadi ruang
-            itu diisi tiga angka itu — bukan komponen baru, hanya isi yang
-            sebelumnya terbuang. Perilakunya tidak berubah: tetap satu
-            tombol yang membuka lembar rekap. */}
+        {/* Ringkasan pesanan hari ini. */}
         <button
           type="button"
           onClick={() => {
@@ -253,7 +259,11 @@ export function BerandaPedagang() {
         >
           {[
             { nilai: baru.length, label: "Baru", warna: "text-biru" },
-            { nilai: pesananMasuk.filter((p) => p.status === "diantar").length, label: "Diantar", warna: "text-amber-tua" },
+            {
+              nilai: pesananMasuk.filter((p) => p.status === "diantar").length,
+              label: "Diantar",
+              warna: "text-amber-tua",
+            },
             { nilai: selesai.length, label: "Selesai", warna: "text-hijau" },
             {
               nilai: pesananMasuk.filter((p) => p.status === "ditolak").length,
@@ -262,9 +272,15 @@ export function BerandaPedagang() {
             },
           ].map(({ nilai, label, warna }, i) => (
             <span key={label} className="flex flex-1 items-center">
-              {i > 0 && <span aria-hidden className="h-8 w-px shrink-0 bg-garis" />}
+              {i > 0 && (
+                <span aria-hidden className="h-8 w-px shrink-0 bg-garis" />
+              )}
               <span className="flex flex-1 flex-col items-center">
-                <span className={`text-[21px] font-extrabold leading-none ${warna}`}>{nilai}</span>
+                <span
+                  className={`text-[21px] font-extrabold leading-none ${warna}`}
+                >
+                  {nilai}
+                </span>
                 <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
                   {label}
                 </span>
@@ -272,7 +288,11 @@ export function BerandaPedagang() {
             </span>
           ))}
           <span aria-hidden className="shrink-0 pr-1 text-tinta-5">
-            {ringkasTerbuka ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {ringkasTerbuka ? (
+              <ChevronUp size={16} />
+            ) : (
+              <ChevronDown size={16} />
+            )}
           </span>
         </button>
 
@@ -286,7 +306,10 @@ export function BerandaPedagang() {
               </span>
             )}
           </h2>
-          <Link href="/d/pesanan" className="text-[12px] font-semibold text-hijau-terang">
+          <Link
+            href="/d/pesanan"
+            className="text-[12px] font-semibold text-hijau-terang"
+          >
             Lihat semua →
           </Link>
         </div>
@@ -316,11 +339,7 @@ export function BerandaPedagang() {
               </div>
 
               <div className="mt-3 flex gap-2">
-                {/* Menolak menyetel `ditolak`, bukan `selesai`. Dulu tombol
-                    ini menyetel `selesai`, dan sejak Buku Kas ada, pesanan
-                    yang ditolak ikut distempel waktu selesai lalu terhitung
-                    sebagai pemasukan hari itu: menolak pesanan justru
-                    menaikkan omzet. */}
+                {/* Menolak menyetel `ditolak`, bukan `selesai`. */}
                 <button
                   type="button"
                   onClick={() => ubahStatusMasuk(p.id, "ditolak")}
@@ -350,7 +369,6 @@ export function BerandaPedagang() {
           )}
         </ul>
 
-
         {/* Permintaan titik kumpul */}
         <div className="mt-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
@@ -365,35 +383,37 @@ export function BerandaPedagang() {
 
         <ul className="mt-2.5 flex flex-col gap-2.5">
           {tampil.map((t) => (
-              /* Kartunya tautan, bukan kotak diam. Sebelumnya ia
-                 memperlihatkan permintaan yang sedang menunggu tapi tidak
-                 bisa ditekan, sehingga pedagang tidak punya cara melihat
-                 siapa saja yang sudah bergabung atau ikut berunding di
-                 obrolannya. */
-              <li key={t.id}>
-                <Link
-                  href={`/kolab/${t.id}`}
-                  className="bayang-kartu flex items-center gap-2.5 rounded-[14px] border border-garis bg-white p-3 transition-transform active:scale-[0.99]"
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-1.5 text-[13.5px] font-bold text-tinta">
-                      <Users size={14} strokeWidth={2.1} className="shrink-0 text-hijau" />
-                      {t.nama}
-                    </span>
-                    <span className="mt-0.5 block text-[11px] text-tinta-4">
-                      {t.peserta.length}/{t.target} warga · {t.patokan}
-                    </span>
+            /* Kartunya tautan, bukan kotak diam. */
+            <li key={t.id}>
+              <Link
+                href={`/kolab/${t.id}`}
+                className="bayang-kartu flex items-center gap-2.5 rounded-[14px] border border-garis bg-white p-3 transition-transform active:scale-[0.99]"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-1.5 text-[13.5px] font-bold text-tinta">
+                    <Users
+                      size={14}
+                      strokeWidth={2.1}
+                      className="shrink-0 text-hijau"
+                    />
+                    {t.nama}
                   </span>
-                  {/* Statusnya ikut ditulis supaya yang sudah dijemput atau
-                      selesai tidak terlihat sama dengan yang masih menunggu
-                      keputusan. */}
-                  <span className="shrink-0 rounded-pil bg-hijau-lembut px-2 py-0.5 text-[10px] font-bold text-hijau">
-                    {labelStatusTitik[statusTitik(t, sekarang)]}
+                  <span className="mt-0.5 block text-[11px] text-tinta-4">
+                    {t.peserta.length}/{t.target} warga · {t.patokan}
                   </span>
-                  <ChevronRight size={16} className="shrink-0 text-tinta-5" aria-hidden />
-                </Link>
-              </li>
-            ))}
+                </span>
+                {/* Statusnya ikut ditulis supaya yang sudah dijemput atau selesai tidak terlihat sama dengan yang masih menunggu keputusan. */}
+                <span className="shrink-0 rounded-pil bg-hijau-lembut px-2 py-0.5 text-[10px] font-bold text-hijau">
+                  {labelStatusTitik[statusTitik(t, sekarang)]}
+                </span>
+                <ChevronRight
+                  size={16}
+                  className="shrink-0 text-tinta-5"
+                  aria-hidden
+                />
+              </Link>
+            </li>
+          ))}
           {tampil.length === 0 && (
             <li className="rounded-[14px] border border-dashed border-garis bg-white px-4 py-6 text-center text-[12px] text-tinta-4">
               Tidak ada permintaan titik kumpul yang menunggu keputusanmu.
@@ -401,7 +421,6 @@ export function BerandaPedagang() {
           )}
         </ul>
       </div>
-
     </Layar>
   );
 }

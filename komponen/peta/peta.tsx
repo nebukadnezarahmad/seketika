@@ -11,14 +11,7 @@ export type Tanda = {
   label?: { judul: string; isi: string };
 };
 
-/**
- * Kartu peta.
- *
- * Latarnya gambar peta yang sama dengan yang dipakai di berkas desain,
- * dan pin ditempatkan di atasnya memakai persen, bukan piksel, supaya
- * letaknya tetap benar ketika lebar layar berubah. Pin dijangkarkan
- * pada ujung bawahnya karena di situlah letak yang ia tunjuk.
- */
+/** Kartu peta. */
 export function Peta({
   tanda = [],
   saya,
@@ -36,12 +29,7 @@ export function Peta({
   tinggi?: number;
   /** Memenuhi seluruh induknya alih-alih memakai tinggi tetap. */
   penuh?: boolean;
-  /**
-   * Tandai kalau peta ini gambar terbesar di layarnya, sehingga layak
-   * dimuat lebih awal. Jangan dinyalakan pada peta kecil yang muncul di
-   * tengah halaman: preload-nya justru berebut jalur dengan gambar lain
-   * yang lebih dulu terlihat.
-   */
+  /** Tandai kalau peta ini gambar terbesar di layarnya, sehingga layak dimuat lebih awal. */
   utama?: boolean;
   /** Menampilkan lencana "N pedagang aktif" di kiri atas. */
   jumlahAktif?: number;
@@ -70,12 +58,15 @@ export function Peta({
           style={{ left: `${t.x}%`, top: `${t.y}%` }}
         >
           {t.rupa === "kumpul" ? <PinKumpul /> : <PinPedagang />}
-          {/* Label menggantung di bawah pin tanpa menambah tinggi kotaknya,
-              supaya ujung pin tetap menunjuk titik yang benar. */}
+          {/* Label menggantung di bawah pin tanpa menambah tinggi kotaknya, supaya ujung pin tetap menunjuk titik yang benar. */}
           {t.label && (
             <div className="absolute top-full mt-0.5 whitespace-nowrap rounded-[10px] bg-white/95 px-2 py-1 text-center shadow-[0_2px_8px_rgb(0_0_0/0.12)]">
-              <p className="text-[10.5px] font-bold leading-tight text-tinta">{t.label.judul}</p>
-              <p className="mt-px text-[9.5px] leading-tight text-tinta-4">{t.label.isi}</p>
+              <p className="text-[10.5px] font-bold leading-tight text-tinta">
+                {t.label.judul}
+              </p>
+              <p className="mt-px text-[9.5px] leading-tight text-tinta-4">
+                {t.label.isi}
+              </p>
             </div>
           )}
         </div>
@@ -106,7 +97,9 @@ export function Peta({
             <span className="absolute -top-[1.5px] left-[-1px] h-1 w-px bg-tinta-2" />
             <span className="absolute -top-[1.5px] right-0 h-1 w-px bg-tinta-2" />
           </span>
-          <span className="text-[8px] font-medium leading-3 tracking-[0.4px] text-tinta-6">100m</span>
+          <span className="text-[8px] font-medium leading-3 tracking-[0.4px] text-tinta-6">
+            100m
+          </span>
         </div>
       )}
 

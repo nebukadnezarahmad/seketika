@@ -4,14 +4,7 @@ import * as React from "react";
 import { Lembar } from "@/komponen/ui/lembar";
 import { Tombol } from "@/komponen/ui/tombol";
 
-/**
- * Lembar berisi formulir pendek untuk mengubah beberapa kolom.
- *
- * Dipakai di kedua layar profil. Formulirnya berbeda isi tapi sama
- * kerangkanya: judul, beberapa kolom, satu tombol simpan. Menyalin
- * kerangka itu ke tiap layar berarti tiap perbaikan pada jarak, ukuran
- * huruf, atau perilaku simpannya harus diketik ulang di semua tempat.
- */
+/** Lembar berisi formulir pendek untuk mengubah beberapa kolom. */
 export function LembarUbah({
   buka,
   tutup,
@@ -33,9 +26,13 @@ export function LembarUbah({
   return (
     <Lembar buka={buka} tutup={tutup} judul={judul}>
       <div className="px-4 pb-6 pt-1">
-        <h2 className="tulisan-judul text-[18px] font-extrabold text-tinta">{judul}</h2>
+        <h2 className="tulisan-judul text-[18px] font-extrabold text-tinta">
+          {judul}
+        </h2>
         {keterangan && (
-          <p className="mt-1 text-[12px] leading-relaxed text-tinta-4">{keterangan}</p>
+          <p className="mt-1 text-[12px] leading-relaxed text-tinta-4">
+            {keterangan}
+          </p>
         )}
 
         <div className="mt-4 flex flex-col gap-3">{children}</div>
@@ -79,7 +76,9 @@ export function Kolom({
 
   return (
     <label className="block">
-      <span className="block text-[11.5px] font-semibold text-tinta-3">{label}</span>
+      <span className="block text-[11.5px] font-semibold text-tinta-3">
+        {label}
+      </span>
       {banyakBaris ? (
         <textarea
           value={nilai}
@@ -98,7 +97,9 @@ export function Kolom({
           className={kelas}
         />
       )}
-      {salah && <span className="mt-1 block text-[11px] text-merah">{salah}</span>}
+      {salah && (
+        <span className="mt-1 block text-[11px] text-merah">{salah}</span>
+      )}
     </label>
   );
 }

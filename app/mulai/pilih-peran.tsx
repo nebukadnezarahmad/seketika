@@ -6,7 +6,12 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Check, House, ShoppingBag } from "lucide-react";
 import { BilahStatus } from "@/komponen/ui/bilah-status";
 import { Tombol } from "@/komponen/ui/tombol";
-import { JudulLangkah, KakiVersi, Kicker, TitikLangkah } from "@/komponen/ui/langkah";
+import {
+  JudulLangkah,
+  KakiVersi,
+  Kicker,
+  TitikLangkah,
+} from "@/komponen/ui/langkah";
 import type { Peran } from "@/lib/tipe";
 
 const pilihan = [
@@ -26,10 +31,7 @@ const pilihan = [
   },
 ];
 
-/* Kedua peran sama-sama gratis dan tanpa komisi, jadi janji ini muncul
-   pada kartu mana pun yang sedang dipilih, bukan menempel pada salah
-   satunya. Begitu pula di rancangan: bingkai varian "Langkah 1 - Membeli"
-   menampilkannya pada kartu pembeli. */
+/* Kedua peran sama-sama gratis dan tanpa komisi, jadi janji ini muncul pada kartu mana pun yang sedang dipilih, bukan menempel pada salah satunya. */
 const janji = ["Gratis daftar", "Tanpa komisi"];
 
 export function PilihPeran() {
@@ -60,7 +62,8 @@ export function PilihPeran() {
           <Kicker anak="LANGKAH 1 DARI 3" />
           <JudulLangkah anak="Selamat Datang!" />
           <p className="mt-2 text-[13px] leading-relaxed text-tinta-3">
-            Pilih peranmu untuk mulai menjelajahi komunitas jajanan keliling terdekat.
+            Pilih peranmu untuk mulai menjelajahi komunitas jajanan keliling
+            terdekat.
           </p>
         </div>
 
@@ -98,21 +101,21 @@ export function PilihPeran() {
                     <span className="inline-block rounded-[6px] bg-hijau-lembut px-1.5 py-0.5 text-[9px] font-bold tracking-[0.1em] text-hijau">
                       {tag}
                     </span>
-                    <span className="mt-1.5 block text-[14.5px] font-bold text-tinta">{judul}</span>
-                    <span className="mt-1 block text-[12px] leading-[1.45] text-tinta-3">{isi}</span>
+                    <span className="mt-1.5 block text-[14.5px] font-bold text-tinta">
+                      {judul}
+                    </span>
+                    <span className="mt-1 block text-[12px] leading-[1.45] text-tinta-3">
+                      {isi}
+                    </span>
 
-                    {/* Baris janji tumbuh dari tinggi nol, bukan muncul
-                        seketika, supaya kartunya terasa memuai saat dipilih.
-                        `grid-rows` dianimasikan karena `height: auto` tidak
-                        bisa ditransisikan. */}
+                    {/* Baris janji tumbuh dari tinggi nol, bukan muncul seketika, supaya kartunya terasa memuai saat dipilih. */}
                     <span
-                      /* Saat mengerut, barisnya juga disembunyikan dari
-                         pembaca layar. Tanpa ini kedua kartu sama-sama
-                         membacakan "Gratis daftar, Tanpa komisi" walau
-                         hanya satu yang terlihat. */
+                      /* Saat mengerut, barisnya juga disembunyikan dari pembaca layar. */
                       aria-hidden={!aktif}
                       className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
-                        aktif ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                        aktif
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0"
                       }`}
                     >
                       <span className="overflow-hidden">

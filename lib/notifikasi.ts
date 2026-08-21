@@ -2,21 +2,7 @@ import { menungguPedagang, statusTitik } from "@/lib/kolab";
 import { rp, totalBaris } from "@/lib/format";
 import type { Peran, Pesanan, PesananMasuk, TitikKumpul } from "@/lib/tipe";
 
-/**
- * Pemberitahuan dibentuk dari keadaan yang sudah ada, bukan disimpan.
- *
- * Menyimpan pemberitahuan sebagai daftar tersendiri berarti ada dua
- * sumber untuk satu kenyataan: status pesanan di satu tempat, kalimat
- * yang menceritakannya di tempat lain. Begitu salah satu berubah tanpa
- * yang lain, aplikasinya mengabarkan sesuatu yang tidak lagi benar —
- * "pesanan selesai" pada pesanan yang sudah dibatalkan.
- *
- * Karena diturunkan, idnya harus tetap sama selama keadaan yang
- * melahirkannya sama. Id itulah yang dipakai menandai sudah dibaca; kalau
- * ia berubah tiap render, lencananya tidak akan pernah bisa dipadamkan.
- * Itu sebabnya id disusun dari id sumber dan keadaannya, bukan dari waktu
- * atau nomor urut.
- */
+/** Pemberitahuan dibentuk dari keadaan yang sudah ada, bukan disimpan. */
 export type Nada = "hijau" | "biru" | "amber" | "merah" | "ungu";
 
 export type Pemberitahuan = {
@@ -68,9 +54,7 @@ export function pemberitahuanPembeli(
         href: `/kolab/${t.id}`,
       });
     } else if (keadaan === "hangus" && ikut) {
-      /* Yang hangus hanya dikabarkan kepada yang ikut. Warga yang tidak
-         pernah bergabung tidak perlu diberi tahu bahwa sesuatu yang tidak
-         diikutinya sudah lewat. */
+      /* Yang hangus hanya dikabarkan kepada yang ikut. */
       daftar.push({
         id: `tk-${t.id}-hangus`,
         judul: "Titik kumpul hangus",
@@ -106,10 +90,7 @@ export function pemberitahuanPedagang(
 
   for (const t of titikKumpul) {
     if (t.pedagangSlug !== slugGerobak) continue;
-    /* Hanya yang targetnya sudah tercapai. Sebelumnya setiap titik kumpul
-       milik gerobak ini dikabarkan tanpa melihat statusnya, jadi yang
-       masih mengumpulkan sudah memanggil pedagang sebelum warganya cukup,
-       dan yang sudah diselesaikan tetap mengabari selamanya. */
+    /* Hanya yang targetnya sudah tercapai. */
     if (!menungguPedagang(t, sekarang)) continue;
     daftar.push({
       id: `tk-${t.id}-permintaan`,
@@ -134,6 +115,11 @@ export function pemberitahuan(
   sekarang: number | null,
 ): Pemberitahuan[] {
   return peran === "pedagang"
-    ? pemberitahuanPedagang(sumber.pesananMasuk, sumber.titikKumpul, sumber.slugGerobak, sekarang)
+    ? pemberitahuanPedagang(
+        sumber.pesananMasuk,
+        sumber.titikKumpul,
+        sumber.slugGerobak,
+        sekarang,
+      )
     : pemberitahuanPembeli(sumber.pesanan, sumber.titikKumpul, sekarang);
 }

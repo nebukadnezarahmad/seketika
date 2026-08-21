@@ -18,7 +18,9 @@ test.describe("Kelola menu", () => {
     await expect(page.getByText("6 dari 6 menu menyala")).toBeVisible();
 
     await page.goto("/pedagang/bakso-pak-anton/menu");
-    await expect(page.getByRole("button", { name: /Bakso Urat Jumbo/ })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: /Bakso Urat Jumbo/ }),
+    ).toBeVisible();
     await expect(page.getByText("Rp 28.000")).toBeVisible();
   });
 
@@ -29,8 +31,7 @@ test.describe("Kelola menu", () => {
 
     await expect(lembar.getByText("Nama menu belum diisi.")).toBeVisible();
     await expect(lembar.getByText("Harga harus lebih dari nol.")).toBeVisible();
-    /* Lembarnya tetap terbuka; menutupnya diam-diam berarti isian yang
-       ditolak hilang tanpa penjelasan. */
+    /* Lembarnya tetap terbuka; menutupnya diam-diam berarti isian yang ditolak hilang tanpa penjelasan. */
     await expect(lembar).toBeVisible();
   });
 
@@ -51,11 +52,15 @@ test.describe("Kelola menu", () => {
 
     await lembar.getByRole("button", { name: /Hapus Menu/ }).click();
     /* Ketukan pertama cuma memunculkan penegasan, belum menghapus. */
-    await expect(lembar.getByText(/Hapus Bakso Ikan dari daftar menu/)).toBeVisible();
+    await expect(
+      lembar.getByText(/Hapus Bakso Ikan dari daftar menu/),
+    ).toBeVisible();
 
     await lembar.getByRole("button", { name: "Ya, hapus" }).click();
     await expect(page.getByText("4 dari 4 menu menyala")).toBeVisible();
-    await expect(page.getByRole("button", { name: /Bakso Ikan/ })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /Bakso Ikan/ })).toHaveCount(
+      0,
+    );
   });
 });
 
@@ -77,7 +82,9 @@ test.describe("Tombol pada tab profil", () => {
     await expect(page.getByText("Jalan Kenanga No.7")).toBeVisible();
   });
 
-  test("bantuan dan tentang aplikasi punya isi, bukan tautan mati", async ({ page }) => {
+  test("bantuan dan tentang aplikasi punya isi, bukan tautan mati", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pembeli", "Dewi");
     await page.goto("/profil");
 
@@ -101,8 +108,14 @@ test.describe("Tombol pada tab profil", () => {
     await expect(page.getByText("06.30 - 21.00")).toBeVisible();
 
     await page.getByRole("button", { name: /Area Jangkauan/ }).click();
-    await page.getByRole("dialog").getByLabel("Kawasan").fill("Perum Griya Asri");
-    await page.getByRole("dialog").getByRole("button", { name: "Simpan" }).click();
+    await page
+      .getByRole("dialog")
+      .getByLabel("Kawasan")
+      .fill("Perum Griya Asri");
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: "Simpan" })
+      .click();
     await expect(page.getByText("Perum Griya Asri")).toBeVisible();
   });
 
@@ -113,19 +126,25 @@ test.describe("Tombol pada tab profil", () => {
 
     const lembar = page.getByRole("dialog");
     await expect(lembar.getByRole("img")).toHaveCount(6);
-    await expect(lembar.getByText(/belum tersedia pada purwarupa/)).toBeVisible();
+    await expect(
+      lembar.getByText(/belum tersedia pada purwarupa/),
+    ).toBeVisible();
   });
 });
 
 test.describe("Penilaian terlihat di kedua sisi", () => {
-  test("bintang muncul di riwayat pesanan dan di halaman toko", async ({ page }) => {
+  test("bintang muncul di riwayat pesanan dan di halaman toko", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pembeli", "Dewi");
 
     await page.goto("/pesanan");
     await expect(page.getByText("Belum dinilai").first()).toBeVisible();
 
     await page.goto("/pesanan/ord-002");
-    await page.getByRole("radio", { name: /^5 bintang/ }).check({ force: true });
+    await page
+      .getByRole("radio", { name: /^5 bintang/ })
+      .check({ force: true });
     await page.getByRole("button", { name: "Kirim Penilaian" }).click();
 
     await page.goto("/pesanan");
@@ -133,26 +152,28 @@ test.describe("Penilaian terlihat di kedua sisi", () => {
   });
 });
 
-test("permintaan titik kumpul di beranda pedagang bisa dibuka", async ({ page }) => {
+test("permintaan titik kumpul di beranda pedagang bisa dibuka", async ({
+  page,
+}) => {
   await lewatiPengenalan(page, "pedagang", "Pak Anton");
   await page.getByRole("link", { name: /RT 02 Taman Bermain/ }).click();
   await page.waitForURL(/\/kolab\/tk-/);
-  /* Judulnya "Permintaan", bukan "Detail": yang membuka adalah pedagang
-     pemilik gerobaknya, dan baginya ini pekerjaan yang menunggu diputus,
-     bukan lapak yang sedang ditimbang untuk diikuti. Sisi warga tetap
-     memakai "Detail Titik Kumpul", dikunci di uji/titik-kumpul.spec.ts. */
-  await expect(page.getByRole("heading", { name: "Permintaan Titik Kumpul" })).toBeVisible();
+  /* Judulnya "Permintaan", bukan "Detail": yang membuka adalah pedagang pemilik gerobaknya, dan baginya ini pekerjaan yang menunggu diputus, bukan lapak yang sedang ditimbang untuk diikuti. */
+  await expect(
+    page.getByRole("heading", { name: "Permintaan Titik Kumpul" }),
+  ).toBeVisible();
 });
 
 test.describe("Slot foto menu", () => {
-  /* PNG 1x1 piksel, cukup untuk membuktikan berkasnya benar-benar dibaca,
-     dikecilkan lewat kanvas, lalu disimpan sebagai data URL. */
+  /* PNG 1x1 piksel, cukup untuk membuktikan berkasnya benar-benar dibaca, dikecilkan lewat kanvas, lalu disimpan sebagai data URL. */
   const PIKSEL = Buffer.from(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
     "base64",
   );
 
-  test("foto yang diunggah terpakai di sisi pedagang dan warga", async ({ page }) => {
+  test("foto yang diunggah terpakai di sisi pedagang dan warga", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
     await page.goto("/d/menu");
 
@@ -166,17 +187,19 @@ test.describe("Slot foto menu", () => {
       buffer: PIKSEL,
     });
     /* Setelah ada foto sendiri, jalan kembali ke bawaan ikut muncul. */
-    await expect(lembar.getByRole("button", { name: /Kembalikan foto bawaan/ })).toBeVisible();
+    await expect(
+      lembar.getByRole("button", { name: /Kembalikan foto bawaan/ }),
+    ).toBeVisible();
     await lembar.getByRole("button", { name: "Simpan Perubahan" }).click();
 
     const fotoTersimpan = await page.evaluate(() => {
       const s = JSON.parse(localStorage.getItem("seketika") ?? "{}");
-      return Object.values(s.state?.fotoMenuSaya ?? {})[0] as string | undefined;
+      return Object.values(s.state?.fotoMenuSaya ?? {})[0] as
+        string | undefined;
     });
     expect(fotoTersimpan?.startsWith("data:image/jpeg")).toBe(true);
 
-    /* Dikecilkan, bukan disimpan mentah: satu foto tidak boleh mendekati
-       kuota penyimpanan peramban yang cuma sekitar lima megabita. */
+    /* Dikecilkan, bukan disimpan mentah: satu foto tidak boleh mendekati kuota penyimpanan peramban yang cuma sekitar lima megabita. */
     expect(fotoTersimpan!.length).toBeLessThan(200_000);
 
     await page.goto("/pedagang/bakso-pak-anton/menu");
@@ -195,7 +218,9 @@ test.describe("Slot foto menu", () => {
       mimeType: "text/plain",
       buffer: Buffer.from("bukan gambar"),
     });
-    await expect(lembar.getByText("Berkasnya harus berupa gambar.")).toBeVisible();
+    await expect(
+      lembar.getByText("Berkasnya harus berupa gambar."),
+    ).toBeVisible();
   });
 });
 
@@ -204,23 +229,31 @@ test.describe("Grafik tujuh hari bisa diketuk", () => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
     await page.goto("/d/rekap");
 
-    const grafik = page.locator("section").filter({ hasText: "Tujuh Hari Terakhir" });
+    const grafik = page
+      .locator("section")
+      .filter({ hasText: "Tujuh Hari Terakhir" });
     await expect(page.getByText("Menu Terlaris7 hari")).toBeVisible();
 
     /* Batang paling kiri adalah hari terjauh, enam hari ke belakang. */
     await grafik.getByRole("button").first().click();
 
-    /* Judul bagian di bawahnya ikut berganti jadi tanggal hari itu, bukan
-       tetap menulis tujuh hari. */
+    /* Judul bagian di bawahnya ikut berganti jadi tanggal hari itu, bukan tetap menulis tujuh hari. */
     await expect(page.getByText("Menu Terlaris7 hari")).toHaveCount(0);
-    await expect(grafik.getByRole("button").first()).toHaveAttribute("aria-pressed", "true");
-    await expect(page.getByRole("button", { name: "Kembali ke tujuh hari" })).toBeVisible();
+    await expect(grafik.getByRole("button").first()).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await expect(
+      page.getByRole("button", { name: "Kembali ke tujuh hari" }),
+    ).toBeVisible();
 
     await page.getByRole("button", { name: "Kembali ke tujuh hari" }).click();
     await expect(page.getByText("Menu Terlaris7 hari")).toBeVisible();
   });
 
-  test("mengetuk batang yang sama dua kali kembali ke rangkuman", async ({ page }) => {
+  test("mengetuk batang yang sama dua kali kembali ke rangkuman", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
     await page.goto("/d/rekap");
 

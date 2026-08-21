@@ -13,18 +13,7 @@ import { daftarPedagang } from "@/lib/data/pedagang";
 import { jarakSingkat } from "@/lib/format";
 import type { Pedagang } from "@/lib/tipe";
 
-/**
- * Peta satu layar penuh.
- *
- * Bedanya dengan peta kecil di beranda: di sini tiap pin membawa label
- * nama, jarak, dan perkiraan waktu, dan di bagian bawah ada rel kartu
- * ringkas yang bisa digeser.
- *
- * Mengetuk kartu menaikkan lembar pedagang di atas peta ini, bukan
- * membuka halaman pedagang. Berpindah ke sana berarti memuat peta layar
- * penuh kedua hanya untuk menampilkan kartu yang sama, sementara peta
- * yang sedang dilihat pengguna sudah tergambar di belakangnya.
- */
+/** Peta satu layar penuh. */
 export function PetaPenuh() {
   const router = useRouter();
   const [dipilih, setDipilih] = React.useState<Pedagang | null>(null);
@@ -35,7 +24,11 @@ export function PetaPenuh() {
       nav
       lembar={
         /* Lembar pedagang, naik di atas peta yang sedang dilihat. */
-        <Lembar buka={lembarBuka} tutup={() => setLembarBuka(false)} judul={dipilih?.nama}>
+        <Lembar
+          buka={lembarBuka}
+          tutup={() => setLembarBuka(false)}
+          judul={dipilih?.nama}
+        >
           {dipilih && (
             <div className="px-4 pb-6 pt-1">
               <IsiPedagang pedagang={dipilih} />
@@ -54,7 +47,10 @@ export function PetaPenuh() {
             id: p.id,
             x: p.posisi.x,
             y: p.posisi.y,
-            label: { judul: p.namaPeta, isi: `${jarakSingkat(p.jarak)} • ${p.menit} menit` },
+            label: {
+              judul: p.namaPeta,
+              isi: `${jarakSingkat(p.jarak)} • ${p.menit} menit`,
+            },
           }))}
         />
 
@@ -69,10 +65,7 @@ export function PetaPenuh() {
 
         <div className="absolute left-1/2 top-4 flex -translate-x-1/2 items-center gap-1.5 rounded-pil bg-hijau px-3.5 py-2 shadow-[0_4px_10px_rgb(0_134_15/0.3)]">
           <span aria-hidden className="size-1.5 rounded-pil bg-hijau-neon" />
-          {/* Yang dihitung gerobak yang benar-benar buka. Sebelumnya
-              seluruh daftar ikut terhitung, sehingga gerobak yang sedang
-              tutup pun disebut aktif padahal kartunya di rel bawah
-              terang-terangan berlabel "Tutup". */}
+          {/* Yang dihitung gerobak yang benar-benar buka. */}
           <span className="whitespace-nowrap text-[11px] font-bold text-white">
             {daftarPedagang.filter((p) => p.buka).length} pedagang aktif
           </span>

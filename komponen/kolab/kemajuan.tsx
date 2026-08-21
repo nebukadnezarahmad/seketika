@@ -29,13 +29,7 @@ export function BatangKemajuan({
   );
 }
 
-/**
- * Tumpukan avatar peserta.
- *
- * Slot yang belum terisi digambar sebagai lingkaran putus-putus, bukan
- * dihilangkan. Kekosongan yang terlihat itulah yang mendorong orang
- * mengajak tetangganya.
- */
+/** Tumpukan avatar peserta. */
 export function TumpukanPeserta({
   peserta,
   target,

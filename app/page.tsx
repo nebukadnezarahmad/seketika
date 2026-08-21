@@ -5,13 +5,7 @@ export const metadata: Metadata = {
   title: "SEKETIKA",
 };
 
-/**
- * Layar pembuka.
- *
- * Bingkai splash di berkas Figma masih kosong, jadi layar ini disusun
- * dari unsur yang sudah ada di sistem desainnya: logo, hijau merek, dan
- * tipografi yang sama, supaya tidak terasa datang dari aplikasi lain.
- */
+/** Layar pembuka. */
 export default function Halaman() {
   return <Pembuka />;
 }

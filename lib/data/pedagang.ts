@@ -1,13 +1,6 @@
 import type { Pedagang } from "@/lib/tipe";
 
-/**
- * Lima pedagang keliling contoh, isinya sama persis dengan berkas desain:
- * nama, jenis dagangan, rating, jarak, status buka, sampai daftar menu
- * beserta harga dan keterangannya.
- *
- * `posisi` adalah letak pin di atas kotak peta, dinyatakan dalam persen
- * supaya petanya ikut menyesuaikan lebar layar tanpa pin bergeser.
- */
+/** Lima pedagang keliling contoh, isinya sama persis dengan berkas desain: nama, jenis dagangan, rating, jarak, status buka, sampai daftar menu beserta harga dan keterangannya. */
 export const daftarPedagang: Pedagang[] = [
   {
     id: "pd-01",
@@ -23,11 +16,36 @@ export const daftarPedagang: Pedagang[] = [
     foto: "/img/foto-bakso.jpg",
     posisi: { x: 17.06, y: 35.28 },
     menu: [
-      { id: "m-01", nama: "Bakso Komplit", deskripsi: "Bakso sapi pilihan dengan rasa nikmat", harga: 25000 },
-      { id: "m-02", nama: "Bakso Mercon", deskripsi: "Bakso isian cabe rawit ekstra pedas", harga: 15000 },
-      { id: "m-03", nama: "Bakso Polos", deskripsi: "Bakso sapi full daging dengan tekstur lembut", harga: 13000 },
-      { id: "m-04", nama: "Bakso Telur", deskripsi: "Bakso daging sapi dengan tambahan telur", harga: 15000 },
-      { id: "m-05", nama: "Bakso Ikan", deskripsi: "Bakso yang terbuat dari ikan tenggiri berkualitas", harga: 13000 },
+      {
+        id: "m-01",
+        nama: "Bakso Komplit",
+        deskripsi: "Bakso sapi pilihan dengan rasa nikmat",
+        harga: 25000,
+      },
+      {
+        id: "m-02",
+        nama: "Bakso Mercon",
+        deskripsi: "Bakso isian cabe rawit ekstra pedas",
+        harga: 15000,
+      },
+      {
+        id: "m-03",
+        nama: "Bakso Polos",
+        deskripsi: "Bakso sapi full daging dengan tekstur lembut",
+        harga: 13000,
+      },
+      {
+        id: "m-04",
+        nama: "Bakso Telur",
+        deskripsi: "Bakso daging sapi dengan tambahan telur",
+        harga: 15000,
+      },
+      {
+        id: "m-05",
+        nama: "Bakso Ikan",
+        deskripsi: "Bakso yang terbuat dari ikan tenggiri berkualitas",
+        harga: 13000,
+      },
     ],
   },
   {
@@ -44,9 +62,24 @@ export const daftarPedagang: Pedagang[] = [
     foto: "/img/foto-nasgor.jpg",
     posisi: { x: 78.51, y: 20.95 },
     menu: [
-      { id: "m-06", nama: "Nasi Goreng Spesial", deskripsi: "Nasi goreng dengan telur mata sapi dan ayam", harga: 17000 },
-      { id: "m-07", nama: "Nasi Goreng Biasa", deskripsi: "Nasi goreng bumbu rempah tradisional", harga: 13000 },
-      { id: "m-08", nama: "Es Teh Manis", deskripsi: "Teh segar dengan es batu", harga: 5000 },
+      {
+        id: "m-06",
+        nama: "Nasi Goreng Spesial",
+        deskripsi: "Nasi goreng dengan telur mata sapi dan ayam",
+        harga: 17000,
+      },
+      {
+        id: "m-07",
+        nama: "Nasi Goreng Biasa",
+        deskripsi: "Nasi goreng bumbu rempah tradisional",
+        harga: 13000,
+      },
+      {
+        id: "m-08",
+        nama: "Es Teh Manis",
+        deskripsi: "Teh segar dengan es batu",
+        harga: 5000,
+      },
     ],
   },
   {
@@ -63,8 +96,18 @@ export const daftarPedagang: Pedagang[] = [
     foto: "/img/foto-mie.jpg",
     posisi: { x: 30.47, y: 64.61 },
     menu: [
-      { id: "m-09", nama: "Mie Ayam Biasa", deskripsi: "Mie dengan topping ayam cincang", harga: 8000 },
-      { id: "m-10", nama: "Mie Ayam Bakso", deskripsi: "Mie ayam lengkap dengan bakso sapi", harga: 12000 },
+      {
+        id: "m-09",
+        nama: "Mie Ayam Biasa",
+        deskripsi: "Mie dengan topping ayam cincang",
+        harga: 8000,
+      },
+      {
+        id: "m-10",
+        nama: "Mie Ayam Bakso",
+        deskripsi: "Mie ayam lengkap dengan bakso sapi",
+        harga: 12000,
+      },
     ],
   },
   {
@@ -81,7 +124,12 @@ export const daftarPedagang: Pedagang[] = [
     foto: "/img/foto-esteh.jpg",
     posisi: { x: 17.34, y: 86.61 },
     menu: [
-      { id: "m-11", nama: "Es Teh Spesial", deskripsi: "Es teh pilihan dengan gula merah", harga: 6000 },
+      {
+        id: "m-11",
+        nama: "Es Teh Spesial",
+        deskripsi: "Es teh pilihan dengan gula merah",
+        harga: 6000,
+      },
     ],
   },
   {
@@ -98,8 +146,18 @@ export const daftarPedagang: Pedagang[] = [
     foto: "/img/foto-siomay.jpg",
     posisi: { x: 55.89, y: 84.94 },
     menu: [
-      { id: "m-12", nama: "Siomay Ikan", deskripsi: "Siomay ikan tenggiri kukus dengan bumbu kacang", harga: 15000 },
-      { id: "m-13", nama: "Batagor", deskripsi: "Batagor renyah dengan kuah kacang", harga: 12000 },
+      {
+        id: "m-12",
+        nama: "Siomay Ikan",
+        deskripsi: "Siomay ikan tenggiri kukus dengan bumbu kacang",
+        harga: 15000,
+      },
+      {
+        id: "m-13",
+        nama: "Batagor",
+        deskripsi: "Batagor renyah dengan kuah kacang",
+        harga: 12000,
+      },
     ],
   },
 ];
@@ -125,15 +183,7 @@ export function cariPedagang(slug: string): Pedagang | undefined {
   return daftarPedagang.find((p) => p.slug === slug);
 }
 
-/**
- * Gerobak yang dipegang peran pedagang pada purwarupa ini.
- *
- * Aplikasi belum punya autentikasi, jadi peran pedagang selalu masuk
- * sebagai gerobak yang sama. Slugnya disimpan di sini, satu tempat,
- * karena sebelumnya ditulis ulang di dua layar dan keduanya memaksa
- * hasil pencariannya bukan-null. Kalau slug itu diganti saat menyunting
- * data contoh, keduanya akan gagal saat render tanpa peringatan apa pun.
- */
+/** Gerobak yang dipegang peran pedagang pada purwarupa ini. */
 export const SLUG_GEROBAK_SAYA = "bakso-pak-anton";
 
 /** Gerobak peran pedagang. Jatuh ke pedagang pertama kalau slugnya hilang. */
@@ -142,4 +192,10 @@ export function gerobakSaya(): Pedagang {
 }
 
 /** Kategori penyaring di beranda. "Dekat Anda" berarti tanpa penyaringan. */
-export const kategoriPenyaring = ["Dekat Anda", "Makanan", "Minuman", "Jajanan", "Cemilan"] as const;
+export const kategoriPenyaring = [
+  "Dekat Anda",
+  "Makanan",
+  "Minuman",
+  "Jajanan",
+  "Cemilan",
+] as const;

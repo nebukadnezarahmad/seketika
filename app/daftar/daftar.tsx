@@ -7,40 +7,31 @@ import { KepalaMerek } from "@/komponen/ui/kepala-merek";
 import { IkonFacebook, IkonGoogle } from "@/komponen/ui/ikon-sosial";
 import { useToko } from "@/lib/toko";
 
-/**
- * Pembuatan akun.
- *
- * Layar ini hanya mengumpulkan identitas dasar. Peran, izin, dan detail
- * lain ditanyakan setelahnya lewat tiga langkah pengenalan, supaya
- * gerbang pertama tetap pendek dan tidak menakuti orang yang baru
- * membuka aplikasi.
- */
+/** Pembuatan akun. */
 export function Daftar() {
   const router = useRouter();
   const simpanDraf = useToko((s) => s.simpanDraf);
   const [isi, setIsi] = React.useState({ nama: "", email: "", sandi: "" });
   const [lihatSandi, setLihatSandi] = React.useState(false);
 
-  const ubah = (k: keyof typeof isi) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setIsi((s) => ({ ...s, [k]: e.target.value }));
+  const ubah =
+    (k: keyof typeof isi) => (e: React.ChangeEvent<HTMLInputElement>) =>
+      setIsi((s) => ({ ...s, [k]: e.target.value }));
 
-  const boleh = isi.nama.trim().length >= 2 && isi.email.includes("@") && isi.sandi.length >= 6;
+  const boleh =
+    isi.nama.trim().length >= 2 &&
+    isi.email.includes("@") &&
+    isi.sandi.length >= 6;
 
   const kirim = (e: React.FormEvent) => {
     e.preventDefault();
     if (!boleh) return;
-    /* Nama dan surel dititipkan sebagai draf, jadi pengguna tidak perlu
-       mengetiknya lagi di langkah isi data. */
+    /* Nama dan surel dititipkan sebagai draf, jadi pengguna tidak perlu mengetiknya lagi di langkah isi data. */
     simpanDraf({ nama: isi.nama.trim(), email: isi.email.trim() });
     router.push("/mulai");
   };
 
-  /* Cincinnya hijau pekat, bukan hijau 35%. Karena `outline-none`
-     membuang indikator bawaan peramban, cincin inilah satu-satunya
-     penanda fokus, dan pada opasitas 35% ia membaur jadi #A6D5AB yang
-     cuma 1,65:1 di atas putih — di bawah ambang 3:1 untuk penanda
-     keadaan (WCAG 1.4.11 dan 2.4.11). Hijau pekat mencapai 4,75:1.
-     Jaraknya 2px supaya cincin tidak menyatu dengan tepi kotaknya. */
+  /* Cincinnya hijau pekat, bukan hijau 35%. */
   const label = "block text-[16px] font-medium text-tinta";
   const kotak =
     "mt-[6px] h-[40px] w-full rounded-full border border-garis-tegas bg-white px-[18px] text-[14px] text-tinta placeholder:text-tinta-4 focus:outline-none focus:ring-2 focus:ring-hijau focus:ring-offset-2";
@@ -62,14 +53,17 @@ export function Daftar() {
         <KepalaMerek sapaan={false} ukuran={58} />
       </div>
 
-      {/* Lembar formulir. Ia bergulir sendiri supaya isinya tetap dapat
-          dijangkau di ponsel pendek ketika papan ketik terbuka. */}
+      {/* Lembar formulir. */}
       <form
         onSubmit={kirim}
         className="mt-auto max-h-[82%] overflow-y-auto border-t border-garis bg-white px-6 pb-[env(safe-area-inset-bottom)] pt-6"
       >
-        <h1 className="tulisan-judul text-[20px] font-bold text-tinta">Perjalanan Anda dimulai di sini.</h1>
-        <p className="mt-[9px] text-[16px] font-normal text-tinta">Masukkan Detail Anda di bawah</p>
+        <h1 className="tulisan-judul text-[20px] font-bold text-tinta">
+          Perjalanan Anda dimulai di sini.
+        </h1>
+        <p className="mt-[9px] text-[16px] font-normal text-tinta">
+          Masukkan Detail Anda di bawah
+        </p>
 
         <div className="mt-[15px]">
           <label className={label}>
@@ -117,7 +111,9 @@ export function Daftar() {
               <button
                 type="button"
                 onClick={() => setLihatSandi((v) => !v)}
-                aria-label={lihatSandi ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                aria-label={
+                  lihatSandi ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"
+                }
                 className="absolute bottom-0 right-[10px] top-[6px] grid w-8 place-items-center text-tinta-4"
               >
                 {lihatSandi ? <Eye size={17} /> : <EyeOff size={17} />}

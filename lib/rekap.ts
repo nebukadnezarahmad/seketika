@@ -1,47 +1,21 @@
 import { totalBaris } from "@/lib/format";
 import type { PesananMasuk } from "@/lib/tipe";
 
-/**
- * Perhitungan Buku Kas.
- *
- * Dipisahkan dari komponennya, sama alasannya dengan `lib/format.ts`:
- * ini logika uang, bukan tampilan, dan logika uang harus bisa diuji
- * tanpa merender apa pun.
- *
- * Dua aturan yang berlaku di seluruh berkas ini:
- *
- * 1. Nominal selalu lewat `totalBaris()`, tidak pernah menulis ulang
- *    `harga × jumlah`. Rumus itu pernah tersebar di tiga layar dan mulai
- *    menyimpang satu sama lain.
- * 2. Tidak ada satu pun pemanggilan `Date.now()` di sini. Waktu masuk
- *    sebagai parameter `sekarang`, persis seperti `sisaWaktu()`. Kalau
- *    dibaca diam-diam di dalam, fungsinya berhenti murni: hasil di
- *    server tidak akan cocok dengan hasil di peramban, dan angkanya
- *    berubah tanpa ada yang menyuruh.
- */
+/** Perhitungan Buku Kas. */
 
 /** Tengah malam pada hari yang berjarak `offset` hari ke belakang. */
 function awalHari(sekarang: number, offset = 0): number {
   const d = new Date(sekarang);
   d.setHours(0, 0, 0, 0);
-  /* Lewat `setDate`, bukan pengurangan 86.400.000 milidetik. Keduanya
-     sama hasilnya di Indonesia yang tidak mengenal waktu musim panas,
-     tapi pengurangan mentah meleset satu jam di zona yang mengenalnya,
-     dan meleset satu jam artinya pesanan pukul 00.30 jatuh ke hari yang
-     salah. */
+  /* Lewat `setDate`, bukan pengurangan 86.400.000 milidetik. */
   d.setDate(d.getDate() - offset);
   return d.getTime();
 }
 
-/**
- * Menyaring pesanan yang benar-benar bisa dihitung.
- *
- * Yang lolos hanya pesanan berstatus selesai dan bertanggal. Pesanan
- * selesai tanpa `selesaiPada` datang dari penyimpanan versi lama;
- * memasukkannya berarti menebak tanggalnya, dan tebakan pada angka uang
- * lebih buruk daripada tidak menampilkannya sama sekali.
- */
-function terhitung(daftar: PesananMasuk[]): { waktu: number; pesanan: PesananMasuk }[] {
+/** Menyaring pesanan yang benar-benar bisa dihitung. */
+function terhitung(
+  daftar: PesananMasuk[],
+): { waktu: number; pesanan: PesananMasuk }[] {
   return daftar
     .filter((p) => p.status === "selesai" && p.selesaiPada)
     .map((p) => ({ waktu: new Date(p.selesaiPada!).getTime(), pesanan: p }))
@@ -64,12 +38,11 @@ const NAMA_HARI = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
 export type TitikDeret = { label: string; iso: string; total: number };
 
-/**
- * Tujuh hari terakhir untuk grafik batang, urut dari paling lama ke hari
- * ini. Hari ini selalu jadi butir terakhir supaya batangnya berada di
- * ujung kanan, arah yang sama dengan cara orang membaca garis waktu.
- */
-export function deretTujuhHari(daftar: PesananMasuk[], sekarang: number): TitikDeret[] {
+/** Tujuh hari terakhir untuk grafik batang, urut dari paling lama ke hari ini. */
+export function deretTujuhHari(
+  daftar: PesananMasuk[],
+  sekarang: number,
+): TitikDeret[] {
   return Array.from({ length: 7 }, (_, i) => {
     const offset = 6 - i;
     const hari = new Date(awalHari(sekarang, offset));
@@ -83,16 +56,7 @@ export function deretTujuhHari(daftar: PesananMasuk[], sekarang: number): TitikD
 
 export type BarisMenuTerlaris = { nama: string; porsi: number; total: number };
 
-/**
- * Menu yang paling banyak terjual dalam `sejakHari` hari terakhir.
- *
- * Urutannya menurut jumlah porsi, bukan menurut rupiah. "Terlaris"
- * berarti paling banyak berpindah tangan; menu murah yang selalu ikut
- * dipesan memang pantas berada di atas menu mahal yang sesekali laku,
- * dan justru itu keterangan yang berguna buat memutuskan berapa banyak
- * yang harus disiapkan besok. Nominalnya tetap ikut ditampilkan supaya
- * sisi uangnya tidak hilang.
- */
+/** Menu yang paling banyak terjual dalam `sejakHari` hari terakhir. */
 export function menuTerlaris(
   daftar: PesananMasuk[],
   sekarang: number,
@@ -111,7 +75,9 @@ export function menuTerlaris(
     }
   }
 
-  return [...kumpulan.values()].sort((a, b) => b.porsi - a.porsi || b.total - a.total);
+  return [...kumpulan.values()].sort(
+    (a, b) => b.porsi - a.porsi || b.total - a.total,
+  );
 }
 
 export type RentangJam = { mulai: number; selesai: number; jumlah: number };
@@ -119,21 +85,18 @@ export type RentangJam = { mulai: number; selesai: number; jumlah: number };
 /** Lebar satu keranjang jam, dalam jam. */
 const LEBAR_JAM = 2;
 
-/**
- * Rentang jam dengan pesanan terbanyak dalam tujuh hari terakhir.
- *
- * Dikelompokkan per dua jam, bukan per jam. Per jam, pesanan yang
- * sebenarnya satu gelombang sore terpecah jadi beberapa batang kecil
- * yang tidak menonjol; dua jam cukup lebar untuk memunculkan polanya
- * tapi masih cukup sempit untuk ditindaklanjuti pedagang.
- */
-export function jamRamai(daftar: PesananMasuk[], sekarang: number): RentangJam[] {
+/** Rentang jam dengan pesanan terbanyak dalam tujuh hari terakhir. */
+export function jamRamai(
+  daftar: PesananMasuk[],
+  sekarang: number,
+): RentangJam[] {
   const batas = awalHari(sekarang, 6);
   const keranjang = new Map<number, number>();
 
   for (const { waktu } of terhitung(daftar)) {
     if (awalHari(waktu) < batas) continue;
-    const mulai = Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
+    const mulai =
+      Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
     keranjang.set(mulai, (keranjang.get(mulai) ?? 0) + 1);
   }
 
@@ -144,16 +107,7 @@ export function jamRamai(daftar: PesananMasuk[], sekarang: number): RentangJam[]
 
 export type Banding = { persen: number; naik: boolean };
 
-/**
- * Selisih hari ini terhadap kemarin dalam persen.
- *
- * Ketika kemarin nol, persentase tidak punya arti matematis: tidak ada
- * yang bisa dibagi. Yang dikembalikan nol, dan pemanggilnya wajib
- * memeriksa sendiri apakah kemarin memang nol sebelum menampilkan
- * perbandingan. Menampilkan "+0% dari kemarin" pada hari pertama
- * berjualan akan terbaca sebagai tidak ada kemajuan, padahal yang benar
- * adalah belum ada pembandingnya.
- */
+/** Selisih hari ini terhadap kemarin dalam persen. */
 export function bandingHari(iniTotal: number, kemarinTotal: number): Banding {
   if (kemarinTotal <= 0) return { persen: 0, naik: iniTotal > 0 };
   const selisih = ((iniTotal - kemarinTotal) / kemarinTotal) * 100;
@@ -165,14 +119,7 @@ export function jamRapi(jam: number): string {
   return `${String(jam).padStart(2, "0")}.00`;
 }
 
-/* ------------------------------------------------------------------
-   Perhitungan langganan berbayar.
-
-   Dipisahkan ke bagian bawah berkas yang sama, bukan berkas sendiri,
-   karena semuanya bersandar pada `terhitung` dan `awalHari` yang sudah
-   ada di atas. Aturan yang berlaku di berkas ini tetap: nominal lewat
-   `totalBaris`, dan waktu selalu masuk sebagai parameter.
-   ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ Perhitungan langganan berbayar. */
 
 /** Panjang satu daur laporan bulanan, dalam hari. */
 export const HARI_BULANAN = 30;
@@ -187,17 +134,16 @@ export type LaporanBulanan = {
   mingguan: { label: string; total: number }[];
 };
 
-const TANGGAL_PENDEK = new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short" });
+const TANGGAL_PENDEK = new Intl.DateTimeFormat("id-ID", {
+  day: "numeric",
+  month: "short",
+});
 
-/**
- * Rekap tiga puluh hari terakhir.
- *
- * `rataRataHarian` dibagi jumlah hari yang benar-benar ada penjualannya,
- * bukan dibagi tiga puluh. Pedagang keliling tidak berjualan tiap hari,
- * dan membagi dengan hari libur membuat rata-ratanya terlihat lebih buruk
- * daripada kenyataan pada hari ia benar-benar mendorong gerobaknya.
- */
-export function laporanBulanan(daftar: PesananMasuk[], sekarang: number): LaporanBulanan {
+/** Rekap tiga puluh hari terakhir. */
+export function laporanBulanan(
+  daftar: PesananMasuk[],
+  sekarang: number,
+): LaporanBulanan {
   const perHari = new Map<number, number>();
   let jumlahPesanan = 0;
   const batas = awalHari(sekarang, HARI_BULANAN - 1);
@@ -226,7 +172,10 @@ export function laporanBulanan(daftar: PesananMasuk[], sekarang: number): Lapora
     for (const [hari, nilai] of perHari) {
       if (hari >= mulai && hari <= selesai) jumlah += nilai;
     }
-    return { label: ke === 0 ? "Minggu ini" : `${ke + 1} minggu lalu`, total: jumlah };
+    return {
+      label: ke === 0 ? "Minggu ini" : `${ke + 1} minggu lalu`,
+      total: jumlah,
+    };
   });
 
   return {
@@ -247,28 +196,19 @@ export type Prakiraan = {
   total: number;
 };
 
-/**
- * Kawasan dan jam yang paling sering menghasilkan pesanan.
- *
- * Ini yang membedakannya dari "jam paling ramai" pada rekap gratis: di
- * sana yang dijawab cuma kapan, di sini kapan sekaligus di mana. Bagi
- * pedagang yang harus memilih satu arah untuk didorong, dua keterangan
- * itu baru berguna kalau datang bersamaan.
- *
- * Diambil dari tiga puluh hari, bukan tujuh, supaya satu hari yang
- * kebetulan ramai di satu gang tidak langsung terbaca sebagai pola.
- */
-export function prakiraanRamai(daftar: PesananMasuk[], sekarang: number): Prakiraan[] {
+/** Kawasan dan jam yang paling sering menghasilkan pesanan. */
+export function prakiraanRamai(
+  daftar: PesananMasuk[],
+  sekarang: number,
+): Prakiraan[] {
   const batas = awalHari(sekarang, HARI_BULANAN - 1);
   const kotak = new Map<string, Prakiraan>();
 
   for (const { waktu, pesanan } of terhitung(daftar)) {
     if (awalHari(waktu) < batas) continue;
-    const mulai = Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
-    /* Kawasan diambil dari bagian pertama nama titik, sebelum tanda
-       pemisah. "RT 05 Blok C · Pos Ronda" dan "RT 05 Blok C · Pos 2"
-       adalah dua patokan di kawasan yang sama, dan yang perlu diketahui
-       pedagang adalah kawasannya. */
+    const mulai =
+      Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
+    /* Kawasan diambil dari bagian pertama nama titik, sebelum tanda pemisah. */
     const titik = pesanan.titik.split("·")[0].trim();
     const kunci = `${titik}|${mulai}`;
     const ada = kotak.get(kunci);
@@ -281,23 +221,14 @@ export function prakiraanRamai(daftar: PesananMasuk[], sekarang: number): Prakir
     });
   }
 
-  return [...kotak.values()].sort((a, b) => b.jumlah - a.jumlah || b.total - a.total);
+  return [...kotak.values()].sort(
+    (a, b) => b.jumlah - a.jumlah || b.total - a.total,
+  );
 }
 
 export type Nilai = { rata: number; jumlah: number };
 
-/**
- * Rata-rata bintang yang diterima satu gerobak.
- *
- * Penilaian disimpan dikunci pada id pesanan, bukan pada pedagangnya,
- * karena satu bintang selalu lahir dari satu transaksi tertentu.
- * Pemetaan ke pedagang dikerjakan di sini supaya sisi pedagang tidak
- * perlu tahu cara penilaian disimpan.
- *
- * Mengembalikan null kalau belum ada satu pun bintang. Menampilkan 0,0
- * pada gerobak yang belum pernah dinilai membuatnya terbaca seperti
- * gerobak terburuk, padahal yang benar adalah belum ada yang menilai.
- */
+/** Rata-rata bintang yang diterima satu gerobak. */
 export function nilaiRataRata(
   pesanan: { id: string; pedagangSlug: string }[],
   penilaian: Record<string, number>,
@@ -310,7 +241,8 @@ export function nilaiRataRata(
 
   if (angka.length === 0) return null;
   return {
-    rata: Math.round((angka.reduce((j, n) => j + n, 0) / angka.length) * 10) / 10,
+    rata:
+      Math.round((angka.reduce((j, n) => j + n, 0) / angka.length) * 10) / 10,
     jumlah: angka.length,
   };
 }
@@ -322,15 +254,7 @@ export type RincianHari = {
   jam: RentangJam[];
 };
 
-/**
- * Rincian satu hari saja, dipakai saat batang grafik diketuk.
- *
- * Fungsinya sengaja berdiri sendiri alih-alih menambah parameter pada
- * `menuTerlaris` dan `jamRamai`. Keduanya menjawab "sepanjang beberapa
- * hari terakhir", sedangkan yang ini menjawab "pada hari itu". Memaksa
- * satu fungsi melayani dua pertanyaan berbeda lewat parameter tambahan
- * membuat pemanggilnya harus tahu kombinasi mana yang sah.
- */
+/** Rincian satu hari saja, dipakai saat batang grafik diketuk. */
 export function rincianHari(
   daftar: PesananMasuk[],
   sekarang: number,
@@ -345,7 +269,8 @@ export function rincianHari(
 
   for (const { waktu, pesanan } of pada) {
     total += totalBaris(pesanan.baris);
-    const mulai = Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
+    const mulai =
+      Math.floor(new Date(waktu).getHours() / LEBAR_JAM) * LEBAR_JAM;
     keranjang.set(mulai, (keranjang.get(mulai) ?? 0) + 1);
 
     for (const b of pesanan.baris) {
@@ -361,7 +286,9 @@ export function rincianHari(
   return {
     total,
     jumlahPesanan: pada.length,
-    menu: [...kumpulan.values()].sort((a, b) => b.porsi - a.porsi || b.total - a.total),
+    menu: [...kumpulan.values()].sort(
+      (a, b) => b.porsi - a.porsi || b.total - a.total,
+    ),
     jam: [...keranjang.entries()]
       .map(([mulai, jumlah]) => ({ mulai, selesai: mulai + LEBAR_JAM, jumlah }))
       .sort((a, b) => b.jumlah - a.jumlah || a.mulai - b.mulai),
@@ -369,7 +296,13 @@ export function rincianHari(
 }
 
 const HARI_PANJANG = [
-  "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu",
+  "Minggu",
+  "Senin",
+  "Selasa",
+  "Rabu",
+  "Kamis",
+  "Jumat",
+  "Sabtu",
 ];
 
 /** "Kamis, 20 Agu" dari offset hari. Dipakai judul rincian harian. */

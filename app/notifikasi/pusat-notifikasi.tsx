@@ -2,7 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Bell, ChevronRight, MapPin, Receipt, TriangleAlert, Users } from "lucide-react";
+import {
+  Bell,
+  ChevronRight,
+  MapPin,
+  Receipt,
+  TriangleAlert,
+  Users,
+} from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { Kepala } from "@/komponen/ui/kepala";
 import { SLUG_GEROBAK_SAYA } from "@/lib/data/pedagang";
@@ -46,15 +53,7 @@ export function PusatNotifikasi() {
     [peran, pesanan, pesananMasuk, titikKumpul, sekarang],
   );
 
-  /* Membuka layarnya berarti membacanya. Menandai satu per satu lewat
-     ketukan akan meninggalkan lencana menyala untuk pemberitahuan yang
-     sudah terlihat di layar tapi kebetulan tidak diketuk.
-
-     Kunci efeknya berupa deretan id yang digabung jadi satu teks, bukan
-     larik idnya langsung. Larik baru lahir pada tiap render sehingga
-     efeknya akan berjalan tanpa henti; teks yang isinya sama
-     dibandingkan sebagai nilai, jadi efek ini hanya berjalan ulang kalau
-     daftar pemberitahuannya benar-benar berubah. */
+  /* Membuka layarnya berarti membacanya. */
   const belum = daftar.filter((n) => !dibaca.includes(n.id)).map((n) => n.id);
   const kunci = daftar.map((n) => n.id).join("|");
   React.useEffect(() => {
@@ -66,7 +65,9 @@ export function PusatNotifikasi() {
     <Layar nav peran={peran}>
       <Kepala
         judul="Notifikasi"
-        subjudul={daftar.length > 0 ? `${daftar.length} pemberitahuan` : undefined}
+        subjudul={
+          daftar.length > 0 ? `${daftar.length} pemberitahuan` : undefined
+        }
       />
 
       <div className="px-4 pb-6 pt-3">
@@ -80,7 +81,9 @@ export function PusatNotifikasi() {
                   href={n.href}
                   className="bayang-kartu flex items-start gap-3 rounded-[18px] border border-garis bg-white p-3.5 transition-transform active:scale-[0.99]"
                 >
-                  <span className={`grid size-10 shrink-0 place-items-center rounded-[12px] ${warna[n.nada]}`}>
+                  <span
+                    className={`grid size-10 shrink-0 place-items-center rounded-[12px] ${warna[n.nada]}`}
+                  >
                     <Ikon size={18} strokeWidth={1.9} />
                   </span>
                   <span className="min-w-0 flex-1">
@@ -98,7 +101,11 @@ export function PusatNotifikasi() {
                       {n.isi}
                     </span>
                   </span>
-                  <ChevronRight size={16} className="mt-1 shrink-0 text-tinta-5" aria-hidden />
+                  <ChevronRight
+                    size={16}
+                    className="mt-1 shrink-0 text-tinta-5"
+                    aria-hidden
+                  />
                 </Link>
               </li>
             );
@@ -107,7 +114,11 @@ export function PusatNotifikasi() {
 
         {daftar.length === 0 && (
           <p className="rounded-[20px] border border-dashed border-garis bg-white px-4 py-12 text-center text-[12.5px] leading-relaxed text-tinta-4">
-            <MapPin size={22} className="mx-auto mb-2 text-tinta-5" aria-hidden />
+            <MapPin
+              size={22}
+              className="mx-auto mb-2 text-tinta-5"
+              aria-hidden
+            />
             Belum ada pemberitahuan.
             <br />
             Kabar pesanan dan titik kumpul akan muncul di sini.

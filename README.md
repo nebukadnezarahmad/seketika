@@ -9,9 +9,9 @@ Dibuat untuk **App Development Competition IT FEST 2026** yang diselenggarakan H
 Informatika UIN K.H. Abdurrahman Wahid Pekalongan.
 Subtema: **Digitalisasi UMKM dan Ekonomi Kreatif**.
 
-| | |
-|---|---|
-| Aplikasi | <https://seketika-puce.vercel.app> |
+|            |                                                 |
+| ---------- | ----------------------------------------------- |
+| Aplikasi   | <https://seketika-puce.vercel.app>              |
 | Repositori | <https://github.com/nebukadnezarahmad/seketika> |
 
 > Buka dari ponsel, atau perkecil jendela peramban. Tata letaknya dirancang
@@ -33,53 +33,51 @@ SEKETIKA menyelesaikannya dari dua arah sekaligus:
   mengumpulkan pesanan pada satu titik. Pedagang baru berangkat setelah target
   jumlah warga terpenuhi, jadi satu perjalanan melayani banyak pembeli sekaligus.
 
-Tidak ada ongkos kirim dan tidak ada komisi. Yang dijual bukan pengantaran,
-melainkan kepastian: warga tahu kapan gerobaknya datang, pedagang tahu ke mana
-harus berjalan.
+Tidak ada ongkos kirim dan tidak ada komisi.
 
 ## Fitur
 
 ### Sisi warga
 
-| Fitur | Keterangan |
-|---|---|
-| Pembuka bertahap | Ilustrasi, lambang, lalu tagline muncul berurutan |
-| Sambutan & daftar akun | Masuk atau buat akun, termasuk pintasan Google dan Facebook |
-| Peta pedagang | Gerobak aktif di sekitar, dengan jarak dan estimasi waktu |
-| Pencarian | Cari menu atau pedagang, dengan penyaring estimasi harga |
-| Daftar menu | Ketuk menu untuk melihat foto dan keterangan lengkapnya |
-| Panggil penjual | Memanggil gerobak ke lokasi, dengan atau tanpa pesanan awal |
-| Pelacakan pesanan | Empat tahap, dari menunggu konfirmasi sampai selesai |
-| **Titik Kumpul** | Buat atau ikut patungan pesanan bersama tetangga |
-| Obrolan titik kumpul | Warga yang ikut patungan berunding jam berkumpul |
-| Kedaluwarsa otomatis | Titik kumpul yang lewat tenggat berhenti menerima warga |
-| Bagikan undangan | Tautan titik kumpul dibagikan lewat WhatsApp |
-| Percakapan | Obrolan langsung dengan pedagang |
-| Beri penilaian | Bintang untuk pesanan selesai, sekali kirim, tampil di riwayat |
-| Kelola akun | Ubah nama, telepon, alamat, dan patokan lewat lembar di profil |
-| Pusat notifikasi | Kabar pesanan dan titik kumpul, dengan lencana belum dibaca |
-| Bisa dipasang | Punya manifest, ikon, dan service worker; terpasang seperti aplikasi biasa |
+| Fitur                  | Keterangan                                                                 |
+| ---------------------- | -------------------------------------------------------------------------- |
+| Pembuka bertahap       | Ilustrasi, lambang, lalu tagline muncul berurutan                          |
+| Sambutan & daftar akun | Masuk atau buat akun, termasuk pintasan Google dan Facebook                |
+| Peta pedagang          | Gerobak aktif di sekitar, dengan jarak dan estimasi waktu                  |
+| Pencarian              | Cari menu atau pedagang, dengan penyaring estimasi harga                   |
+| Daftar menu            | Ketuk menu untuk melihat foto dan keterangan lengkapnya                    |
+| Panggil penjual        | Memanggil gerobak ke lokasi, dengan atau tanpa pesanan awal                |
+| Pelacakan pesanan      | Empat tahap, dari menunggu konfirmasi sampai selesai                       |
+| **Titik Kumpul**       | Buat atau ikut patungan pesanan bersama tetangga                           |
+| Obrolan titik kumpul   | Warga yang ikut patungan berunding jam berkumpul                           |
+| Kedaluwarsa otomatis   | Titik kumpul yang lewat tenggat berhenti menerima warga                    |
+| Bagikan undangan       | Tautan titik kumpul dibagikan lewat WhatsApp                               |
+| Percakapan             | Obrolan langsung dengan pedagang                                           |
+| Beri penilaian         | Bintang untuk pesanan selesai, sekali kirim, tampil di riwayat             |
+| Kelola akun            | Ubah nama, telepon, alamat, dan patokan lewat lembar di profil             |
+| Pusat notifikasi       | Kabar pesanan dan titik kumpul, dengan lencana belum dibaca                |
+| Bisa dipasang          | Punya manifest, ikon, dan service worker; terpasang seperti aplikasi biasa |
 
 ### Sisi pedagang
 
-| Fitur | Keterangan |
-|---|---|
-| Sakelar gerobak | Buka atau tutup. Saat tutup, permintaan yang menunggu ditampilkan |
-| Pesanan masuk | Disaring menurut status, dengan rincian dan total |
-| Terima & berangkat | Membuka navigasi dengan panduan arah |
-| Rekap harian | Ringkasan pesanan yang sudah dilayani |
-| Buku Kas | Pendapatan harian, grafik tujuh hari, menu terlaris, dan jam paling ramai |
-| Rincian per hari | Batang grafik bisa diketuk; menu terlaris dan jam ramai ikut menyesuaikan hari itu |
-| Kelola menu | Tambah, ubah, hapus, dan matikan menu, lengkap dengan foto yang bisa diganti |
-| Pengaturan toko | Nama, jenis, keterangan, area jangkauan, jam operasional, dan galeri |
-| Penilaian diterima | Rata-rata bintang dari warga, dihitung dari pesanan yang dinilai |
-| Tolak pesanan | Punya statusnya sendiri dan tidak terhitung sebagai pemasukan |
-| Pusat notifikasi | Pesanan baru dan permintaan titik kumpul untuk gerobak sendiri |
-| **SEKETIKA Pro** | Langganan yang bisa dinyalakan dan dimatikan, membuka tiga fitur di bawah |
-| Laporan 30 hari | Total, rata-rata per hari jualan, hari terbaik, dan perbandingan mingguan |
-| Prakiraan kawasan | Kawasan dan jam yang paling sering menghasilkan pesanan |
-| Catatan stok | Sisa porsi tiap menu, dicatat naik-turun dengan satu ketukan |
-| Halaman toko | Kelola menu, area jangkauan, dan jam operasional |
+| Fitur              | Keterangan                                                                         |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| Sakelar gerobak    | Buka atau tutup. Saat tutup, permintaan yang menunggu ditampilkan                  |
+| Pesanan masuk      | Disaring menurut status, dengan rincian dan total                                  |
+| Terima & berangkat | Membuka navigasi dengan panduan arah                                               |
+| Rekap harian       | Ringkasan pesanan yang sudah dilayani                                              |
+| Buku Kas           | Pendapatan harian, grafik tujuh hari, menu terlaris, dan jam paling ramai          |
+| Rincian per hari   | Batang grafik bisa diketuk; menu terlaris dan jam ramai ikut menyesuaikan hari itu |
+| Kelola menu        | Tambah, ubah, hapus, dan matikan menu, lengkap dengan foto yang bisa diganti       |
+| Pengaturan toko    | Nama, jenis, keterangan, area jangkauan, jam operasional, dan galeri               |
+| Penilaian diterima | Rata-rata bintang dari warga, dihitung dari pesanan yang dinilai                   |
+| Tolak pesanan      | Punya statusnya sendiri dan tidak terhitung sebagai pemasukan                      |
+| Pusat notifikasi   | Pesanan baru dan permintaan titik kumpul untuk gerobak sendiri                     |
+| **SEKETIKA Pro**   | Langganan yang bisa dinyalakan dan dimatikan, membuka tiga fitur di bawah          |
+| Laporan 30 hari    | Total, rata-rata per hari jualan, hari terbaik, dan perbandingan mingguan          |
+| Prakiraan kawasan  | Kawasan dan jam yang paling sering menghasilkan pesanan                            |
+| Catatan stok       | Sisa porsi tiap menu, dicatat naik-turun dengan satu ketukan                       |
+| Halaman toko       | Kelola menu, area jangkauan, dan jam operasional                                   |
 
 ## Teknologi
 
@@ -94,10 +92,8 @@ harus berjalan.
 - **Playwright** untuk uji ujung-ke-ujung
 
 Aplikasi berjalan sepenuhnya di sisi klien dan tidak memerlukan basis data,
-kunci API, maupun sambungan internet setelah halaman termuat. Pilihan ini
-disengaja: seluruh alur, termasuk yang melibatkan dua peran yang saling
-menunggu, bisa ditelusuri utuh tanpa satu pun langkah yang bisa gagal karena
-jaringan.
+kunci API, maupun sambungan internet setelah halaman termuat. Data disimpan di
+peramban perangkat memakai Zustand.
 
 ## Menjalankan
 
@@ -134,16 +130,41 @@ contoh. Data tersimpan di peramban perangkat itu sendiri, jadi ponsel yang sudah
 pernah membuka versi lama akan tetap memegang data lamanya sampai tombol ini
 ditekan. Tekan sekali sebelum memperagakan aplikasinya.
 
-## Memasang sebagai aplikasi
+## Memasang di ponsel
 
-SEKETIKA adalah PWA. Dari Chrome di Android, menu tiga titik memuat **Instal
-aplikasi**; setelah dipasang ia punya ikon sendiri di layar utama dan terbuka
-tanpa bilah alamat. Di iOS lewat Safari, **Bagikan → Tambahkan ke Layar Utama**.
+SEKETIKA adalah PWA, jadi bisa dipasang langsung dari peramban tanpa lewat toko
+aplikasi. Setelah terpasang, ada ikonnya sendiri di layar utama dan terbuka
+layar penuh tanpa bilah alamat.
 
-Isinya tetap dimuat dari server, jadi setiap kali kode ini di-deploy, aplikasi
-yang sudah terpasang ikut memakai versi baru saat dibuka berikutnya. Yang tidak
+### Android (Chrome)
+
+1. Buka <https://seketika-puce.vercel.app> di Chrome.
+2. Kalau muncul banner **Instal aplikasi** atau **Tambahkan ke Layar utama** di
+   bawah, ketuk itu.
+3. Kalau tidak muncul, buka menu tiga titik di kanan atas, lalu pilih **Instal
+   aplikasi** (atau **Tambahkan ke Layar utama**).
+4. Konfirmasi. Ikon SEKETIKA muncul di layar utama.
+
+Buka dari ikonnya, bukan dari tab Chrome, supaya tampil layar penuh.
+
+### iPhone dan iPad (Safari)
+
+Di iOS pemasangan hanya bisa lewat Safari; Chrome iOS tidak menyediakannya.
+
+1. Buka <https://seketika-puce.vercel.app> di Safari.
+2. Ketuk tombol **Bagikan** (kotak dengan panah ke atas).
+3. Gulir, lalu pilih **Tambahkan ke Layar Utama**.
+4. Ketuk **Tambah** di kanan atas.
+
+### Setelah terpasang
+
+Isi aplikasi tetap dimuat dari server, jadi setiap kali kode di-deploy, versi
+di ponsel ikut baru saat dibuka berikutnya tanpa perlu pasang ulang. Yang tidak
 ikut berubah hanya ikon, nama, dan splash screen, karena ketiganya dibaca dari
 manifest saat pemasangan.
+
+Kalau ponsel sudah pernah membuka versi lama, buka **Profil → Setel Ulang Data**
+sekali setelah terpasang supaya data contohnya ikut versi terbaru.
 
 ### Membungkusnya jadi APK
 
@@ -204,11 +225,11 @@ lalu tiga langkah pengenalan sebelum masuk ke beranda sesuai peran.
 
 ## Tim
 
-| | |
-|---|---|
-| Nama tim | INGKER |
-| Institusi | Institut Teknologi PLN |
-| Subtema | Digitalisasi UMKM dan Ekonomi Kreatif |
+|           |                                       |
+| --------- | ------------------------------------- |
+| Nama tim  | INGKER                                |
+| Institusi | Institut Teknologi PLN                |
+| Subtema   | Digitalisasi UMKM dan Ekonomi Kreatif |
 
 ## Lisensi
 

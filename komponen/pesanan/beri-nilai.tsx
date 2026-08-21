@@ -4,31 +4,30 @@ import * as React from "react";
 import { Star } from "lucide-react";
 import { useToko } from "@/lib/toko";
 
-const KETERANGAN = ["", "Mengecewakan", "Kurang", "Lumayan", "Bagus", "Memuaskan"];
+const KETERANGAN = [
+  "",
+  "Mengecewakan",
+  "Kurang",
+  "Lumayan",
+  "Bagus",
+  "Memuaskan",
+];
 
-/**
- * Memberi bintang untuk satu pesanan yang sudah selesai.
- *
- * Dibuat sebagai kelompok tombol radio sungguhan, bukan deretan ikon yang
- * bisa diklik. Bintang yang cuma gambar tidak bisa dicapai papan ketik,
- * tidak bisa dipilih dengan panah, dan pembaca layar tidak punya cara
- * menyuarakan berapa yang sedang terpilih. Bentuk radio memberi semuanya
- * secara cuma-cuma.
- *
- * Sekali terkirim, nilainya tidak bisa diubah lagi. Bintang yang masih
- * bisa diputar-putar setelah dikirim membuat angkanya kehilangan arti
- * bagi pedagang yang sudah melihatnya.
- */
-export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; namaPedagang?: string }) {
+/** Memberi bintang untuk satu pesanan yang sudah selesai. */
+export function BeriNilai({
+  pesananId,
+  namaPedagang,
+}: {
+  pesananId: string;
+  namaPedagang?: string;
+}) {
   const nilaiTersimpan = useToko((s) => s.penilaian[pesananId]);
   const beriNilai = useToko((s) => s.beriNilai);
   const [pilihan, setPilihan] = React.useState(0);
 
   if (nilaiTersimpan) {
     return (
-      /* Susunannya rata tengah persis seperti keadaan sebelum dinilai.
-         Kalau yang satu rata kiri dan yang lain rata tengah, kartunya
-         melompat berpindah tata letak tepat pada saat tombol ditekan. */
+      /* Susunannya rata tengah persis seperti keadaan sebelum dinilai. */
       <div className="bayang-kartu mt-3 rounded-2xl border border-garis bg-white p-4 text-center">
         <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-tinta-4">
           Penilaian Anda
@@ -39,7 +38,9 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
               key={n}
               size={24}
               strokeWidth={1.7}
-              className={n <= nilaiTersimpan ? "fill-amber text-amber" : "text-tinta-5"}
+              className={
+                n <= nilaiTersimpan ? "fill-amber text-amber" : "text-tinta-5"
+              }
             />
           ))}
         </p>
@@ -63,7 +64,9 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
       </p>
 
       <fieldset className="mt-3.5">
-        <legend className="khusus-pembaca-layar">Pilih jumlah bintang, satu sampai lima</legend>
+        <legend className="khusus-pembaca-layar">
+          Pilih jumlah bintang, satu sampai lima
+        </legend>
 
         {/* Deret bintangnya rata tengah, jaraknya sama di kiri dan kanan. */}
         <div className="flex items-center justify-center gap-1.5">
@@ -87,19 +90,16 @@ export function BeriNilai({ pesananId, namaPedagang }: { pesananId: string; nama
                 <Star
                   size={30}
                   strokeWidth={1.6}
-                  className={n <= pilihan ? "fill-amber text-amber" : "text-tinta-5"}
+                  className={
+                    n <= pilihan ? "fill-amber text-amber" : "text-tinta-5"
+                  }
                 />
               </span>
             </label>
           ))}
         </div>
 
-        {/* Keterangannya turun ke bawah deret, bukan menempel di sebelah
-            kanan bintang terakhir. Waktu ia berada di samping, munculnya
-            kata "Memuaskan" mendorong seluruh deret ke kiri, sehingga
-            bintangnya berhenti rata tengah justru pada saat pengguna
-            sedang memilih. Tingginya dikunci supaya kartunya tidak
-            tersentak memanjang saat kata itu muncul. */}
+        {/* Keterangannya turun ke bawah deret, bukan menempel di sebelah kanan bintang terakhir. */}
         <p className="mt-2 flex h-[18px] items-center justify-center text-[12.5px] font-semibold text-tinta-3">
           {pilihan > 0 ? KETERANGAN[pilihan] : ""}
         </p>

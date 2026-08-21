@@ -2,17 +2,14 @@
 
 /** Tautan undangan. Memakai asal peramban supaya benar di mana pun ditaruh. */
 export function tautTitik(id: string): string {
-  const asal = typeof window === "undefined" ? "https://seketika.app" : window.location.origin;
+  const asal =
+    typeof window === "undefined"
+      ? "https://seketika.app"
+      : window.location.origin;
   return `${asal}/kolab/${id}`;
 }
 
-/**
- * Menyalin teks ke papan klip.
- *
- * Clipboard API hanya tersedia pada konteks aman. Di luar itu dipakai
- * cara lama lewat elemen sementara, supaya tombol salin tetap bekerja
- * ketika aplikasi dibuka lewat alamat IP jaringan lokal saat demo.
- */
+/** Menyalin teks ke papan klip. */
 export async function salinTeks(teks: string): Promise<boolean> {
   try {
     if (navigator.clipboard && window.isSecureContext) {
@@ -37,5 +34,9 @@ export async function salinTeks(teks: string): Promise<boolean> {
 /** Membuka WhatsApp dengan pesan ajakan yang sudah terisi. */
 export function bagikanWhatsApp(namaTitik: string, taut: string): void {
   const pesan = `Yuk patungan pesan bareng di titik kumpul "${namaTitik}"! Gabung lewat SEKETIKA: ${taut}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, "_blank", "noopener,noreferrer");
+  window.open(
+    `https://wa.me/?text=${encodeURIComponent(pesan)}`,
+    "_blank",
+    "noopener,noreferrer",
+  );
 }

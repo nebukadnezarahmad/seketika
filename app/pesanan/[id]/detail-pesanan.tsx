@@ -45,7 +45,9 @@ export function DetailPesanan({ id }: { id: string }) {
   const pedagang = cariPedagang(pesanan.pedagangSlug);
   const batas = sampaiTahap(pesanan.status);
   const total = totalBaris(pesanan.baris);
-  const obrolan = percakapan.find((c) => c.pedagangSlug === pesanan.pedagangSlug);
+  const obrolan = percakapan.find(
+    (c) => c.pedagangSlug === pesanan.pedagangSlug,
+  );
 
   return (
     <Layar nav>
@@ -64,7 +66,9 @@ export function DetailPesanan({ id }: { id: string }) {
             />
           )}
           <div className="min-w-0">
-            <p className="truncate text-[15px] font-extrabold text-hijau">{pedagang?.nama}</p>
+            <p className="truncate text-[15px] font-extrabold text-hijau">
+              {pedagang?.nama}
+            </p>
             <p className="mt-1 flex flex-wrap items-center gap-1.5">
               <span className="rounded-pil bg-hijau-lembut px-2 py-0.5 text-[10.5px] font-semibold text-hijau">
                 {pedagang?.jenis}
@@ -77,9 +81,7 @@ export function DetailPesanan({ id }: { id: string }) {
           </div>
         </div>
 
-        {/* Penilaian hanya ditawarkan setelah pesanan benar-benar selesai.
-            Meminta bintang untuk sesuatu yang belum diterima warga cuma
-            menghasilkan angka yang tidak berarti apa-apa. */}
+        {/* Penilaian hanya ditawarkan setelah pesanan benar-benar selesai. */}
         {pesanan.status === "selesai" && (
           <BeriNilai pesananId={pesanan.id} namaPedagang={pedagang?.nama} />
         )}
@@ -91,9 +93,13 @@ export function DetailPesanan({ id }: { id: string }) {
           </p>
           <ul className="mt-3 flex flex-col gap-2">
             {pesanan.baris.map((b) => (
-              <li key={b.menuId} className="flex items-baseline justify-between gap-3 text-[12.5px]">
+              <li
+                key={b.menuId}
+                className="flex items-baseline justify-between gap-3 text-[12.5px]"
+              >
                 <span className="min-w-0 text-tinta-2">
-                  <span className="font-semibold text-tinta">{b.jumlah}×</span> {b.nama}
+                  <span className="font-semibold text-tinta">{b.jumlah}×</span>{" "}
+                  {b.nama}
                 </span>
                 <span className="shrink-0 font-semibold tabular-nums text-tinta">
                   {rp(b.harga * b.jumlah)}
@@ -102,11 +108,7 @@ export function DetailPesanan({ id }: { id: string }) {
             ))}
           </ul>
 
-          {/* Penjual bisa dipanggil tanpa memesan apa pun dulu; warga
-              memilih dagangannya setelah gerobak sampai. Tanpa baris ini
-              layarnya cuma memperlihatkan daftar kosong dan Rp 0, yang
-              terbaca seperti pesanan gagal padahal justru begitu memang
-              cara kerjanya. */}
+          {/* Penjual bisa dipanggil tanpa memesan apa pun dulu; warga memilih dagangannya setelah gerobak sampai. */}
           {pesanan.baris.length === 0 && (
             <p className="text-[12.5px] leading-relaxed text-tinta-4">
               Belum ada rincian. Penjual dipanggil lebih dulu, menunya dipilih
@@ -116,7 +118,9 @@ export function DetailPesanan({ id }: { id: string }) {
 
           <p className="mt-3 flex items-baseline justify-between border-t border-garis pt-3">
             <span className="text-[12px] text-tinta-4">
-              {pesanan.baris.length === 0 ? "Dihitung di tempat" : "Total · bayar di tempat"}
+              {pesanan.baris.length === 0
+                ? "Dihitung di tempat"
+                : "Total · bayar di tempat"}
             </span>
             <span className="text-[15px] font-extrabold tabular-nums text-hijau">
               {pesanan.baris.length === 0 ? "—" : rp(total)}
@@ -139,13 +143,18 @@ export function DetailPesanan({ id }: { id: string }) {
                   <div className="flex flex-col items-center">
                     <span
                       className={`grid size-[18px] shrink-0 place-items-center rounded-full ${
-                        lewat ? "bg-hijau text-white" : "border-2 border-garis bg-white"
+                        lewat
+                          ? "bg-hijau text-white"
+                          : "border-2 border-garis bg-white"
                       }`}
                     >
                       {lewat ? (
                         <Check size={11} strokeWidth={3.4} />
                       ) : (
-                        <Circle size={6} className="fill-tinta-5 text-tinta-5" />
+                        <Circle
+                          size={6}
+                          className="fill-tinta-5 text-tinta-5"
+                        />
                       )}
                     </span>
                     {!terakhir && (
@@ -165,7 +174,9 @@ export function DetailPesanan({ id }: { id: string }) {
                       {t.label}
                     </p>
                     {t.jam && lewat && (
-                      <p className="mt-0.5 text-[10.5px] text-tinta-4">{t.jam}</p>
+                      <p className="mt-0.5 text-[10.5px] text-tinta-4">
+                        {t.jam}
+                      </p>
                     )}
                   </div>
                 </li>

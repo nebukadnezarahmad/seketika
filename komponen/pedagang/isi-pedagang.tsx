@@ -4,18 +4,7 @@ import { ChevronRight, User, Users } from "lucide-react";
 import { jarakSingkat } from "@/lib/format";
 import type { Pedagang } from "@/lib/tipe";
 
-/**
- * Isi lembar pedagang: nama, tautan ke menu, dan dua cara memesan.
- *
- * Dipisahkan dari layarnya karena isi yang sama muncul di dua tempat.
- * Di beranda ia naik sebagai lembar di atas peta yang sudah tergambar,
- * sedangkan `/pedagang/[slug]` menyajikannya sebagai halaman utuh untuk
- * tautan langsung. Kalau isinya diketik dua kali, satu sisi pasti
- * tertinggal begitu tawarannya berubah.
- *
- * Kartu hijau pekat sengaja diberikan pada pemesanan kolaborasi, karena
- * itulah yang membedakan SEKETIKA dari aplikasi pesan-antar biasa.
- */
+/** Isi lembar pedagang: nama, tautan ke menu, dan dua cara memesan. */
 export function IsiPedagang({ pedagang }: { pedagang: Pedagang }) {
   return (
     <>
@@ -44,7 +33,9 @@ export function IsiPedagang({ pedagang }: { pedagang: Pedagang }) {
         Lihat Daftar Menu?
       </Link>
 
-      <p className="mt-4 text-[13px] text-tinta-4">Bagaimana kamu ingin memesan?</p>
+      <p className="mt-4 text-[13px] text-tinta-4">
+        Bagaimana kamu ingin memesan?
+      </p>
 
       <div className="mt-3 flex flex-col gap-3">
         <Link
@@ -74,7 +65,9 @@ export function IsiPedagang({ pedagang }: { pedagang: Pedagang }) {
           </span>
           <span className="min-w-0 flex-1">
             <span className="flex items-center gap-2">
-              <span className="text-[14px] font-bold text-white">Pesan dengan Kolaborasi</span>
+              <span className="text-[14px] font-bold text-white">
+                Pesan dengan Kolaborasi
+              </span>
               <span className="rounded-pil bg-hijau-neon px-1.5 py-0.5 text-[9px] font-extrabold tracking-[0.06em] text-hijau-gelap">
                 BARU
               </span>

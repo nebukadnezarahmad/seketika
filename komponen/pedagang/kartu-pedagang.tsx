@@ -4,20 +4,7 @@ import { IkonBintang } from "@/komponen/ui/ikon";
 import { jarakSingkat } from "@/lib/format";
 import type { Pedagang } from "@/lib/tipe";
 
-/**
- * Kartu pedagang pada rel mendatar di beranda.
- *
- * Lebarnya dipatok 148px seperti di desain supaya kartu berikutnya
- * selalu terlihat mengintip di tepi kanan. Potongan itu yang memberi
- * tahu pengguna bahwa deretnya masih bisa digeser.
- *
- * Kartunya bisa berperan dua cara. Kalau `onPilih` diberikan ia jadi
- * tombol yang menaikkan lembar di layar yang sama; tanpa itu ia kembali
- * jadi tautan biasa ke halaman pedagang. Beranda memakai yang pertama:
- * peta sudah tergambar di belakang, dan berpindah halaman hanya untuk
- * menggambar peta serupa membuat kerja yang sudah selesai diulang, dan
- * konteks tempat yang sedang dilihat pengguna hilang.
- */
+/** Kartu pedagang pada rel mendatar di beranda. */
 export function KartuPedagang({
   pedagang,
   utama,
@@ -37,7 +24,14 @@ export function KartuPedagang({
   const isi = (
     <>
       <div className="relative h-[100px] w-full">
-        <Image src={foto} alt={nama} fill sizes="148px" priority={utama} className="object-cover" />
+        <Image
+          src={foto}
+          alt={nama}
+          fill
+          sizes="148px"
+          priority={utama}
+          className="object-cover"
+        />
         <span
           className={`absolute right-2 top-2 rounded-pil px-[7px] py-[3px] text-[9px] font-bold leading-[13.5px] tracking-[0.36px] text-white ${
             buka ? "bg-hijau/88" : "bg-black/55"
@@ -51,7 +45,9 @@ export function KartuPedagang({
         <p className="truncate text-[12px] font-bold leading-[15.6px] tracking-[-0.12px] text-tinta">
           {nama}
         </p>
-        <p className="mt-0.5 truncate text-[10px] leading-[10px] text-tinta-4">{jenis}</p>
+        <p className="mt-0.5 truncate text-[10px] leading-[10px] text-tinta-4">
+          {jenis}
+        </p>
 
         <div className="mt-[7px] flex items-center justify-between">
           <span className="flex items-center gap-[3px]">

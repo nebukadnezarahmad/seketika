@@ -7,7 +7,10 @@ import { rp, totalBaris } from "@/lib/format";
 import { useToko } from "@/lib/toko";
 import type { PesananMasuk } from "@/lib/tipe";
 
-const rupaStatus: Record<PesananMasuk["status"], { label: string; kelas: string }> = {
+const rupaStatus: Record<
+  PesananMasuk["status"],
+  { label: string; kelas: string }
+> = {
   baru: { label: "Pesanan Baru", kelas: "bg-biru-lembut text-biru" },
   diproses: { label: "Diproses", kelas: "bg-amber/15 text-amber-tua" },
   diantar: { label: "Sedang Diantar", kelas: "bg-hijau/12 text-hijau" },
@@ -16,17 +19,18 @@ const rupaStatus: Record<PesananMasuk["status"], { label: string; kelas: string 
 };
 
 /** Yang masih berjalan, dilihat dari sisi penyaring. */
-const berjalan = (s: PesananMasuk["status"]) => s === "diproses" || s === "diantar";
+const berjalan = (s: PesananMasuk["status"]) =>
+  s === "diproses" || s === "diantar";
 
 export function PesananMasukLayar() {
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const ubahStatusMasuk = useToko((s) => s.ubahStatusMasuk);
-  const [aktif, setAktif] = React.useState<"semua" | PesananMasuk["status"]>("semua");
+  const [aktif, setAktif] = React.useState<"semua" | PesananMasuk["status"]>(
+    "semua",
+  );
   const [terbuka, setTerbuka] = React.useState<string | null>(null);
 
-  /* Tab "Diproses" menghitung pesanan yang sudah diterima maupun yang
-     sedang diantar. Bagi pedagang keduanya sama-sama belum kelar, dan
-     memecahnya jadi dua tab hanya menambah tab yang jarang berisi. */
+  /* Tab "Diproses" menghitung pesanan yang sudah diterima maupun yang sedang diantar. */
   const hitung = {
     semua: pesananMasuk.length,
     baru: pesananMasuk.filter((p) => p.status === "baru").length,
@@ -53,7 +57,9 @@ export function PesananMasukLayar() {
     <Layar nav peran="pedagang">
       <header className="px-4 pb-3 pt-3">
         <div className="flex items-start justify-between gap-3">
-          <h1 className="tulisan-judul text-[20px] font-extrabold text-hijau">Pesanan Masuk</h1>
+          <h1 className="tulisan-judul text-[20px] font-extrabold text-hijau">
+            Pesanan Masuk
+          </h1>
           {hitung.baru > 0 && (
             <span className="shrink-0 rounded-pil bg-merah px-2.5 py-1 text-[11px] font-bold text-white">
               {hitung.baru} baru
@@ -137,10 +143,16 @@ export function PesananMasukLayar() {
 
                   <span className="mt-1 flex items-center justify-between gap-2">
                     <span className="flex min-w-0 items-center gap-1 truncate text-[11px] text-tinta-4">
-                      <MapPin size={11} strokeWidth={2.2} className="shrink-0" />
+                      <MapPin
+                        size={11}
+                        strokeWidth={2.2}
+                        className="shrink-0"
+                      />
                       {p.titik}
                     </span>
-                    <span className={`shrink-0 rounded-pil px-2 py-0.5 text-[10px] font-bold ${kelas}`}>
+                    <span
+                      className={`shrink-0 rounded-pil px-2 py-0.5 text-[10px] font-bold ${kelas}`}
+                    >
                       {label}
                     </span>
                   </span>
@@ -161,7 +173,10 @@ export function PesananMasukLayar() {
                         className="flex items-baseline justify-between gap-3 text-[12px]"
                       >
                         <span className="text-tinta-2">
-                          <span className="font-semibold text-tinta">{b.jumlah}×</span> {b.nama}
+                          <span className="font-semibold text-tinta">
+                            {b.jumlah}×
+                          </span>{" "}
+                          {b.nama}
                         </span>
                         <span className="shrink-0 font-semibold tabular-nums text-tinta">
                           {rp(b.harga * b.jumlah)}

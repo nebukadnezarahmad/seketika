@@ -1,19 +1,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 
-/**
- * Deret pintasan layanan di beranda.
- *
- * Bentuknya mengikuti pola super-app: ubin persegi-membulat berlatar
- * warna lembut, label tebal gelap di bawahnya, dan keping kecil gelap
- * menempel di pojok kiri atas ubin.
- *
- * Keping itu di aplikasi aslinya berisi promo. Di sini isinya angka
- * sungguhan dari keadaan aplikasi (berapa titik kumpul sedang berjalan,
- * berapa gerobak sedang buka, harga termurah yang ada) — bukan tempelan
- * hiasan. Kalau tidak ada angka yang jujur untuk ditampilkan, kepingnya
- * memang tidak digambar; itu sebabnya `keping` boleh kosong.
- */
+/** Deret pintasan layanan di beranda. */
 export type Pintasan = {
   label: string;
   href: string;
@@ -42,12 +30,7 @@ export function AksiCepat({ pintasan }: { pintasan: readonly Pintasan[] }) {
                   <Ikon size={26} strokeWidth={1.9} />
                 </span>
                 {keping && (
-                  /* Keping menumpang di tepi ubin, bukan di dalamnya, persis
-                     seperti label promo pada aplikasi rujukan. Karena ia
-                     mengulang angka yang juga terbaca di halaman tujuan,
-                     matanya saja yang perlu melihatnya; pembaca layar akan
-                     membacakan label ubin dua kali kalau keping ini ikut
-                     disuarakan. */
+                  /* Keping menumpang di tepi ubin, bukan di dalamnya, persis seperti label promo pada aplikasi rujukan. */
                   <span
                     aria-hidden
                     className="absolute -left-1.5 -top-1.5 rounded-[8px] bg-tinta px-1.5 py-[3px] text-[8.5px] font-bold leading-[10px] text-white"

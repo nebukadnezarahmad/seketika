@@ -22,11 +22,7 @@ export function PesanKolaborasi() {
   const namaSaya = useToko((s) => s.profil?.nama);
   const sekarang = useSekarang();
 
-  /* Yang hangus tetap ditampilkan, tidak dibuang diam-diam. Titik kumpul
-     yang tiba-tiba lenyap membuat warga yang sudah bergabung mengira
-     datanya hilang; yang benar adalah ia lewat tenggat, dan itu perlu
-     terbaca. Urutannya yang hangus turun ke bawah supaya tidak menghalangi
-     yang masih bisa diikuti. */
+  /* Yang hangus tetap ditampilkan, tidak dibuang diam-diam. */
   const aktif = titikKumpul
     .filter((t) => t.status !== "selesai")
     .slice()
@@ -59,18 +55,16 @@ export function PesanKolaborasi() {
           <p className="relative mt-1.5 max-w-[15rem] text-[12.5px] leading-snug text-white/70">
             Pesan bareng tetangga agar pedagang datang ke lingkunganmu.
           </p>
-          {/* Pil putih, bukan teks hijau menyala seperti sebelumnya.
-              Waktu latarnya masih hijau tua, teks neon di atasnya masih
-              terbaca; setelah latarnya ikut jadi hijau terang, keduanya
-              nyaris menyatu. Pil putih juga membuat ajakan ini terbaca
-              sebagai tombol, bukan sekadar tulisan berwarna. */}
+          {/* Pil putih, bukan teks hijau menyala seperti sebelumnya. */}
           <span className="relative mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 text-[12.5px] font-bold text-hijau">
             Mulai sekarang
             <ArrowRight size={15} strokeWidth={2.6} />
           </span>
         </Link>
 
-        <h2 className="mb-2.5 mt-5 text-[14px] font-bold text-tinta">Titik Kumpul Aktif</h2>
+        <h2 className="mb-2.5 mt-5 text-[14px] font-bold text-tinta">
+          Titik Kumpul Aktif
+        </h2>
 
         <ul className="rentet flex flex-col gap-3">
           {aktif.map((t) => {
@@ -91,7 +85,11 @@ export function PesanKolaborasi() {
                 <div className="p-3.5">
                   <div className="flex items-start justify-between gap-2">
                     <p className="flex min-w-0 items-center gap-1.5 text-[15px] font-bold text-tinta">
-                      <MapPin size={15} strokeWidth={2.1} className="shrink-0 text-hijau" />
+                      <MapPin
+                        size={15}
+                        strokeWidth={2.1}
+                        className="shrink-0 text-hijau"
+                      />
                       <span className="truncate">{t.nama}</span>
                     </p>
                     <span
@@ -103,13 +101,19 @@ export function PesanKolaborasi() {
                             : "bg-hijau-lembut text-hijau"
                       }`}
                     >
-                      {hangus ? "Hangus" : penuh ? "Target tercapai" : labelStatusTitik[keadaan]}
+                      {hangus
+                        ? "Hangus"
+                        : penuh
+                          ? "Target tercapai"
+                          : labelStatusTitik[keadaan]}
                     </span>
                   </div>
 
                   <p className="mt-1 text-[11px] text-tinta-4">
                     Dibuat oleh {punyaSaya ? "Anda" : pembuat} ·{" "}
-                    {hangus ? "waktunya sudah lewat" : sisaWaktu(t.kedaluwarsa, sekarang)}
+                    {hangus
+                      ? "waktunya sudah lewat"
+                      : sisaWaktu(t.kedaluwarsa, sekarang)}
                   </p>
 
                   <div className="mt-3 flex items-baseline justify-between gap-2">
@@ -122,7 +126,10 @@ export function PesanKolaborasi() {
                   </div>
 
                   <div className="mt-1.5">
-                    <BatangKemajuan nilai={t.peserta.length} target={t.target} />
+                    <BatangKemajuan
+                      nilai={t.peserta.length}
+                      target={t.target}
+                    />
                   </div>
 
                   <div className="mt-3 flex items-center justify-between gap-2">

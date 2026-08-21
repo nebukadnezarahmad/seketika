@@ -89,7 +89,10 @@ export function Cari() {
                   </option>
                 ))}
               </select>
-              <ChevronDown size={15} className="pointer-events-none shrink-0 text-tinta-5" />
+              <ChevronDown
+                size={15}
+                className="pointer-events-none shrink-0 text-tinta-5"
+              />
             </span>
           </label>
         </div>
@@ -99,7 +102,10 @@ export function Cari() {
             Cari
           </Tombol>
           <p className="mt-4 text-center">
-            <Link href="/beranda" className="text-[12.5px] text-tinta-4 underline underline-offset-4">
+            <Link
+              href="/beranda"
+              className="text-[12.5px] text-tinta-4 underline underline-offset-4"
+            >
               Atau lihat lihat dulu
             </Link>
           </p>

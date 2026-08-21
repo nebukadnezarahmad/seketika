@@ -1,79 +1,32 @@
 @import "tailwindcss";
 
-/* ------------------------------------------------------------------
-   Rancangan awal token ini diambil langsung dari berkas Figma SEKETIKA.
-   Set ini adalah revisi kedua: warnanya digeser mengikuti ekosistem
-   Gojek (hijau #00AA13, latar putih/abu sejuk, bentuk serba membulat)
-   supaya aplikasinya terasa lebih segar dan kekinian, atas permintaan
-   eksplisit pengguna. Nama variabelnya sengaja dipertahankan sama
-   dengan versi lama — sebagian besar berkas di aplikasi ini memanggil
-   token, bukan angka mentah, jadi mengganti nilai di sini saja sudah
-   mengubah tampilan sebagian besar layar tanpa menyentuh berkas lain.
-   ------------------------------------------------------------------ */
+/* Rancangan awal token ini diambil langsung dari berkas Figma SEKETIKA. */
 @theme {
-  /* Hijau, warna utama merek, terinspirasi hijau Gojek (#00AA13).
-     --color-hijau BUKAN angka itu persis: pada teks putih kecil (label
-     tombol, badge jumlah) #00AA13 hanya mencapai kontras 3,1:1, di
-     bawah ambang AA 4,5:1 untuk teks. #00860F menahan rona dan
-     kejenuhan yang sama tapi lolos 4,75:1, jadi tombol tetap terbaca.
-     Hijau aslinya sendiri disimpan di --color-hijau-terang untuk
-     gradasi dan aksen dekoratif besar yang tidak menanggung teks kecil
-     di atasnya. */
+  /* Hijau, warna utama merek, terinspirasi hijau Gojek (#00AA13). */
   --color-hijau-gelap: #005c0a;
   --color-hijau: #00860f;
   --color-hijau-terang: #00aa13;
   --color-hijau-lembut: #e6f8e8;
-  /* Hijau menyala, dan ini SELALU dipakai di atas latar hijau: titik
-     "sedang aktif", sakelar gerobak buka, keping "BARU". Karena itu ia
-     harus jauh lebih terang dari warna merek, bukan sekadar lebih
-     jenuh. Sempat disetel #17c93b dan hasilnya nyaris menyatu dengan
-     --color-hijau; keping yang memakainya sebagai latar bahkan cuma
-     mencapai 2:1 terhadap teks hijaunya. #4ade80 mengembalikan jarak
-     terang itu: sebagai latar dengan teks --color-hijau-gelap ia lolos
-     4,76:1. Jangan memakainya sebagai teks di atas putih, di sana ia
-     tidak terbaca; untuk itu ada --color-hijau. */
+  /* Hijau menyala, dan ini SELALU dipakai di atas latar hijau: titik "sedang aktif", sakelar gerobak buka, keping "BARU". */
   --color-hijau-neon: #4ade80;
 
-  /* Netral sejuk. Latarnya abu-putih, bukan krem hangat seperti versi
-     pertama — pola super-app modern: kartu putih mengambang di atas
-     latar abu sangat muda, bukan kartu di atas krem. Nama variabelnya
-     tetap "krem" supaya berkas lain yang memanggil `bg-krem` tidak
-     perlu diubah. */
+  /* Netral sejuk. */
   --color-krem: #f5f6f5;
   --color-garis: #e7e9e7;
   --color-garis-pil: #e2e5e2;
-  /* Garis yang MENANDAI batas komponen, bukan sekadar memisahkan isi.
-     WCAG 1.4.11 menuntut 3:1 untuk batas yang dipakai mengenali kontrol,
-     dan --color-garis hanya 1,22:1 di atas putih: tepi kotak isian dan
-     tombol bergaris praktis tidak terlihat. #909290 lolos 3,13:1.
-     Dipakai untuk tepi input dan tombol sekunder; untuk garis pemisah
-     yang murni hiasan, --color-garis tetap yang benar karena di sana
-     tidak ada ambang yang harus dilewati. */
+  /* Garis yang MENANDAI batas komponen, bukan sekadar memisahkan isi. */
   --color-garis-tegas: #909290;
 
-  /* Tinta, dari paling pekat ke paling pudar. Rona digeser dari
-     kecoklatan hangat ke abu sejuk supaya serasi dengan latar barunya. */
+  /* Tinta, dari paling pekat ke paling pudar. */
   --color-tinta: #191b19;
   --color-tinta-2: #2a2d2a;
   --color-tinta-3: #767b76;
-  /* #6b706b lolos 5,05:1 di atas krem baru maupun putih — marjinnya
-     malah lebih longgar dari versi lama karena latarnya kini lebih
-     terang. */
+  /* #6b706b lolos 5,05:1 di atas krem baru maupun putih — marjinnya malah lebih longgar dari versi lama karena latarnya kini lebih terang. */
   --color-tinta-4: #6b706b;
   --color-tinta-5: #c4c7c4;
   --color-tinta-6: #63675f;
 
-  /* Aksen. Oranye dan merah dinaikkan kejenuhannya (dan merahnya
-     digelapkan secukupnya untuk tetap lolos AA di atas dirinya sendiri
-     sebagai latar teks putih) supaya terasa lebih hidup. Biru dan ungu
-     baru menggantikan hex tertambat yang sebelumnya tersebar sendiri-
-     sendiri di beberapa berkas (badge status, ikon kategori, aksen
-     rute) supaya semuanya menarik dari satu sumber yang sama.
-
-     Pengecualian yang SENGAJA tidak memakai token ini: logo Google di
-     ikon-sosial.tsx (empat warna resmi Google, bukan warna kita) dan
-     titik lokasi pengguna di peta (konvensi biru universal ala Google
-     Maps, bukan warna merek). Keduanya tetap hex literal. */
+  /* Aksen. */
   --color-amber: #ff9500;
   --color-amber-tua: #e65100;
   --color-amber-lembut: #fff3e0;
@@ -86,15 +39,13 @@
 
   --radius-pil: 99px;
 
-  /* Token gerak. Empat durasi saja; kalau butuh yang kelima biasanya
-     tandanya animasinya sendiri yang salah, bukan angkanya. */
+  /* Token gerak. */
   --gerak-kilat: 90ms;
   --gerak-cepat: 180ms;
   --gerak-sedang: 320ms;
   --gerak-lambat: 560ms;
 
-  /* Meluncur keluar dengan cepat lalu mendarat pelan. Dipakai untuk
-     hampir semua gerak masuk. */
+  /* Meluncur keluar dengan cepat lalu mendarat pelan. */
   --pelan-keluar: cubic-bezier(0.22, 1, 0.36, 1);
   --tajam: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -109,11 +60,7 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Dokumen luar dikunci setinggi layar dan tidak boleh bergulir sama
-     sekali. Tiap layar sudah punya wadah gulirnya sendiri di dalam;
-     tanpa kunci ini, menyeret layar di aplikasi terpasang menarik
-     seluruh dokumen ikut naik dan menyingkap latar kosong di baliknya —
-     yang di ponsel terlihat seperti "layar bisa keangkat". */
+  /* Dokumen luar dikunci setinggi layar dan tidak boleh bergulir sama sekali. */
   html {
     height: 100%;
     overflow: hidden;
@@ -128,25 +75,32 @@
     overscroll-behavior: none;
   }
 
-  /* Tombol dan tautan di aplikasi ini tidak pernah memakai serif
-     bawaan peramban untuk elemen form. */
-  button, input, textarea, select {
+  /* Tombol dan tautan di aplikasi ini tidak pernah memakai serif bawaan peramban untuk elemen form. */
+  button,
+  input,
+  textarea,
+  select {
     font: inherit;
     color: inherit;
   }
 }
 
 @layer utilities {
-  /* Bayangan berulang dari desain, disimpan sebagai utilitas supaya
-     nilainya tidak tersalin-salin dan menyimpang satu sama lain. */
+  /* Bayangan berulang dari desain, disimpan sebagai utilitas supaya nilainya tidak tersalin-salin dan menyimpang satu sama lain. */
   .bayang-kartu {
-    box-shadow: 0 2px 14px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.04);
+    box-shadow:
+      0 2px 14px rgb(0 0 0 / 0.06),
+      0 1px 3px rgb(0 0 0 / 0.04);
   }
   .bayang-kendali {
-    box-shadow: 0 3px 8px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+    box-shadow:
+      0 3px 8px rgb(0 0 0 / 0.06),
+      0 1px 2px rgb(0 0 0 / 0.04);
   }
   .bayang-peta {
-    box-shadow: 0 4px 24px rgb(0 0 0 / 0.09), 0 1px 6px rgb(0 0 0 / 0.05);
+    box-shadow:
+      0 4px 24px rgb(0 0 0 / 0.09),
+      0 1px 6px rgb(0 0 0 / 0.05);
   }
   .bayang-nav {
     box-shadow: 0 -6px 12px rgb(0 0 0 / 0.05);
@@ -158,16 +112,12 @@
     box-shadow: 0 -8px 32px rgb(0 0 0 / 0.13);
   }
 
-  /* Huruf lambang/judul. Poppins terasa lebih bulat dan geometris
-     daripada Inter — dipakai pada judul-judul besar yang ingin terasa
-     kekinian (wordmark, judul bagian utama), bukan pada seluruh teks. */
+  /* Huruf lambang/judul. */
   .tulisan-judul {
     font-family: var(--font-lambang);
   }
 
-  /* Tulisan bergradasi. Warnanya dipotong mengikuti bentuk huruf, jadi
-     latarnya harus transparan; tanpa `text-transparent` yang terlihat
-     hanya blok warna. */
+  /* Tulisan bergradasi. */
   .tulisan-gradasi {
     background-image: linear-gradient(to bottom, #00aa13 0%, #00860f 100%);
     -webkit-background-clip: text;
@@ -175,8 +125,7 @@
     color: transparent;
   }
 
-  /* Gradasi kartu hijau. Dua arah berbeda dipakai di desain: kartu
-     status gerobak menyapu diagonal, kartu titik kumpul lebih datar. */
+  /* Gradasi kartu hijau. */
   .gradasi-gerobak {
     background-image: linear-gradient(135deg, #005c0a 0%, #00aa13 100%);
   }
@@ -187,8 +136,7 @@
     background-image: linear-gradient(135deg, #ffb020 0%, #e65100 100%);
   }
 
-  /* Deret bergulir mendatar tanpa batang gulir yang terlihat. Dipakai
-     untuk pil penyaring dan rel kartu pedagang. */
+  /* Deret bergulir mendatar tanpa batang gulir yang terlihat. */
   .rel-gulir {
     overflow-x: auto;
     scrollbar-width: none;
@@ -198,36 +146,39 @@
     display: none;
   }
 
-  /* Isi layar yang bergulir.
-
-     Anak langsungnya dikunci agar tidak menyusut. Tanpa ini, wadah lentur
-     yang bergulir akan memeras anak-anaknya sampai muat sehingga halaman
-     tidak pernah benar-benar bergulir dan barisnya gepeng. Anak dengan
-     `flex-1` tetap bisa memanjang karena yang dimatikan hanya penyusutan.
-     Ini yang membuat layar peta bisa memenuhi sisa ruang sementara daftar
-     panjang tetap tergulung utuh. */
+  /* Isi layar yang bergulir. */
   .isi-layar > * {
     flex-shrink: 0;
   }
 
-  /* Daftar yang anaknya muncul berurutan.
-
-     Penundaannya ditulis sebagai aturan nth-child, bukan gaya sebaris per
-     butir, supaya komponen daftarnya tetap bersih dan penundaan tidak ikut
-     tersalin ke mana-mana. Setelah butir kedelapan semuanya muncul
-     bersamaan: menunggu giliran lebih lama dari itu terasa lambat, bukan
-     berurutan. */
+  /* Daftar yang anaknya muncul berurutan. */
   .rentet > * {
     animation: masuk-daftar var(--gerak-sedang) var(--pelan-keluar) both;
   }
-  .rentet > *:nth-child(1) { animation-delay: 0ms; }
-  .rentet > *:nth-child(2) { animation-delay: 45ms; }
-  .rentet > *:nth-child(3) { animation-delay: 90ms; }
-  .rentet > *:nth-child(4) { animation-delay: 135ms; }
-  .rentet > *:nth-child(5) { animation-delay: 180ms; }
-  .rentet > *:nth-child(6) { animation-delay: 225ms; }
-  .rentet > *:nth-child(7) { animation-delay: 270ms; }
-  .rentet > *:nth-child(n + 8) { animation-delay: 300ms; }
+  .rentet > *:nth-child(1) {
+    animation-delay: 0ms;
+  }
+  .rentet > *:nth-child(2) {
+    animation-delay: 45ms;
+  }
+  .rentet > *:nth-child(3) {
+    animation-delay: 90ms;
+  }
+  .rentet > *:nth-child(4) {
+    animation-delay: 135ms;
+  }
+  .rentet > *:nth-child(5) {
+    animation-delay: 180ms;
+  }
+  .rentet > *:nth-child(6) {
+    animation-delay: 225ms;
+  }
+  .rentet > *:nth-child(7) {
+    animation-delay: 270ms;
+  }
+  .rentet > *:nth-child(n + 8) {
+    animation-delay: 300ms;
+  }
 
   /* Menyembunyikan isi dari mata tapi tetap terbaca pembaca layar. */
   .khusus-pembaca-layar {
@@ -243,9 +194,7 @@
   }
 }
 
-/* Perpindahan halaman. Hanya opasitas dan geseran kecil; menggeser
-   seluruh layar lebih jauh membuat perpindahan terasa lamban, bukan
-   halus. */
+/* Perpindahan halaman. */
 @keyframes masuk-halaman {
   from {
     opacity: 0;
@@ -268,12 +217,7 @@
   }
 }
 
-/* Kemunculan bertahap pada layar pembuka.
-
-   Tahapannya diatur murni lewat penundaan animasi CSS, bukan lewat
-   penghitung di React. Dengan begitu tidak ada satu pun render tambahan
-   selama pembukaan berjalan, dan urutannya tidak bisa meleset karena
-   pewaktu yang tereksekusi terlambat. */
+/* Kemunculan bertahap pada layar pembuka. */
 @keyframes muncul {
   from {
     opacity: 0;
@@ -296,11 +240,7 @@
   }
 }
 
-/* Titik berjalan pada kartu navigasi melayang.
-
-   Empat titik bergiliran memanjang dan menyala hijau, memberi kesan
-   perjalanan yang sedang berlangsung. Rancangannya membekukan keadaan
-   ini pada titik kedua; di sini giliran itu berputar. */
+/* Titik berjalan pada kartu navigasi melayang. */
 @keyframes titik-jalan {
   0%,
   100% {
@@ -331,10 +271,7 @@
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
-    /* Penundaan ikut dinolkan. Kalau hanya durasinya yang dipangkas,
-       unsur dengan `animation-delay` panjang tetap menunggu giliran
-       sebelum muncul, sehingga layar pembuka terlihat kosong lebih dari
-       satu detik bagi orang yang justru meminta gerak dikurangi. */
+    /* Penundaan ikut dinolkan. */
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -343,25 +280,7 @@
   }
 }
 
-/* ------------------------------------------------------------------
-   Koreografi layar pembuka.
-
-   Lambangnya tidak muncul utuh lalu memudar masuk, melainkan dirakit di
-   depan mata: gerobaknya datang lebih dulu, pin lokasi jatuh mendarat di
-   atasnya, lingkaran dan intinya membesar dari tengah, baru sinarnya
-   memancar. Urutan itu menceritakan lambangnya sendiri, dan itu yang
-   membedakan gerak bermakna dari sekadar unsur yang berkedip masuk.
-
-   Seluruh tahapannya diatur lewat penundaan animasi CSS, bukan penghitung
-   di React. Dengan begitu tidak ada satu pun render tambahan sepanjang
-   pembukaan berjalan, dan urutannya tidak bisa meleset karena pewaktu
-   yang tereksekusi terlambat.
-
-   Yang dianimasikan hanya transform dan opacity, dua sifat yang bisa
-   ditangani penyusun gambar tanpa menghitung ulang tata letak pada tiap
-   bingkai. Pada ponsel kelas bawah, menganimasikan lebar atau posisi di
-   layar pembuka justru membuat kesan pertama tersendat.
-   ------------------------------------------------------------------ */
+/* Koreografi layar pembuka. */
 
 @keyframes lg-gerobak-masuk {
   from {
@@ -374,8 +293,7 @@
   }
 }
 
-/* Rodanya berputar lebih dari satu putaran penuh supaya terbaca sebagai
-   gerobak yang benar-benar didorong, bukan roda yang sekadar bergeser. */
+/* Rodanya berputar lebih dari satu putaran penuh supaya terbaca sebagai gerobak yang benar-benar didorong, bukan roda yang sekadar bergeser. */
 @keyframes lg-roda-putar {
   from {
     transform: rotate(-400deg);
@@ -385,9 +303,7 @@
   }
 }
 
-/* Pin jatuh melewati titik akhirnya sedikit lalu balik. Pendaratan yang
-   berhenti tepat pada sasaran terasa seperti gambar yang ditempel;
-   lewat sedikit membuatnya terasa punya bobot. */
+/* Pin jatuh melewati titik akhirnya sedikit lalu balik. */
 @keyframes lg-pin-jatuh {
   0% {
     opacity: 0;
@@ -421,8 +337,7 @@
   }
 }
 
-/* Sinar memancar keluar dari pusat pin, jadi ia mengecil dari nol
-   sekaligus bergeser sedikit ke arah luar. */
+/* Sinar memancar keluar dari pusat pin, jadi ia mengecil dari nol sekaligus bergeser sedikit ke arah luar. */
 @keyframes lg-sinar-pancar {
   from {
     opacity: 0;
@@ -468,9 +383,7 @@
   }
 }
 
-/* Bulatan hijau lembut yang mengambang pelan di latar. Geraknya sengaja
-   lambat dan kecil; latar yang ikut sibuk akan merebut perhatian dari
-   lambang yang sedang dirakit di depannya. */
+/* Bulatan hijau lembut yang mengambang pelan di latar. */
 @keyframes lg-apung {
   0%,
   100% {
@@ -524,21 +437,10 @@
   }
 }
 
-/* ------------------------------------------------------------------
-   Aplikasi terpasang.
-
-   Aturan-aturan ini sengaja ditulis di luar @layer. Lapisan bernama
-   selalu kalah dari CSS tanpa lapisan, jadi menaruhnya di sini menjamin
-   ia menang atas utilitas Tailwind pada elemen yang sama tanpa perlu
-   menaikkan kekhususan pemilihnya.
-   ------------------------------------------------------------------ */
+/* Aplikasi terpasang. */
 
 @media (display-mode: standalone) {
-  /* Sistem operasi sudah menggambar bilah statusnya sendiri di atas
-     jendela; bilah tiruan dari rancangan akan jadi yang kedua, lengkap
-     dengan jam yang menunjukkan waktu sama. Isi halaman sudah otomatis
-     mulai di bawah bilah status sistem, jadi tidak ada ruang pengganti
-     yang perlu ditambahkan. */
+  /* Sistem operasi sudah menggambar bilah statusnya sendiri di atas jendela; bilah tiruan dari rancangan akan jadi yang kedua, lengkap dengan jam yang menunjukkan waktu sama. */
   .bilah-tiruan {
     display: none;
   }

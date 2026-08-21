@@ -13,15 +13,16 @@ export type RupaLawan = {
 
 export function rupaLawan(id: string, peran: Peran): RupaLawan {
   if (peran === "pedagang") {
-    return rupaPercakapanPedagang[id] ?? { inisial: "?", daring: false, kapan: "" };
+    return (
+      rupaPercakapanPedagang[id] ?? { inisial: "?", daring: false, kapan: "" }
+    );
   }
   const r = rupaPercakapan[id];
   return {
     foto: r?.foto ?? "/img/foto-bakso.jpg",
     daring: r?.daring ?? false,
     kapan: r?.kapan ?? "",
-    /* Di sisi pembeli hanya percakapan pertama yang punya lencana belum
-       dibaca, sesuai rancangannya. */
+    /* Di sisi pembeli hanya percakapan pertama yang punya lencana belum dibaca, sesuai rancangannya. */
     belumDibaca: id === "ch-01" ? 1 : undefined,
   };
 }

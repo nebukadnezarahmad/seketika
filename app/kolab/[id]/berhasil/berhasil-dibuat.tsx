@@ -41,8 +41,12 @@ export function BerhasilDibuat({ id }: { id: string }) {
             <Link2 size={17} strokeWidth={2.1} />
           </span>
           <span className="min-w-0 flex-1 text-left">
-            <span className="block truncate text-[12.5px] font-semibold text-tinta">{taut}</span>
-            <span className="block text-[11px] text-tinta-4">Link undangan Anda</span>
+            <span className="block truncate text-[12.5px] font-semibold text-tinta">
+              {taut}
+            </span>
+            <span className="block text-[11px] text-tinta-4">
+              Link undangan Anda
+            </span>
           </span>
           <button
             type="button"
@@ -54,7 +58,10 @@ export function BerhasilDibuat({ id }: { id: string }) {
         </div>
 
         <div className="mt-6 flex w-full flex-col gap-3">
-          <Tombol penuh onClick={() => bagikanWhatsApp(titik?.nama ?? "titik kumpul", taut)}>
+          <Tombol
+            penuh
+            onClick={() => bagikanWhatsApp(titik?.nama ?? "titik kumpul", taut)}
+          >
             <MessageCircle size={17} strokeWidth={2.2} />
             Bagikan via WhatsApp
           </Tombol>

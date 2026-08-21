@@ -1,10 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-/**
- * Uji dijalankan pada ukuran ponsel yang sama dengan papan rancangan
- * (390x844), karena seluruh tata letak aplikasi ini memang dirancang
- * untuk lebar itu.
- */
+/** Uji dijalankan pada ukuran ponsel yang sama dengan papan rancangan (390x844), karena seluruh tata letak aplikasi ini memang dirancang untuk lebar itu. */
 export default defineConfig({
   testDir: "./uji",
   fullyParallel: true,

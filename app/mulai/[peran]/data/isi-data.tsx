@@ -3,13 +3,33 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
-  ArrowRight, Leaf, Mail, MapPin, MoreHorizontal, Package, Phone, ScissorsLineDashed,
-  ShieldCheck, ShoppingBasket, Sparkles, Store, Trees, User, Utensils, Wrench, House,
+  ArrowRight,
+  Leaf,
+  Mail,
+  MapPin,
+  MoreHorizontal,
+  Package,
+  Phone,
+  ScissorsLineDashed,
+  ShieldCheck,
+  ShoppingBasket,
+  Sparkles,
+  Store,
+  Trees,
+  User,
+  Utensils,
+  Wrench,
+  House,
 } from "lucide-react";
 import { BilahStatus } from "@/komponen/ui/bilah-status";
 import { Tombol } from "@/komponen/ui/tombol";
 import { KolomIsian } from "@/komponen/ui/kolom-isian";
-import { JudulLangkah, KakiVersi, Kicker, TitikLangkah } from "@/komponen/ui/langkah";
+import {
+  JudulLangkah,
+  KakiVersi,
+  Kicker,
+  TitikLangkah,
+} from "@/komponen/ui/langkah";
 import { useToko } from "@/lib/toko";
 import type { Peran } from "@/lib/tipe";
 
@@ -31,9 +51,7 @@ export function IsiData({ peran }: { peran: Peran }) {
   const simpanProfil = useToko((s) => s.simpanProfil);
   const draf = useToko((s) => s.draf);
 
-  /* Nilai awal dibaca sekali lewat penginisialisasi malas. Menyalinnya
-     dari draf lewat efek akan menimpa apa yang sedang diketik pengguna
-     setiap kali komponennya render ulang. */
+  /* Nilai awal dibaca sekali lewat penginisialisasi malas. */
   const [isi, setIsi] = React.useState(() => ({
     nama: draf?.nama ?? "",
     email: draf?.email ?? "",
@@ -44,12 +62,12 @@ export function IsiData({ peran }: { peran: Peran }) {
     deskripsiUsaha: "",
   }));
   const [jenis, setJenis] = React.useState<string | null>(null);
-  const ubah = (k: keyof typeof isi) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setIsi((s) => ({ ...s, [k]: e.target.value }));
+  const ubah =
+    (k: keyof typeof isi) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setIsi((s) => ({ ...s, [k]: e.target.value }));
 
-  /* Hanya nama yang benar-benar wajib. Sisanya bisa dilengkapi belakangan
-     lewat halaman profil, dan memaksanya di sini cuma membuat orang
-     berhenti di gerbang. */
+  /* Hanya nama yang benar-benar wajib. */
   const bolehLanjut = isi.nama.trim().length >= 2;
 
   const kirim = (e: React.FormEvent) => {
@@ -75,12 +93,19 @@ export function IsiData({ peran }: { peran: Peran }) {
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-krem">
       <BilahStatus />
 
-      <form onSubmit={kirim} className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-2 pt-2">
+      <form
+        onSubmit={kirim}
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-2 pt-2"
+      >
         <TitikLangkah ke={3} />
 
         <div className="mt-3">
           <Kicker anak="LANGKAH 3 DARI 3" />
-          <JudulLangkah anak={peran === "pedagang" ? "Isi Data Pedagang" : "Isi Data Pembeli"} />
+          <JudulLangkah
+            anak={
+              peran === "pedagang" ? "Isi Data Pedagang" : "Isi Data Pembeli"
+            }
+          />
           <p className="mt-2 text-[13px] leading-relaxed text-tinta-3">
             {peran === "pedagang"
               ? "Lengkapi data berikut agar pembeli dapat menemukan dan memesan dari Anda."
@@ -176,8 +201,14 @@ export function IsiData({ peran }: { peran: Peran }) {
                           onChange={() => setJenis(nama)}
                           className="khusus-pembaca-layar"
                         />
-                        <Ikon size={17} strokeWidth={1.9} className={aktif ? "text-white" : "text-hijau"} />
-                        <span className="text-[9.5px] font-medium leading-[1.25]">{nama}</span>
+                        <Ikon
+                          size={17}
+                          strokeWidth={1.9}
+                          className={aktif ? "text-white" : "text-hijau"}
+                        />
+                        <span className="text-[9.5px] font-medium leading-[1.25]">
+                          {nama}
+                        </span>
                       </label>
                     );
                   })}
@@ -200,8 +231,8 @@ export function IsiData({ peran }: { peran: Peran }) {
         {peran === "pembeli" && (
           <p className="mt-3 flex gap-2.5 rounded-[14px] bg-hijau-lembut/70 p-3.5 text-[11.5px] leading-relaxed text-tinta-3">
             <ShieldCheck size={15} className="mt-px shrink-0 text-hijau" />
-            Data Anda aman bersama kami. Informasi ini hanya digunakan untuk keperluan pemesanan
-            dan pengantaran.
+            Data Anda aman bersama kami. Informasi ini hanya digunakan untuk
+            keperluan pemesanan dan pengantaran.
           </p>
         )}
 

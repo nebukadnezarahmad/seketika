@@ -45,16 +45,10 @@ export function BukuKas() {
   const pesananMasuk = useToko((s) => s.pesananMasuk);
   const sekarang = useSekarang();
   const [tersalin, setTersalin] = React.useState(false);
-  /* Offset hari yang batangnya sedang diketuk; null berarti sedang
-     melihat rangkuman tujuh hari. Disimpan sebagai offset, bukan tanggal,
-     supaya nilainya tetap benar walau tengah malam lewat sementara layar
-     dibiarkan terbuka. */
+  /* Offset hari yang batangnya sedang diketuk; null berarti sedang melihat rangkuman tujuh hari. */
   const [hariDipilih, setHariDipilih] = React.useState<number | null>(null);
 
-  /* Buku Kas membaca dua sumber sekaligus: riwayat hari-hari sebelumnya
-     dan pesanan hari ini yang sudah ditandai selesai. Keduanya digabung
-     di sini, bukan disatukan di penyimpanan, supaya kotak masuk hari ini
-     tetap bersih dari riwayat. */
+  /* Buku Kas membaca dua sumber sekaligus: riwayat hari-hari sebelumnya dan pesanan hari ini yang sudah ditandai selesai. */
   const sumber = React.useMemo(
     () => [...riwayat, ...pesananMasuk.filter((p) => p.status === "selesai")],
     [riwayat, pesananMasuk],
@@ -76,8 +70,7 @@ export function BukuKas() {
     };
   }, [sumber, sekarang]);
 
-  /* Rincian hari yang dipilih. Dihitung terpisah dari rangkuman tujuh
-     hari supaya memilih hari tidak memaksa seluruh rekap dihitung ulang. */
+  /* Rincian hari yang dipilih. */
   const rincian = React.useMemo(
     () =>
       sekarang === null || hariDipilih === null
@@ -89,17 +82,16 @@ export function BukuKas() {
     [sumber, sekarang, hariDipilih],
   );
 
-  /* Yang ditampilkan di bawah grafik: rincian satu hari kalau ada yang
-     dipilih, kalau tidak rangkuman tujuh hari seperti semula. */
+  /* Yang ditampilkan di bawah grafik: rincian satu hari kalau ada yang dipilih, kalau tidak rangkuman tujuh hari seperti semula. */
   const menuTampil = rincian ? rincian.menu.slice(0, 3) : (angka?.menu ?? []);
   const jamTampil = rincian ? rincian.jam.slice(0, 3) : (angka?.jam ?? []);
   const rentang = rincian ? rincian.label : "7 hari";
 
-  /* Puncak dipakai sebagai penyebut tinggi batang. Kalau seluruh minggu
-     nol, penyebutnya diganti satu supaya tidak ada pembagian dengan nol
-     yang menghasilkan NaN pada atribut gaya. */
+  /* Puncak dipakai sebagai penyebut tinggi batang. */
   const puncak = Math.max(1, ...(angka?.deret.map((d) => d.total) ?? [0]));
-  const adaTransaksi = (angka?.deret.some((d) => d.total > 0) ?? false) || (angka?.menu.length ?? 0) > 0;
+  const adaTransaksi =
+    (angka?.deret.some((d) => d.total > 0) ?? false) ||
+    (angka?.menu.length ?? 0) > 0;
 
   const salin = async () => {
     if (!angka) return;
@@ -111,7 +103,9 @@ export function BukuKas() {
         : "Kemarin: belum ada transaksi",
       "",
       "Menu terlaris 7 hari:",
-      ...angka.menu.map((m, i) => `${i + 1}. ${m.nama} — ${m.porsi} porsi · ${rp(m.total)}`),
+      ...angka.menu.map(
+        (m, i) => `${i + 1}. ${m.nama} — ${m.porsi} porsi · ${rp(m.total)}`,
+      ),
       "",
       angka.jam.length > 0
         ? `Jam paling ramai: ${jamRapi(angka.jam[0].mulai)}–${jamRapi(angka.jam[0].selesai)}`
@@ -130,7 +124,10 @@ export function BukuKas() {
       <div className="px-4 pb-6 pt-3">
         {/* 1. Pendapatan hari ini */}
         <section className="gradasi-gerobak relative overflow-hidden rounded-[20px] p-4">
-          <span aria-hidden className="absolute -right-8 -top-8 size-32 rounded-full bg-white/[0.07]" />
+          <span
+            aria-hidden
+            className="absolute -right-8 -top-8 size-32 rounded-full bg-white/[0.07]"
+          />
           <p className="relative text-[10px] font-semibold uppercase tracking-[0.1em] text-white/70">
             Pendapatan Hari Ini
           </p>
@@ -138,14 +135,13 @@ export function BukuKas() {
             {angka ? rp(angka.hariIni) : "—"}
           </p>
 
-          {/* Arah perubahan disampaikan tiga kali sekaligus: lewat tanda
-              plus-minus, lewat arah panah, dan lewat warna. Warna sendirian
-              tidak cukup; ada pengguna yang tidak bisa membedakan hijau dan
-              merah, dan bagi mereka kartu ini harus tetap terbaca. */}
+          {/* Arah perubahan disampaikan tiga kali sekaligus: lewat tanda plus-minus, lewat arah panah, dan lewat warna. */}
           {angka && angka.kemarin > 0 && (
             <p
               className={`relative mt-2.5 inline-flex items-center gap-1.5 rounded-pil px-2.5 py-1 text-[11.5px] font-bold ${
-                angka.banding.naik ? "bg-white/15 text-hijau-neon" : "bg-white/15 text-white"
+                angka.banding.naik
+                  ? "bg-white/15 text-hijau-neon"
+                  : "bg-white/15 text-white"
               }`}
             >
               {angka.banding.naik ? (
@@ -175,21 +171,14 @@ export function BukuKas() {
           <>
             {/* 2. Grafik tujuh hari */}
             <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
-              <h2 className="text-[14px] font-bold text-tinta">Tujuh Hari Terakhir</h2>
+              <h2 className="text-[14px] font-bold text-tinta">
+                Tujuh Hari Terakhir
+              </h2>
               <p className="mt-0.5 text-[11.5px] text-tinta-4">
                 Total {rp(angka?.deret.reduce((j, d) => j + d.total, 0) ?? 0)}
               </p>
 
-              {/* Batangnya digambar dengan tinggi persen, bukan pustaka
-                  grafik. Untuk tujuh angka, memuat pustaka berukuran
-                  ratusan kilobita hanya untuk menggambar tujuh persegi
-                  adalah ongkos yang tidak sebanding.
-
-                  Sebagai daftar, bukan kumpulan div: tiap batang adalah
-                  satu butir data, dan pembaca layar menyuarakannya
-                  berurutan lengkap dengan nominalnya. Tinggi batang tidak
-                  berarti apa-apa buat yang tidak melihatnya, jadi angkanya
-                  ikut ditulis. */}
+              {/* Batangnya digambar dengan tinggi persen, bukan pustaka grafik. */}
               <ul className="mt-4 flex h-[132px] items-end gap-1.5">
                 {(angka?.deret ?? []).map((d, i) => {
                   const offset = (angka?.deret.length ?? 7) - 1 - i;
@@ -197,10 +186,7 @@ export function BukuKas() {
                   const terpilih = hariDipilih === offset;
                   return (
                     <li key={d.iso} className="flex h-full flex-1">
-                      {/* Tiap batang tombol sungguhan, bukan div berwarna.
-                          Dengan begitu ia bisa dicapai papan ketik, punya
-                          nama yang disuarakan pembaca layar, dan keadaan
-                          terpilihnya diumumkan lewat `aria-pressed`. */}
+                      {/* Tiap batang tombol sungguhan, bukan div berwarna. */}
                       <button
                         type="button"
                         aria-pressed={terpilih}
@@ -216,10 +202,10 @@ export function BukuKas() {
                                 ? "bg-hijau"
                                 : "bg-hijau-lembut"
                           }`}
-                          /* Minimum dua piksel supaya hari tanpa pemasukan
-                             tetap kelihatan sebagai batang kosong, bukan
-                             menghilang seolah harinya tidak ada. */
-                          style={{ height: `${Math.max(2, (d.total / puncak) * 100)}%` }}
+                          /* Minimum dua piksel supaya hari tanpa pemasukan tetap kelihatan sebagai batang kosong, bukan menghilang seolah harinya tidak ada. */
+                          style={{
+                            height: `${Math.max(2, (d.total / puncak) * 100)}%`,
+                          }}
                         />
                         <span
                           aria-hidden
@@ -235,8 +221,8 @@ export function BukuKas() {
                         </span>
                         <span className="khusus-pembaca-layar">
                           {d.label}
-                          {iniHariIni ? " (hari ini)" : ""}: {rp(d.total)}. Ketuk untuk
-                          rinciannya.
+                          {iniHariIni ? " (hari ini)" : ""}: {rp(d.total)}.
+                          Ketuk untuk rinciannya.
                         </span>
                       </button>
                     </li>
@@ -256,7 +242,9 @@ export function BukuKas() {
               <section className="bayang-kartu mt-4 rounded-[20px] border border-amber/40 bg-amber-lembut p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h2 className="text-[14px] font-bold text-tinta">{rincian.label}</h2>
+                    <h2 className="text-[14px] font-bold text-tinta">
+                      {rincian.label}
+                    </h2>
                     <p className="mt-0.5 text-[11.5px] text-amber-tua">
                       {rincian.jumlahPesanan} pesanan selesai
                     </p>
@@ -268,8 +256,8 @@ export function BukuKas() {
 
                 {rincian.jumlahPesanan === 0 && (
                   <p className="mt-2.5 text-[12px] leading-relaxed text-amber-tua">
-                    Tidak ada pesanan yang selesai pada hari ini. Bagian di bawah
-                    ikut kosong, bukan menampilkan angka hari lain.
+                    Tidak ada pesanan yang selesai pada hari ini. Bagian di
+                    bawah ikut kosong, bukan menampilkan angka hari lain.
                   </p>
                 )}
 
@@ -288,7 +276,9 @@ export function BukuKas() {
               <section className="bayang-kartu mt-4 overflow-hidden rounded-[20px] border border-garis bg-white">
                 <h2 className="border-b border-garis px-4 py-3 text-[14px] font-bold text-tinta">
                   Menu Terlaris
-                  <span className="ml-1.5 text-[11px] font-normal text-tinta-4">{rentang}</span>
+                  <span className="ml-1.5 text-[11px] font-normal text-tinta-4">
+                    {rentang}
+                  </span>
                 </h2>
                 <ol>
                   {menuTampil.map((m, i) => (
@@ -303,13 +293,11 @@ export function BukuKas() {
                         <span className="block truncate text-[13.5px] font-bold text-tinta">
                           {m.nama}
                         </span>
-                        <span className="text-[11.5px] text-tinta-4">{rp(m.total)}</span>
+                        <span className="text-[11.5px] text-tinta-4">
+                          {rp(m.total)}
+                        </span>
                       </span>
-                      {/* Porsi yang ditebalkan, bukan rupiahnya, karena
-                          porsi itulah kunci pengurutan daftar ini. Waktu
-                          rupiah yang ditonjolkan, kolomnya terbaca menurun
-                          ke arah yang salah dan daftarnya terlihat seperti
-                          gagal diurutkan padahal urutannya benar. */}
+                      {/* Porsi yang ditebalkan, bukan rupiahnya, karena porsi itulah kunci pengurutan daftar ini. */}
                       <span className="shrink-0 text-[13px] font-bold text-hijau">
                         {m.porsi} porsi
                       </span>
@@ -323,9 +311,15 @@ export function BukuKas() {
             {jamTampil.length > 0 && (
               <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
                 <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
-                  <TrendingUp size={16} strokeWidth={2.1} className="shrink-0 text-hijau" />
+                  <TrendingUp
+                    size={16}
+                    strokeWidth={2.1}
+                    className="shrink-0 text-hijau"
+                  />
                   Jam Paling Ramai
-                  <span className="text-[11px] font-normal text-tinta-4">{rentang}</span>
+                  <span className="text-[11px] font-normal text-tinta-4">
+                    {rentang}
+                  </span>
                 </h2>
 
                 <ul className="mt-3 flex flex-col gap-2">
@@ -349,17 +343,20 @@ export function BukuKas() {
                   ))}
                 </ul>
 
-                {/* Kalimat yang mengubah tabel angka jadi saran. Latar
-                    belakang proposal ini justru soal rute pedagang yang
-                    ditentukan kebiasaan alih-alih data; di sinilah datanya
-                    berbicara. */}
+                {/* Kalimat yang mengubah tabel angka jadi saran. */}
                 {!rincian && angka && angka.jam.length > 0 && (
                   <p className="mt-3.5 flex gap-2.5 rounded-[14px] bg-hijau-lembut px-3.5 py-3 text-[12px] leading-relaxed text-hijau-gelap">
-                    <Sparkles size={15} strokeWidth={2.1} className="mt-px shrink-0" aria-hidden />
+                    <Sparkles
+                      size={15}
+                      strokeWidth={2.1}
+                      className="mt-px shrink-0"
+                      aria-hidden
+                    />
                     <span>
                       Paling ramai jam{" "}
                       <strong className="font-bold">
-                        {jamRapi(angka.jam[0].mulai)}–{jamRapi(angka.jam[0].selesai)}
+                        {jamRapi(angka.jam[0].mulai)}–
+                        {jamRapi(angka.jam[0].selesai)}
                       </strong>
                       . Coba mulai keliling dari RT 05 sekitar jam segitu.
                     </span>
@@ -380,17 +377,18 @@ export function BukuKas() {
           </>
         )}
 
-        {/* 7. Langganan berbayar.
-
-            Kartunya berubah watak menurut keadaan langganan. Waktu mati ia
-            menawarkan; waktu menyala ia jadi pintu ke isinya. Menyimpan
-            dua kartu terpisah untuk dua keadaan berarti dua tempat yang
-            harus sama-sama diperbarui setiap kali daftar fiturnya
-            berubah. */}
+        {/* 7. */}
         <section className="mt-5 overflow-hidden rounded-[20px] border border-garis bg-white">
           <div className="gradasi-amber flex items-center gap-2.5 px-4 py-3">
-            <Sparkles size={15} strokeWidth={2.3} className="shrink-0 text-white" aria-hidden />
-            <p className="flex-1 text-[13.5px] font-extrabold text-white">SEKETIKA Pro</p>
+            <Sparkles
+              size={15}
+              strokeWidth={2.3}
+              className="shrink-0 text-white"
+              aria-hidden
+            />
+            <p className="flex-1 text-[13.5px] font-extrabold text-white">
+              SEKETIKA Pro
+            </p>
             <span className="rounded-pil bg-white/25 px-2.5 py-1 text-[10px] font-bold text-white">
               {pro ? "Aktif" : "Nonaktif"}
             </span>
@@ -399,8 +397,8 @@ export function BukuKas() {
           {pro ? (
             <>
               <p className="border-b border-garis px-4 py-3 text-[12px] leading-relaxed text-tinta-3">
-                Langganan menyala. Laporan bulanan dan prakiraan kawasan
-                muncul di bawah, catatan stok ada di layarnya sendiri.
+                Langganan menyala. Laporan bulanan dan prakiraan kawasan muncul
+                di bawah, catatan stok ada di layarnya sendiri.
               </p>
               <Link
                 href="/d/stok"
@@ -410,12 +408,18 @@ export function BukuKas() {
                   <Box size={18} strokeWidth={1.9} />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[13.5px] font-bold text-tinta">Catatan Stok</span>
+                  <span className="block text-[13.5px] font-bold text-tinta">
+                    Catatan Stok
+                  </span>
                   <span className="mt-0.5 block text-[11.5px] text-tinta-4">
                     Sisa porsi tiap menu
                   </span>
                 </span>
-                <ChevronRight size={17} className="shrink-0 text-tinta-5" aria-hidden />
+                <ChevronRight
+                  size={17}
+                  className="shrink-0 text-tinta-5"
+                  aria-hidden
+                />
               </Link>
             </>
           ) : (
@@ -426,9 +430,21 @@ export function BukuKas() {
                 { Ikon: Box, teks: "Catatan stok dagangan" },
               ].map(({ Ikon, teks }) => (
                 <li key={teks} className="flex items-center gap-2.5 py-1.5">
-                  <Ikon size={15} strokeWidth={2} className="shrink-0 text-tinta-5" aria-hidden />
-                  <span className="flex-1 text-[12.5px] text-tinta-3">{teks}</span>
-                  <Lock size={12} strokeWidth={2.2} className="shrink-0 text-tinta-5" aria-hidden />
+                  <Ikon
+                    size={15}
+                    strokeWidth={2}
+                    className="shrink-0 text-tinta-5"
+                    aria-hidden
+                  />
+                  <span className="flex-1 text-[12.5px] text-tinta-3">
+                    {teks}
+                  </span>
+                  <Lock
+                    size={12}
+                    strokeWidth={2.2}
+                    className="shrink-0 text-tinta-5"
+                    aria-hidden
+                  />
                   <span className="khusus-pembaca-layar">terkunci</span>
                 </li>
               ))}
@@ -444,9 +460,7 @@ export function BukuKas() {
             >
               {pro ? "Nonaktifkan Langganan" : "Aktifkan SEKETIKA Pro"}
             </Tombol>
-            {/* Purwarupa ini tidak memungut pembayaran. Menuliskannya
-                terang-terangan lebih baik daripada membiarkan orang
-                mengira ada tagihan yang berjalan di belakang. */}
+            {/* Purwarupa ini tidak memungut pembayaran. */}
             <p className="mt-2 text-center text-[11px] leading-snug text-tinta-4">
               Purwarupa lomba, belum ada pembayaran sungguhan
             </p>
@@ -458,7 +472,11 @@ export function BukuKas() {
             {/* Laporan bulanan */}
             <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
               <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
-                <TrendingUp size={16} strokeWidth={2.1} className="shrink-0 text-amber-tua" />
+                <TrendingUp
+                  size={16}
+                  strokeWidth={2.1}
+                  className="shrink-0 text-amber-tua"
+                />
                 Laporan {HARI_BULANAN} Hari
               </h2>
 
@@ -466,13 +484,15 @@ export function BukuKas() {
                 {rp(angka.bulanan.total)}
               </p>
               <p className="mt-1 text-[11.5px] text-tinta-4">
-                {angka.bulanan.jumlahPesanan} pesanan · {angka.bulanan.hariBerjualan} hari
-                berjualan
+                {angka.bulanan.jumlahPesanan} pesanan ·{" "}
+                {angka.bulanan.hariBerjualan} hari berjualan
               </p>
 
               <dl className="mt-3.5 grid grid-cols-2 gap-2">
                 <div className="rounded-[14px] bg-krem px-3 py-2.5">
-                  <dt className="text-[10.5px] text-tinta-4">Rata-rata per hari jualan</dt>
+                  <dt className="text-[10.5px] text-tinta-4">
+                    Rata-rata per hari jualan
+                  </dt>
                   <dd className="mt-0.5 text-[14px] font-extrabold text-tinta">
                     {rp(angka.bulanan.rataRataHarian)}
                   </dd>
@@ -518,7 +538,11 @@ export function BukuKas() {
             {/* Prakiraan kawasan */}
             <section className="bayang-kartu mt-4 rounded-[20px] border border-garis bg-white p-4">
               <h2 className="flex items-center gap-2 text-[14px] font-bold text-tinta">
-                <MapPin size={16} strokeWidth={2.1} className="shrink-0 text-amber-tua" />
+                <MapPin
+                  size={16}
+                  strokeWidth={2.1}
+                  className="shrink-0 text-amber-tua"
+                />
                 Prakiraan Kawasan
               </h2>
               <p className="mt-0.5 text-[11.5px] text-tinta-4">
@@ -542,15 +566,12 @@ export function BukuKas() {
                         {jamRapi(k.mulai)}–{jamRapi(k.selesai)} · {rp(k.total)}
                       </span>
                     </span>
-                    {/* Jumlah pesanan yang ditebalkan, bukan rupiahnya,
-                        karena itulah kunci pengurutan daftar ini. Waktu
-                        rupiah yang ditonjolkan, kolomnya terbaca menurun
-                        ke arah yang salah: kawasan kedua bisa punya nominal
-                        lebih besar dari yang pertama, dan daftarnya
-                        terlihat gagal diurutkan padahal urutannya benar. */}
+                    {/* Jumlah pesanan yang ditebalkan, bukan rupiahnya, karena itulah kunci pengurutan daftar ini. */}
                     <span className="shrink-0 text-right text-[12px] font-bold text-hijau">
                       {k.jumlah}
-                      <span className="block text-[10px] font-normal text-tinta-4">pesanan</span>
+                      <span className="block text-[10px] font-normal text-tinta-4">
+                        pesanan
+                      </span>
                     </span>
                   </li>
                 ))}
@@ -558,10 +579,18 @@ export function BukuKas() {
 
               {angka.prakiraan.length > 0 && (
                 <p className="mt-3.5 flex gap-2.5 rounded-[14px] bg-amber-lembut px-3.5 py-3 text-[12px] leading-relaxed text-amber-tua">
-                  <Sparkles size={15} strokeWidth={2.1} className="mt-px shrink-0" aria-hidden />
+                  <Sparkles
+                    size={15}
+                    strokeWidth={2.1}
+                    className="mt-px shrink-0"
+                    aria-hidden
+                  />
                   <span>
                     Besok mulai dari{" "}
-                    <strong className="font-bold">{angka.prakiraan[0].titik}</strong> sekitar{" "}
+                    <strong className="font-bold">
+                      {angka.prakiraan[0].titik}
+                    </strong>{" "}
+                    sekitar{" "}
                     <strong className="font-bold">
                       {jamRapi(angka.prakiraan[0].mulai)}
                     </strong>
@@ -573,7 +602,6 @@ export function BukuKas() {
             </section>
           </>
         )}
-
       </div>
     </Layar>
   );

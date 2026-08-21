@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import { lewatiPengenalan, pilihPeran } from "./bantu";
 
 test.describe("Pengenalan", () => {
-  test("pembuka menampilkan lambang lalu mengantar ke layar sambutan", async ({ page }) => {
+  test("pembuka menampilkan lambang lalu mengantar ke layar sambutan", async ({
+    page,
+  }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: "SEKETIKA" })).toBeVisible();
     await page.waitForURL("**/sambutan", { timeout: 10_000 });
@@ -16,21 +18,25 @@ test.describe("Pengenalan", () => {
     await expect(lanjut).toBeDisabled();
 
     await pilihPeran(page, "pembeli");
-    /* Mengetuk kartunya harus benar-benar mencentang radio di dalamnya;
-       kalau kaitan labelnya putus, papan ketik dan pembaca layar ikut
-       kehilangan kendali atas pilihan ini. */
-    await expect(page.getByRole("radio", { name: /Saya Ingin Membeli/ })).toBeChecked();
+    /* Mengetuk kartunya harus benar-benar mencentang radio di dalamnya; kalau kaitan labelnya putus, papan ketik dan pembaca layar ikut kehilangan kendali atas pilihan ini. */
+    await expect(
+      page.getByRole("radio", { name: /Saya Ingin Membeli/ }),
+    ).toBeChecked();
     await expect(lanjut).toBeEnabled();
   });
 
-  test("janji gratis dan tanpa komisi mengikuti kartu yang dipilih", async ({ page }) => {
+  test("janji gratis dan tanpa komisi mengikuti kartu yang dipilih", async ({
+    page,
+  }) => {
     await page.goto("/mulai");
-    const kartuPembeli = page.getByRole("radio", { name: /Saya Ingin Membeli/ });
-    const kartuPedagang = page.getByRole("radio", { name: /Saya Ingin Berdagang/ });
+    const kartuPembeli = page.getByRole("radio", {
+      name: /Saya Ingin Membeli/,
+    });
+    const kartuPedagang = page.getByRole("radio", {
+      name: /Saya Ingin Berdagang/,
+    });
 
-    /* Nama tergabung radio mencakup isi kartunya, jadi kehadiran janji
-       di dalamnya bisa diperiksa lewat nama itu. Kartu yang tidak dipilih
-       harus bersih, termasuk bagi pembaca layar. */
+    /* Nama tergabung radio mencakup isi kartunya, jadi kehadiran janji di dalamnya bisa diperiksa lewat nama itu. */
     await pilihPeran(page, "pembeli");
     await expect(kartuPembeli).toHaveAccessibleName(/Gratis daftar/);
     await expect(kartuPedagang).not.toHaveAccessibleName(/Gratis daftar/);
@@ -40,31 +46,43 @@ test.describe("Pengenalan", () => {
     await expect(kartuPembeli).not.toHaveAccessibleName(/Gratis daftar/);
   });
 
-  test("pembeli menyelesaikan tiga langkah lalu mendarat di beranda", async ({ page }) => {
+  test("pembeli menyelesaikan tiga langkah lalu mendarat di beranda", async ({
+    page,
+  }) => {
     await page.goto("/mulai");
     await pilihPeran(page, "pembeli");
     await page.getByRole("button", { name: /Lanjut/ }).click();
 
-    await expect(page.getByRole("heading", { name: /Beri Akses/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Beri Akses/ }),
+    ).toBeVisible();
     await page.getByRole("button", { name: /Izinkan/ }).click();
 
-    await expect(page.getByRole("heading", { name: "Isi Data Pembeli" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Isi Data Pembeli" }),
+    ).toBeVisible();
     /* Nama satu-satunya isian wajib; sisanya boleh menyusul dari profil. */
     await expect(page.getByRole("button", { name: /Mulai/ })).toBeDisabled();
     await page.getByLabel("Nama Lengkap").fill("Rahmat");
     await page.getByRole("button", { name: /Mulai/ }).click();
 
     await page.waitForURL("**/beranda");
-    await expect(page.getByRole("heading", { name: "Rekomendasi Terdekat" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Rekomendasi Terdekat" }),
+    ).toBeVisible();
   });
 
-  test("pedagang diarahkan ke berandanya sendiri, bukan beranda warga", async ({ page }) => {
+  test("pedagang diarahkan ke berandanya sendiri, bukan beranda warga", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
     await expect(page.getByText("Status Gerobak")).toBeVisible();
     await expect(page.getByText(/Sedang BUKA/)).toBeVisible();
   });
 
-  test("pengguna yang sudah terdaftar tidak diseret mengulang pengenalan", async ({ page }) => {
+  test("pengguna yang sudah terdaftar tidak diseret mengulang pengenalan", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pembeli");
     await page.goto("/");
     await page.waitForURL("**/beranda", { timeout: 10_000 });

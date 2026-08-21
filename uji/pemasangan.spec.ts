@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
 import { lewatiPengenalan } from "./bantu";
 
-/**
- * Syarat supaya SEKETIKA bisa dipasang sebagai aplikasi, dan supaya
- * tombol setel ulang tetap berguna setelah terpasang.
- */
+/** Syarat supaya SEKETIKA bisa dipasang sebagai aplikasi, dan supaya tombol setel ulang tetap berguna setelah terpasang. */
 test.describe("Bisa dipasang sebagai aplikasi", () => {
-  test("manifest memuat yang dibutuhkan peluncur ponsel", async ({ request, page }) => {
+  test("manifest memuat yang dibutuhkan peluncur ponsel", async ({
+    request,
+    page,
+  }) => {
     await page.goto("/");
     await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
       "href",
@@ -19,21 +19,22 @@ test.describe("Bisa dipasang sebagai aplikasi", () => {
 
     expect(m.name).toContain("SEKETIKA");
     expect(m.short_name).toBe("SEKETIKA");
-    /* `standalone` yang menghilangkan bilah alamat; tanpa itu yang
-       terpasang cuma pintasan peramban. */
+    /* `standalone` yang menghilangkan bilah alamat; tanpa itu yang terpasang cuma pintasan peramban. */
     expect(m.display).toBe("standalone");
     expect(m.start_url).toBe("/");
 
-    /* Chrome menuntut ikon 192 dan 512. Satu ikon maskable diperlukan
-       supaya peluncur yang memotong ikon jadi lingkaran tidak memotong
-       lambangnya. */
+    /* Chrome menuntut ikon 192 dan 512. */
     const ukuran = m.icons.map((i: { sizes: string }) => i.sizes);
     expect(ukuran).toContain("192x192");
     expect(ukuran).toContain("512x512");
-    expect(m.icons.some((i: { purpose?: string }) => i.purpose === "maskable")).toBe(true);
+    expect(
+      m.icons.some((i: { purpose?: string }) => i.purpose === "maskable"),
+    ).toBe(true);
   });
 
-  test("semua ikon yang disebut manifest benar-benar ada", async ({ request }) => {
+  test("semua ikon yang disebut manifest benar-benar ada", async ({
+    request,
+  }) => {
     const m = await (await request.get("/manifest.webmanifest")).json();
     for (const ikon of m.icons as { src: string }[]) {
       const jawaban = await request.get(ikon.src);
@@ -43,29 +44,31 @@ test.describe("Bisa dipasang sebagai aplikasi", () => {
   });
 
   test("berkas service worker tersedia di akar", async ({ request }) => {
-    /* Lingkupnya ditentukan letak berkasnya. Di /sw.js lingkupnya
-       seluruh aplikasi; kalau pindah ke subfolder ia cuma menguasai
-       subfolder itu dan pemasangan gagal. */
+    /* Lingkupnya ditentukan letak berkasnya. */
     const jawaban = await request.get("/sw.js");
     expect(jawaban.status()).toBe(200);
-    expect(await jawaban.text()).toContain("addEventListener(\"fetch\"");
+    expect(await jawaban.text()).toContain('addEventListener("fetch"');
   });
 
-  test("lambang aplikasi memakai logo SEKETIKA, bukan bawaan Next", async ({ page, request }) => {
+  test("lambang aplikasi memakai logo SEKETIKA, bukan bawaan Next", async ({
+    page,
+    request,
+  }) => {
     await page.goto("/");
-    const ikon = await page.locator('link[rel="icon"]').first().getAttribute("href");
+    const ikon = await page
+      .locator('link[rel="icon"]')
+      .first()
+      .getAttribute("href");
     expect(ikon).toContain("/icon.png");
     expect((await request.get("/apple-icon.png")).status()).toBe(200);
   });
 });
 
 test.describe("Bilah status di aplikasi terpasang", () => {
-  /* Playwright tidak bisa memalsukan `display-mode`, dan CDP pun tidak
-     menyediakannya. Yang bisa dikunci di sini: aturannya benar-benar
-     ikut terkirim dengan isi yang benar, dan di peramban biasa keadaan
-     bawaannya tetap seperti sebelumnya. Kalau blok CSS-nya terhapus atau
-     nama kelasnya berubah, uji ini gagal. */
-  test("aturan penyembunyian ikut terkirim dengan isi yang benar", async ({ page }) => {
+  /* Playwright tidak bisa memalsukan `display-mode`, dan CDP pun tidak menyediakannya. */
+  test("aturan penyembunyian ikut terkirim dengan isi yang benar", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pembeli", "Dewi");
 
     const aturan = await page.evaluate(() => {
@@ -100,14 +103,10 @@ test.describe("Bilah status di aplikasi terpasang", () => {
     await expect(page.locator(".bilah-tiruan").first()).toBeVisible();
   });
 
-  test("dokumen luar dikunci, tiap layar menggulung di dalamnya", async ({ page }) => {
-    /* Di aplikasi terpasang, dokumen yang bisa diseret akan ikut naik dan
-       menyingkap latar kosong di baliknya — yang terlihat seperti "layar
-       bisa keangkat". Yang menahannya adalah overflow:hidden pada html
-       dan body; seret jari pengguna ditolak, dan yang bergulir hanya
-       wadah dalam tiap layar. (scrollTop lewat skrip tetap bisa menembus
-       overflow:hidden, jadi yang diperiksa di sini sifat CSS-nya, bukan
-       angka scrollTop.) */
+  test("dokumen luar dikunci, tiap layar menggulung di dalamnya", async ({
+    page,
+  }) => {
+    /* Di aplikasi terpasang, dokumen yang bisa diseret akan ikut naik dan menyingkap latar kosong di baliknya — yang terlihat seperti "layar bisa keangkat". */
     await lewatiPengenalan(page, "pembeli", "Dewi");
     const of = await page.evaluate(() => ({
       html: getComputedStyle(document.documentElement).overflow,
@@ -119,11 +118,12 @@ test.describe("Bilah status di aplikasi terpasang", () => {
 });
 
 test.describe("Setel ulang di aplikasi terpasang", () => {
-  test("memuat ulang halaman penuh, bukan sekadar pindah layar", async ({ page }) => {
+  test("memuat ulang halaman penuh, bukan sekadar pindah layar", async ({
+    page,
+  }) => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
 
-    /* Data dibuat basi seperti pada ponsel yang sudah lama memakai
-       aplikasi ini: tanpa tk-05 dan tk-04 belum tercapai. */
+    /* Data dibuat basi seperti pada ponsel yang sudah lama memakai aplikasi ini: tanpa tk-05 dan tk-04 belum tercapai. */
     await page.evaluate(() => {
       const s = JSON.parse(localStorage.getItem("seketika") ?? "{}");
       s.state.titikKumpul = s.state.titikKumpul
@@ -137,9 +137,7 @@ test.describe("Setel ulang di aplikasi terpasang", () => {
     await expect(page.getByRole("link", { name: /warga ·/ })).toHaveCount(0);
 
     await page.goto("/d/profil");
-    /* Penanda ini cuma hidup selama dokumen yang sama. Kalau setelah
-       menekan tombol ia masih ada, yang terjadi cuma pindah layar lewat
-       router, dan berkas JavaScript versi lama tetap berjalan. */
+    /* Penanda ini cuma hidup selama dokumen yang sama. */
     await page.evaluate(() => {
       (window as unknown as { __penanda?: string }).__penanda = "ada";
     });
@@ -148,7 +146,9 @@ test.describe("Setel ulang di aplikasi terpasang", () => {
     await page.waitForURL("**/", { timeout: 15_000 });
 
     const masihAda = await page.evaluate(
-      () => typeof (window as unknown as { __penanda?: string }).__penanda !== "undefined",
+      () =>
+        typeof (window as unknown as { __penanda?: string }).__penanda !==
+        "undefined",
     );
     expect(masihAda, "halaman tidak dimuat ulang penuh").toBe(false);
 

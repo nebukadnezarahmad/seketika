@@ -7,30 +7,14 @@ import { pemberitahuan } from "@/lib/notifikasi";
 import { useToko } from "@/lib/toko";
 import { useSekarang } from "@/lib/waktu";
 
-/**
- * Lonceng pemberitahuan berikut lencana jumlah yang belum dibaca.
- *
- * Sebelum ini, lonceng di dua layar berupa tombol tanpa penangan apa pun:
- * terlihat bisa ditekan, tapi tidak melakukan apa-apa. Sekarang ia tautan
- * sungguhan ke pusat pemberitahuan.
- *
- * Jumlahnya dihitung dari keadaan yang sama dengan yang dipakai layar
- * tujuannya, jadi angka pada lencana tidak bisa berbeda dengan isi yang
- * ditemukan pengguna setelah mengetuknya.
- */
+/** Lonceng pemberitahuan berikut lencana jumlah yang belum dibaca. */
 export function Lonceng({
   nada = "hijau",
   ukuran = 36,
 }: {
-  /**
-   * `hijau` lingkaran hijau muda, dipakai di atas latar terang.
-   * `putih` tembus pandang, dipakai di atas kepala hijau.
-   * `polos` putih bergaris, untuk bilah atas beranda warga yang
-   *   tetangganya kolom cari dan avatar yang juga putih bergaris.
-   */
+  /** `hijau` lingkaran hijau muda, dipakai di atas latar terang. */
   nada?: "hijau" | "putih" | "polos";
-  /** Sisi kotaknya dalam piksel, supaya bisa disejajarkan dengan
-      tetangganya di bilah atas beranda. */
+  /** Sisi kotaknya dalam piksel, supaya bisa disejajarkan dengan tetangganya di bilah atas beranda. */
   ukuran?: number;
 }) {
   const profil = useToko((s) => s.profil);
@@ -50,7 +34,9 @@ export function Lonceng({
   return (
     <Link
       href="/notifikasi"
-      aria-label={belum > 0 ? `Notifikasi, ${belum} belum dibaca` : "Notifikasi"}
+      aria-label={
+        belum > 0 ? `Notifikasi, ${belum} belum dibaca` : "Notifikasi"
+      }
       style={{ width: ukuran, height: ukuran }}
       className={`relative grid shrink-0 place-items-center rounded-full transition-transform active:scale-90 ${
         nada === "putih"
@@ -62,9 +48,7 @@ export function Lonceng({
     >
       <Bell size={ukuran >= 44 ? 19 : 17} strokeWidth={2} />
       {belum > 0 && (
-        /* Angkanya ikut ditulis, bukan cuma titik merah. Titik saja
-           memaksa orang membuka layarnya untuk tahu ada berapa, dan bagi
-           pembaca layar ia tidak berarti apa-apa. */
+        /* Angkanya ikut ditulis, bukan cuma titik merah. */
         <span
           aria-hidden
           className="absolute -right-0.5 -top-0.5 grid min-w-[17px] place-items-center rounded-full bg-merah px-1 text-[9.5px] font-bold leading-[17px] text-white ring-2 ring-krem"

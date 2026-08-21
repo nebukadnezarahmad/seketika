@@ -1,15 +1,9 @@
 import type { Page } from "@playwright/test";
 
-/**
- * Pembantu yang dipakai beberapa berkas uji.
- *
- * Radio dan sakelar di aplikasi ini adalah input sungguhan yang
- * disembunyikan dari mata dan dibungkus label. Pengguna mengetuk
- * labelnya, bukan inputnya, jadi ujinya pun begitu; setelah itu keadaan
- * input diperiksa untuk memastikan kaitan labelnya benar.
- */
+/** Pembantu yang dipakai beberapa berkas uji. */
 export async function pilihPeran(page: Page, peran: "pembeli" | "pedagang") {
-  const teks = peran === "pembeli" ? "Saya Ingin Membeli" : "Saya Ingin Berdagang";
+  const teks =
+    peran === "pembeli" ? "Saya Ingin Membeli" : "Saya Ingin Berdagang";
   await page.getByText(teks, { exact: true }).click();
 }
 

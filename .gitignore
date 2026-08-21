@@ -52,3 +52,8 @@ next-env.d.ts
 
 # tangkapan layar sementara untuk pemeriksaan visual
 /.tangkap/
+
+# berkas instruksi AI, jangan pernah ikut ter-commit
+AGENTS.md
+CLAUDE.md
+.claude/

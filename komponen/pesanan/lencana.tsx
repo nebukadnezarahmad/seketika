@@ -10,19 +10,15 @@ const rupa: Record<StatusPesanan, { label: string; kelas: string }> = {
 export function LencanaStatus({ status }: { status: StatusPesanan }) {
   const { label, kelas } = rupa[status];
   return (
-    <span className={`shrink-0 rounded-pil px-2.5 py-1 text-[10.5px] font-bold ${kelas}`}>
+    <span
+      className={`shrink-0 rounded-pil px-2.5 py-1 text-[10.5px] font-bold ${kelas}`}
+    >
       {label}
     </span>
   );
 }
 
-/**
- * Tiga titik penanda tahap pesanan: Dipesan, Diproses, Selesai.
- *
- * Pesanan yang dibatalkan berhenti di titik pertama, jadi garisnya tidak
- * boleh ikut penuh. Karena itu tahapnya dihitung terpisah, bukan
- * disamakan begitu saja dengan urutan status.
- */
+/** Tiga titik penanda tahap pesanan: Dipesan, Diproses, Selesai. */
 export function TahapPesanan({ status }: { status: StatusPesanan }) {
   const sampai = status === "selesai" ? 2 : status === "diproses" ? 1 : 0;
   const batal = status === "dibatalkan";
@@ -40,7 +36,9 @@ export function TahapPesanan({ status }: { status: StatusPesanan }) {
           className={`absolute left-1 top-1/2 h-[2px] -translate-y-1/2 rounded-pil transition-[width] ${
             batal ? "bg-tinta-5" : "bg-hijau"
           }`}
-          style={{ width: `calc(${(sampai / 2) * 100}% - ${sampai === 0 ? 0 : 4}px)` }}
+          style={{
+            width: `calc(${(sampai / 2) * 100}% - ${sampai === 0 ? 0 : 4}px)`,
+          }}
         />
         {label.map((l, i) => (
           <span
@@ -63,7 +61,9 @@ export function TahapPesanan({ status }: { status: StatusPesanan }) {
           <span
             key={l}
             className={`text-[10px] ${
-              i <= sampai && !batal ? "font-medium text-tinta-3" : "text-tinta-5"
+              i <= sampai && !batal
+                ? "font-medium text-tinta-3"
+                : "text-tinta-5"
             }`}
           >
             {l}

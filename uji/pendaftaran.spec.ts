@@ -1,52 +1,54 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Pintu masuk", () => {
-  test("sambutan menerangkan aplikasinya, bukan cuma dua tombol", async ({ page }) => {
+  test("sambutan menerangkan aplikasinya, bukan cuma dua tombol", async ({
+    page,
+  }) => {
     await page.goto("/sambutan");
 
-    await expect(page.getByRole("heading", { name: /Panggil jajanan/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Panggil jajanan/ }),
+    ).toBeVisible();
     await expect(page.getByText("Mau ngapain hari ini?")).toBeVisible();
 
-    /* Dua keping cara memesan. Keduanya janji yang benar-benar ditepati
-       aplikasinya, bukan hiasan, jadi keberadaannya ikut dikunci. */
+    /* Dua keping cara memesan. */
     const keping = page.getByRole("listitem");
-    await expect(keping.filter({ hasText: "Panggil ke lokasimu" })).toBeVisible();
+    await expect(
+      keping.filter({ hasText: "Panggil ke lokasimu" }),
+    ).toBeVisible();
     await expect(keping.filter({ hasText: "Patungan tetangga" })).toBeVisible();
 
     await expect(page.getByRole("button", { name: "Masuk" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Buat Akun" })).toBeVisible();
 
-    /* Ilustrasinya karya tim di berkas Figma, bukan hiasan yang bisa
-       hilang tanpa akibat: tanpa itu layar pertama cuma teks dan dua
-       tombol. Tingginya ikut dikunci supaya tidak menyusut jadi
-       perangko kalau tata letaknya berubah lagi. */
-    /* Dicari lewat sumbernya, bukan peran gambar: alt-nya sengaja
-       dikosongkan karena isinya sudah diucapkan teks di sekitarnya. */
+    /* Ilustrasinya karya tim di berkas Figma, bukan hiasan yang bisa hilang tanpa akibat: tanpa itu layar pertama cuma teks dan dua tombol. */
+    /* Dicari lewat sumbernya, bukan peran gambar: alt-nya sengaja dikosongkan karena isinya sudah diucapkan teks di sekitarnya. */
     const gambar = page.locator('img[src*="ilustrasi-warung"]');
     await expect(gambar).toBeVisible();
     const kotak = await gambar.boundingBox();
     expect(kotak!.height).toBeGreaterThan(120);
   });
 
-  /* Pada ekspor Figma aslinya pasangan roda berpusat 8,5 unit di kanan
-     batang gerobaknya, dan seluruh lambang terbaca miring. Selisihnya
-     kecil di ikon 24px tapi kentara pada lambang besar di layar pembuka
-     dan sambutan, jadi kelurusannya dikunci di sini. */
-  test("gerobak pada lambang lurus, bukan miring ke satu sisi", async ({ page }) => {
+  /* Pada ekspor Figma aslinya pasangan roda berpusat 8,5 unit di kanan batang gerobaknya, dan seluruh lambang terbaca miring. */
+  test("gerobak pada lambang lurus, bukan miring ke satu sisi", async ({
+    page,
+  }) => {
     await page.goto("/sambutan");
 
     const lambang = page.locator("svg[aria-label='Logo SEKETIKA']");
     await expect(lambang).toBeVisible();
 
-    /* Dua persegi panjang di lambang: batang gerobak lalu gandarnya.
-       Roda kiri dan kanan adalah elips pertama dan ketiga. */
+    /* Dua persegi panjang di lambang: batang gerobak lalu gandarnya. */
     const batang = await lambang.locator("rect").first().boundingBox();
     const rodaKiri = await lambang.locator("ellipse").nth(0).boundingBox();
     const rodaKanan = await lambang.locator("ellipse").nth(2).boundingBox();
-    if (!batang || !rodaKiri || !rodaKanan) throw new Error("bagian lambang tidak terukur");
+    if (!batang || !rodaKiri || !rodaKanan)
+      throw new Error("bagian lambang tidak terukur");
 
     const pusat = (k: { x: number; width: number }) => k.x + k.width / 2;
-    expect(Math.abs(pusat(rodaKiri) + pusat(rodaKanan) - 2 * pusat(batang))).toBeLessThan(1.5);
+    expect(
+      Math.abs(pusat(rodaKiri) + pusat(rodaKanan) - 2 * pusat(batang)),
+    ).toBeLessThan(1.5);
   });
 
   test("Buat Akun membuka formulir pendaftaran", async ({ page }) => {
@@ -75,7 +77,9 @@ test.describe("Pintu masuk", () => {
     await expect(buat).toBeEnabled();
   });
 
-  test("kata sandi bisa ditampilkan dan disembunyikan lagi", async ({ page }) => {
+  test("kata sandi bisa ditampilkan dan disembunyikan lagi", async ({
+    page,
+  }) => {
     await page.goto("/daftar");
     const sandi = page.getByLabel("Password");
     await sandi.fill("rahasia123");
@@ -105,7 +109,9 @@ test.describe("Pintu masuk", () => {
     await expect(page.getByLabel("Email")).toHaveValue("dewi@contoh.com");
   });
 
-  test("Masuk mengantar pengguna lama langsung ke berandanya", async ({ page }) => {
+  test("Masuk mengantar pengguna lama langsung ke berandanya", async ({
+    page,
+  }) => {
     await page.goto("/mulai");
     await page.getByText("Saya Ingin Membeli", { exact: true }).click();
     await page.getByRole("button", { name: /Lanjut/ }).click();

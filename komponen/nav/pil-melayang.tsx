@@ -3,18 +3,7 @@
 import Link from "next/link";
 import { ChevronUp, Navigation } from "lucide-react";
 
-/**
- * Kartu navigasi yang melayang di atas navigasi bawah.
- *
- * Di berkas rancangan lapisan ini bernama "FloatingNavPill", dan memang
- * melayang: ia menumpang di atas isi halaman, bukan ikut mengalir di
- * dalamnya. Bayangannya jatuh ke kartu di belakangnya, dan halaman tetap
- * bisa digulung penuh di baliknya.
- *
- * Geometrinya mengikuti rancangan: lebar 366 dari bingkai 390, jadi ada
- * sisa 12px di kiri dan kanan, dan dasarnya berhenti 35px di atas
- * navigasi.
- */
+/** Kartu navigasi yang melayang di atas navigasi bawah. */
 export function PilMelayang({
   judul,
   keterangan,
@@ -41,7 +30,10 @@ export function PilMelayang({
         }}
       >
         {/* Enam titik samar di tepi atas, tekstur dari rancangan. */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-2.5 h-0.5">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-2.5 h-0.5"
+        >
           {[10, 65, 120, 175, 230, 285].map((x) => (
             <span
               key={x}
@@ -68,10 +60,7 @@ export function PilMelayang({
                 {[0, 1, 2, 3].map((i) => (
                   <span
                     key={i}
-                    /* Titiknya memanjang lewat skala, bukan lebar. Animasi
-                       ini berputar terus, jadi menganimasikan lebar berarti
-                       memaksa peramban menghitung ulang tata letak pada
-                       setiap bingkai selama kartunya terlihat. */
+                    /* Titiknya memanjang lewat skala, bukan lebar. */
                     className="h-1 w-1 origin-left animate-[titik-jalan_1.6s_ease-in-out_infinite] rounded-pil bg-white/35"
                     style={{ animationDelay: `${i * 0.4}s` }}
                   />
@@ -84,7 +73,9 @@ export function PilMelayang({
           </span>
 
           <span className="flex shrink-0 flex-col items-center rounded-[12px] bg-white/15 px-2.5 py-1.5">
-            <span className="text-[16px] font-extrabold leading-4 text-white">{menit}</span>
+            <span className="text-[16px] font-extrabold leading-4 text-white">
+              {menit}
+            </span>
             <span className="pt-px text-[9px] font-semibold leading-[13.5px] text-white/85">
               menit
             </span>

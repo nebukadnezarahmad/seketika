@@ -4,28 +4,20 @@ import * as React from "react";
 import { Send } from "lucide-react";
 import { useToko } from "@/lib/toko";
 
-/**
- * Obrolan di dalam satu titik kumpul.
- *
- * Bedanya dengan chat pedagang: yang bicara di sini sesama warga yang
- * ikut patungan, bukan pembeli dengan penjual. Karena itu tiap pesan
- * membawa nama pengirimnya di depan; tanpa itu, empat orang yang saling
- * menyahut jadi tidak jelas siapa bilang apa.
- *
- * Isinya dimulai kosong dan tetap kosong sampai ada yang menulis. Tidak
- * ada percakapan contoh yang dipalsukan di sini: obrolan buatan yang
- * seolah sudah ramai akan berhenti menjawab begitu pengguna ikut
- * menulis, dan itu lebih terasa rusak daripada kotak yang jujur kosong.
- */
-export function ObrolanTitik({ titikId, nama }: { titikId: string; nama: string }) {
+/** Obrolan di dalam satu titik kumpul. */
+export function ObrolanTitik({
+  titikId,
+  nama,
+}: {
+  titikId: string;
+  nama: string;
+}) {
   const pesan = useToko((s) => s.obrolanTitik[titikId]) ?? [];
   const kirim = useToko((s) => s.kirimPesanTitik);
   const [isi, setIsi] = React.useState("");
   const dasarRef = React.useRef<HTMLDivElement>(null);
 
-  /* Gulir ke pesan terbaru setiap kali daftarnya bertambah. Tanpa ini,
-     pesan yang baru dikirim mendarat di bawah lipatan dan pengirimnya
-     mengira pesannya tidak terkirim. */
+  /* Gulir ke pesan terbaru setiap kali daftarnya bertambah. */
   React.useEffect(() => {
     dasarRef.current?.scrollIntoView({ block: "end" });
   }, [pesan.length]);

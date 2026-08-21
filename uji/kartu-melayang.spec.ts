@@ -1,11 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { lewatiPengenalan } from "./bantu";
 
-/**
- * Kartu navigasi melayang punya satu aturan sederhana: ia hidup persis
- * selama satu pengantaran berlangsung. Ketiga uji di bawah mengunci
- * ketiga ujung aturan itu.
- */
+/** Kartu navigasi melayang punya satu aturan sederhana: ia hidup persis selama satu pengantaran berlangsung. */
 test.describe("Kartu navigasi melayang", () => {
   const kartu = "text=Ketuk untuk buka navigasi";
 
@@ -13,14 +9,16 @@ test.describe("Kartu navigasi melayang", () => {
     await lewatiPengenalan(page, "pedagang", "Pak Anton");
   });
 
-  test("belum muncul sebelum ada pesanan yang diberangkatkan", async ({ page }) => {
-    /* Data contoh memuat pesanan berstatus diproses, tapi diproses berarti
-       sedang disiapkan, bukan sedang diantar. Tidak ada yang perlu
-       dinavigasikan sampai pedagang benar-benar berangkat. */
+  test("belum muncul sebelum ada pesanan yang diberangkatkan", async ({
+    page,
+  }) => {
+    /* Data contoh memuat pesanan berstatus diproses, tapi diproses berarti sedang disiapkan, bukan sedang diantar. */
     await expect(page.locator(kartu)).toHaveCount(0);
   });
 
-  test("muncul setelah Terima & Berangkat, membawa nama pemesannya", async ({ page }) => {
+  test("muncul setelah Terima & Berangkat, membawa nama pemesannya", async ({
+    page,
+  }) => {
     await page
       .getByRole("listitem")
       .filter({ hasText: "Bu Rahma" })

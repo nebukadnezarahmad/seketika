@@ -1,14 +1,7 @@
 import Image from "next/image";
 import type { RupaLawan } from "./rupa";
 
-/**
- * Avatar lawan bicara.
- *
- * Pedagang punya foto gerobak; warga tidak punya foto di aplikasi ini,
- * jadi memakai lingkaran berinisial seperti di layar pesanan masuk dan
- * titik kumpul. Bentuknya pun beda mengikuti rancangan: kotak membulat
- * untuk pedagang, lingkaran penuh untuk warga.
- */
+/** Avatar lawan bicara. */
 export function AvatarLawan({
   rupa,
   nama,

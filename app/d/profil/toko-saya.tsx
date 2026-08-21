@@ -5,7 +5,16 @@ import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  BadgeCheck, BookOpen, Camera, Clock, MapPin, RotateCcw, Settings, ShoppingBag, Star, Wallet,
+  BadgeCheck,
+  BookOpen,
+  Camera,
+  Clock,
+  MapPin,
+  RotateCcw,
+  Settings,
+  ShoppingBag,
+  Star,
+  Wallet,
 } from "lucide-react";
 import { Layar } from "@/komponen/ui/layar";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
@@ -15,7 +24,6 @@ import { menuBerlaku } from "@/lib/menu";
 import { nilaiRataRata } from "@/lib/rekap";
 import { bersihkanSalinan, muatUlangKeAwal } from "@/lib/setel-ulang";
 import { useToko } from "@/lib/toko";
-
 
 export function TokoSaya() {
   const router = useRouter();
@@ -30,24 +38,13 @@ export function TokoSaya() {
   const gantiPeran = useToko((s) => s.gantiPeran);
   const setelUlang = useToko((s) => s.setelUlang);
 
-  /* Dua angka ini dulu ditulis langsung sebagai 248 dan 1.2K, padahal
-     tidak berasal dari mana-mana. Sejak Buku Kas ada, angka karangan itu
-     berdiri tepat di layar yang sama dengan angka yang benar-benar
-     dihitung, dan siapa pun yang membandingkan keduanya akan menemukan
-     dua kenyataan yang berbeda tentang gerobak yang sama.
-
-     Sekarang keduanya dihitung dari sumber yang sama dengan Buku Kas:
-     seluruh pesanan yang pernah selesai, dan berapa nama warga berbeda
-     di dalamnya. Angkanya jadi jauh lebih kecil, tapi angka kecil yang
-     benar lebih berguna daripada angka besar yang tidak bisa
-     dipertanggungjawabkan. */
-  const selesai = [...riwayat, ...pesananMasuk].filter((p) => p.status === "selesai");
+  /* Dua angka ini dulu ditulis langsung sebagai 248 dan 1.2K, padahal tidak berasal dari mana-mana. */
+  const selesai = [...riwayat, ...pesananMasuk].filter(
+    (p) => p.status === "selesai",
+  );
   const wargaTerlayani = new Set(selesai.map((p) => p.warga)).size;
 
-  /* Bintang yang benar-benar diberikan warga, bukan angka rating pada
-     data contoh. Kalau belum ada yang menilai, yang ditulis tanda pisah,
-     bukan 0,0: nol terbaca seperti gerobak terburuk padahal yang benar
-     adalah belum ada yang menilai. */
+  /* Bintang yang benar-benar diberikan warga, bukan angka rating pada data contoh. */
   const nilai = nilaiRataRata(pesanan, penilaian, SLUG_GEROBAK_SAYA);
   const daftarMenu = menuBerlaku(menuSaya, gerobak.menu);
   const namaToko = profil?.namaUsaha || gerobak.nama;
@@ -78,11 +75,11 @@ export function TokoSaya() {
     setLembar(mana);
   };
 
-  /* Galeri menampilkan foto yang memang sudah dimiliki gerobak ini: foto
-     gerobaknya sendiri dan foto tiap menunya. Tidak ada pengunggahan di
-     purwarupa ini, dan tombol unggah yang tidak mengunggah apa pun lebih
-     buruk daripada galeri yang jujur cuma menampilkan yang ada. */
-  const galeri = [gerobak.foto, ...daftarMenu.map((m) => fotoMenu[m.id]).filter(Boolean)];
+  /* Galeri menampilkan foto yang memang sudah dimiliki gerobak ini: foto gerobaknya sendiri dan foto tiap menunya. */
+  const galeri = [
+    gerobak.foto,
+    ...daftarMenu.map((m) => fotoMenu[m.id]).filter(Boolean),
+  ];
 
   return (
     <Layar
@@ -145,11 +142,24 @@ export function TokoSaya() {
             judul="Jam Operasional"
             keterangan="Jam ini keterangan bagi warga. Yang benar-benar menentukan gerobakmu menerima pesanan adalah sakelar buka-tutup di beranda."
             simpan={() =>
-              perbaruiProfil({ jamBuka: isiBuka.trim(), jamTutup: isiTutup.trim() })
+              perbaruiProfil({
+                jamBuka: isiBuka.trim(),
+                jamTutup: isiTutup.trim(),
+              })
             }
           >
-            <Kolom label="Mulai" nilai={isiBuka} ubah={setIsiBuka} contoh="07.00" />
-            <Kolom label="Sampai" nilai={isiTutup} ubah={setIsiTutup} contoh="20.00" />
+            <Kolom
+              label="Mulai"
+              nilai={isiBuka}
+              ubah={setIsiBuka}
+              contoh="07.00"
+            />
+            <Kolom
+              label="Sampai"
+              nilai={isiTutup}
+              ubah={setIsiTutup}
+              contoh="20.00"
+            />
           </LembarUbah>
 
           <LembarUbah
@@ -160,10 +170,17 @@ export function TokoSaya() {
           >
             <ul className="grid grid-cols-3 gap-2">
               {galeri.map((src, i) => (
-                <li key={src} className="relative aspect-square overflow-hidden rounded-[14px]">
+                <li
+                  key={src}
+                  className="relative aspect-square overflow-hidden rounded-[14px]"
+                >
                   <Image
                     src={src}
-                    alt={i === 0 ? "Foto gerobak" : `Foto menu ${daftarMenu[i - 1]?.nama ?? ""}`}
+                    alt={
+                      i === 0
+                        ? "Foto gerobak"
+                        : `Foto menu ${daftarMenu[i - 1]?.nama ?? ""}`
+                    }
                     fill
                     sizes="110px"
                     className="object-cover"
@@ -179,7 +196,10 @@ export function TokoSaya() {
       }
     >
       <header className="gradasi-kumpul relative overflow-hidden rounded-b-[24px] px-4 pb-5 pt-3">
-        <span aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]" />
+        <span
+          aria-hidden
+          className="absolute -right-10 -top-10 size-40 rounded-full bg-white/[0.06]"
+        />
 
         <div className="relative flex items-center justify-between">
           <h1 className="text-[19px] font-extrabold text-white">Toko Saya</h1>
@@ -213,11 +233,7 @@ export function TokoSaya() {
             <p className="truncate text-[21px] font-extrabold leading-tight text-white">
               {namaToko}
             </p>
-            {/* Nama pemilik hanya disebut kalau memang berbeda dari nama
-                tokonya. Pedagang yang mengosongkan nama usaha saat
-                mendaftar akan memakai nama pribadinya sebagai nama toko,
-                dan tanpa penjagaan ini nama yang sama tercetak dua kali
-                bertumpuk di judul dan subjudulnya. */}
+            {/* Nama pemilik hanya disebut kalau memang berbeda dari nama tokonya. */}
             <p className="mt-0.5 truncate text-[12.5px] text-white/65">
               {gerobak.jenis}
               {pemilik && namaToko !== pemilik ? ` · ${pemilik}` : ""}
@@ -231,18 +247,27 @@ export function TokoSaya() {
 
         <dl className="relative mt-4 grid grid-cols-3 rounded-[16px] bg-white/10 py-3">
           <div className="border-r border-white/15 text-center">
-            <dd className="text-[20px] font-extrabold text-white">{selesai.length}</dd>
+            <dd className="text-[20px] font-extrabold text-white">
+              {selesai.length}
+            </dd>
             <dt className="mt-0.5 text-[11px] text-white/60">Selesai</dt>
           </div>
           <div className="border-r border-white/15 text-center">
-            <dd className="text-[20px] font-extrabold text-white">{wargaTerlayani}</dd>
+            <dd className="text-[20px] font-extrabold text-white">
+              {wargaTerlayani}
+            </dd>
             <dt className="mt-0.5 text-[11px] text-white/60">Warga</dt>
           </div>
           <div className="text-center">
             <dd className="flex items-center justify-center gap-1 text-[20px] font-extrabold text-white">
               {nilai ? (
                 <>
-                  <Star size={15} strokeWidth={2} className="fill-amber text-amber" aria-hidden />
+                  <Star
+                    size={15}
+                    strokeWidth={2}
+                    className="fill-amber text-amber"
+                    aria-hidden
+                  />
                   {nilai.rata.toLocaleString("id-ID")}
                 </>
               ) : (
@@ -346,10 +371,7 @@ export function TokoSaya() {
             judul="Setel Ulang Data"
             isi="Kembalikan ke keadaan contoh"
             onClick={async () => {
-              /* Muat ulang penuh, bukan pindah lewat router: di aplikasi
-                 terpasang tidak ada tombol muat ulang, dan tanpa itu
-                 tombol ini mengembalikan data contoh dari berkas yang
-                 sudah terlanjur berjalan, bukan dari yang sedang tayang. */
+              /* Muat ulang penuh, bukan pindah lewat router: di aplikasi terpasang tidak ada tombol muat ulang, dan tanpa itu tombol ini mengembalikan data contoh dari berkas yang sudah terlanjur berjalan, bukan dari yang sedang tayang. */
               setelUlang();
               await bersihkanSalinan();
               muatUlangKeAwal();

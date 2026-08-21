@@ -3,8 +3,7 @@ import type { ComponentProps } from "react";
 
 type Rupa = "utama" | "garis" | "amber" | "halus" | "bahaya";
 
-/* Bentuk pil (rounded-full), bukan sudut 14px seperti versi lama —
-   tombol utama ala Gojek nyaris selalu berbentuk kapsul penuh. */
+/* Bentuk pil (rounded-full), bukan sudut 14px seperti versi lama — tombol utama ala Gojek nyaris selalu berbentuk kapsul penuh. */
 const dasar =
   "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-[transform,background-color,border-color,opacity] duration-150 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-45";
 

@@ -1,17 +1,6 @@
 import type { SVGProps } from "react";
 
-/**
- * Ikon yang disalin apa adanya dari berkas Figma SEKETIKA.
- *
- * Semua path di sini adalah data ekspor Figma, bukan gambar ulang. Warna
- * asli dari ekspor sudah diganti `currentColor` supaya satu ikon bisa
- * dipakai dalam keadaan aktif maupun tidak aktif tanpa menggandakan
- * berkas. Ukuran dan tebal garisnya tetap sama seperti di desain.
- *
- * Glyph di luar daftar ini diambil dari `lucide-react`. Keluarganya sama:
- * menskalakan path Figma ke viewBox 24 menghasilkan koordinat Lucide yang
- * bulat (2.749 → 3, 8.247 → 9, 10.996 → 12) dengan tebal garis 1.9.
- */
+/** Ikon yang disalin apa adanya dari berkas Figma SEKETIKA. */
 
 type Props = SVGProps<SVGSVGElement> & { size?: number };
 
@@ -131,21 +120,46 @@ export function IkonKompas({ size = 18, ...p }: Props) {
 
 export function IkonSinyal({ size = 16, ...p }: Props) {
   return (
-    <svg width={size} height={(size * 11.9973) / 15.9934} viewBox="0 0 15.9934 11.9973" fill="currentColor" {...p}>
+    <svg
+      width={size}
+      height={(size * 11.9973) / 15.9934}
+      viewBox="0 0 15.9934 11.9973"
+      fill="currentColor"
+      {...p}
+    >
       <rect x="0" y="6.998" width="2.999" height="4.998" rx="1" />
       <rect x="4.498" y="4.499" width="2.999" height="7.497" rx="1" />
       <rect x="8.996" y="2.0" width="2.999" height="9.996" rx="1" />
-      <rect x="13.494" y="0.001" width="2.499" height="11.995" rx="1" opacity={0.3} />
+      <rect
+        x="13.494"
+        y="0.001"
+        width="2.499"
+        height="11.995"
+        rx="1"
+        opacity={0.3}
+      />
     </svg>
   );
 }
 
 export function IkonWifi({ size = 16, ...p }: Props) {
   return (
-    <svg width={size} height={(size * 11.9973) / 15.9934} viewBox="0 0 15.9934 11.9973" fill="none" {...p}>
+    <svg
+      width={size}
+      height={(size * 11.9973) / 15.9934}
+      viewBox="0 0 15.9934 11.9973"
+      fill="none"
+      {...p}
+    >
       <g stroke="currentColor" strokeWidth={1.33278} strokeLinecap="round">
-        <path opacity={0.3} d="M0.666392 3.99947C3.66515 1.00071 12.3282 1.00071 15.327 3.99947" />
-        <path opacity={0.6} d="M2.99876 6.33185C4.99794 4.33267 10.9955 4.33267 12.9946 6.33185" />
+        <path
+          opacity={0.3}
+          d="M0.666392 3.99947C3.66515 1.00071 12.3282 1.00071 15.327 3.99947"
+        />
+        <path
+          opacity={0.6}
+          d="M2.99876 6.33185C4.99794 4.33267 10.9955 4.33267 12.9946 6.33185"
+        />
         <path d="M5.33113 8.66422C6.53064 7.46471 9.46276 7.46471 10.6623 8.66422" />
       </g>
       <path
@@ -157,13 +171,43 @@ export function IkonWifi({ size = 16, ...p }: Props) {
 }
 
 /** Baterai. `isi` 0–1 mengatur lebar batang dalamnya. */
-export function IkonBaterai({ size = 24, isi = 1, ...p }: Props & { isi?: number }) {
+export function IkonBaterai({
+  size = 24,
+  isi = 1,
+  ...p
+}: Props & { isi?: number }) {
   const penuh = Math.max(0, Math.min(1, isi));
   return (
-    <svg width={size} height={(size * 11.9973) / 23.9946} viewBox="0 0 23.9946 11.9973" fill="none" {...p}>
-      <rect x="0.5" y="0.5" width="19.9955" height="10.9975" rx="2.999" stroke="currentColor" strokeWidth={1.19973} />
-      <rect x="1.99955" y="1.99955" width={15.9963 * penuh} height="7.9982" rx="1.5" fill="currentColor" />
-      <path d="M21.4952 3.9991V7.9991" stroke="currentColor" strokeWidth={1.49966} strokeLinecap="round" />
+    <svg
+      width={size}
+      height={(size * 11.9973) / 23.9946}
+      viewBox="0 0 23.9946 11.9973"
+      fill="none"
+      {...p}
+    >
+      <rect
+        x="0.5"
+        y="0.5"
+        width="19.9955"
+        height="10.9975"
+        rx="2.999"
+        stroke="currentColor"
+        strokeWidth={1.19973}
+      />
+      <rect
+        x="1.99955"
+        y="1.99955"
+        width={15.9963 * penuh}
+        height="7.9982"
+        rx="1.5"
+        fill="currentColor"
+      />
+      <path
+        d="M21.4952 3.9991V7.9991"
+        stroke="currentColor"
+        strokeWidth={1.49966}
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

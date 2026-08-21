@@ -56,8 +56,7 @@ export function BuatTitikKumpul() {
             <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-tinta-4">
               Jenis Dagangan
             </p>
-            {/* Pedagangnya sudah ditentukan dari layar sebelumnya, jadi
-                ditampilkan saja alih-alih dibuka untuk diubah. */}
+            {/* Pedagangnya sudah ditentukan dari layar sebelumnya, jadi ditampilkan saja alih-alih dibuka untuk diubah. */}
             <p className="flex items-center gap-2.5 rounded-[12px] bg-krem px-3 py-2.5 text-[13.5px] font-semibold text-tinta">
               <House size={15} className="shrink-0 text-hijau" />
               {pedagang?.nama ?? "Pedagang"}
@@ -96,7 +95,9 @@ export function BuatTitikKumpul() {
               </button>
               <p className="text-[15px] font-extrabold tabular-nums text-hijau">
                 {target}
-                <span className="ml-1 text-[12px] font-medium text-tinta-4">warga</span>
+                <span className="ml-1 text-[12px] font-medium text-tinta-4">
+                  warga
+                </span>
               </p>
               <button
                 type="button"
@@ -131,7 +132,8 @@ export function BuatTitikKumpul() {
 
         <p className="mt-3.5 flex gap-2.5 rounded-[14px] bg-hijau-lembut/70 p-3.5 text-[11.5px] leading-relaxed text-tinta-3">
           <Info size={15} className="mt-px shrink-0 text-hijau" />
-          Titik kumpul akan otomatis berakhir dalam {UMUR_JAM} jam jika target tidak terpenuhi.
+          Titik kumpul akan otomatis berakhir dalam {UMUR_JAM} jam jika target
+          tidak terpenuhi.
         </p>
 
         <div className="mt-4">

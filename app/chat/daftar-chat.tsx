@@ -8,12 +8,7 @@ import { rupaLawan, salinan } from "@/komponen/chat/rupa";
 import { useToko } from "@/lib/toko";
 import type { Peran } from "@/lib/tipe";
 
-/**
- * Kotak masuk. Kedua peran memakai layar ini, tapi isinya berbeda: warga
- * berbicara dengan pedagang, pedagang berbicara dengan warga. Sebelumnya
- * keduanya membaca daftar yang sama, sehingga pedagang melihat
- * percakapannya dengan sesama pedagang.
- */
+/** Kotak masuk. */
 export function DaftarChat({ peran = "pembeli" }: { peran?: Peran }) {
   const [kata, setKata] = React.useState("");
   const percakapan = useToko((s) =>
@@ -63,16 +58,25 @@ export function DaftarChat({ peran = "pembeli" }: { peran?: Peran }) {
 
           return (
             <li key={c.id} className="border-b border-garis last:border-b-0">
-              <Link href={`${awalan}/chat/${c.id}`} className="flex items-center gap-3 py-3">
+              <Link
+                href={`${awalan}/chat/${c.id}`}
+                className="flex items-center gap-3 py-3"
+              >
                 <AvatarLawan rupa={rupa} nama={c.nama} size={44} />
 
                 <span className="min-w-0 flex-1">
                   <span className="flex items-baseline justify-between gap-2">
-                    <span className="truncate text-[14px] font-bold text-tinta">{c.nama}</span>
-                    <span className="shrink-0 text-[11px] text-tinta-4">{rupa.kapan}</span>
+                    <span className="truncate text-[14px] font-bold text-tinta">
+                      {c.nama}
+                    </span>
+                    <span className="shrink-0 text-[11px] text-tinta-4">
+                      {rupa.kapan}
+                    </span>
                   </span>
                   <span className="mt-0.5 flex items-center justify-between gap-2">
-                    <span className="truncate text-[12px] text-tinta-4">{akhir?.isi}</span>
+                    <span className="truncate text-[12px] text-tinta-4">
+                      {akhir?.isi}
+                    </span>
                     {rupa.belumDibaca && (
                       <span className="grid size-[18px] shrink-0 place-items-center rounded-full bg-hijau text-[10px] font-bold text-white">
                         {rupa.belumDibaca}

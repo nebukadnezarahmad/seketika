@@ -11,10 +11,18 @@ import { balasanCepat } from "@/lib/data/awal";
 import { useToko } from "@/lib/toko";
 import type { Peran } from "@/lib/tipe";
 
-export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran }) {
+export function RuangChat({
+  id,
+  peran = "pembeli",
+}: {
+  id: string;
+  peran?: Peran;
+}) {
   const router = useRouter();
   const percakapan = useToko((s) =>
-    (peran === "pedagang" ? s.percakapanPedagang : s.percakapan).find((c) => c.id === id),
+    (peran === "pedagang" ? s.percakapanPedagang : s.percakapan).find(
+      (c) => c.id === id,
+    ),
   );
   const kirimPesan = useToko((s) => s.kirimPesan);
   const [teks, setTeks] = React.useState("");
@@ -22,8 +30,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
 
   const jumlah = percakapan?.pesan.length ?? 0;
   React.useEffect(() => {
-    /* Percakapan selalu dibuka pada pesan terbaru, seperti aplikasi
-       perpesanan pada umumnya. */
+    /* Percakapan selalu dibuka pada pesan terbaru, seperti aplikasi perpesanan pada umumnya. */
     bawah.current?.scrollIntoView({ block: "end" });
   }, [jumlah]);
 
@@ -65,7 +72,12 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
           <ChevronLeft size={18} strokeWidth={2.4} />
         </button>
 
-        <AvatarLawan rupa={rupa} nama={percakapan.nama} size={36} titikDaring={false} />
+        <AvatarLawan
+          rupa={rupa}
+          nama={percakapan.nama}
+          size={36}
+          titikDaring={false}
+        />
 
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-[14px] font-bold leading-tight text-hijau">
@@ -93,13 +105,23 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
         <ul className="flex flex-col gap-3">
           {percakapan.pesan.map((p) => (
-            <li key={p.id} className={p.saya ? "flex justify-end" : "flex gap-2"}>
+            <li
+              key={p.id}
+              className={p.saya ? "flex justify-end" : "flex gap-2"}
+            >
               {!p.saya && (
                 <span className="mt-auto">
-                  <AvatarLawan rupa={rupa} nama={percakapan.nama} size={24} titikDaring={false} />
+                  <AvatarLawan
+                    rupa={rupa}
+                    nama={percakapan.nama}
+                    size={24}
+                    titikDaring={false}
+                  />
                 </span>
               )}
-              <div className={`flex max-w-[76%] flex-col ${p.saya ? "items-end" : "items-start"}`}>
+              <div
+                className={`flex max-w-[76%] flex-col ${p.saya ? "items-end" : "items-start"}`}
+              >
                 <p
                   className={`rounded-[18px] px-3.5 py-2.5 text-[13px] leading-snug ${
                     p.saya
@@ -109,7 +131,9 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
                 >
                   {p.isi}
                 </p>
-                <span className="mt-1 px-1 text-[10px] text-tinta-4">{p.waktu}</span>
+                <span className="mt-1 px-1 text-[10px] text-tinta-4">
+                  {p.waktu}
+                </span>
               </div>
             </li>
           ))}
@@ -117,8 +141,7 @@ export function RuangChat({ id, peran = "pembeli" }: { id: string; peran?: Peran
         <div ref={bawah} />
       </div>
 
-      {/* Balasan cepat, hanya untuk pedagang. Jawaban yang sama diketik
-          berulang kali sepanjang hari, jadi disediakan sebagai ketukan. */}
+      {/* Balasan cepat, hanya untuk pedagang. */}
       {peran === "pedagang" && (
         <div className="rel-gulir flex shrink-0 gap-2 border-t border-garis bg-krem px-3 pt-2.5">
           {balasanCepat.map((b) => (

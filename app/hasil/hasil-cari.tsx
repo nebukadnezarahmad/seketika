@@ -23,13 +23,16 @@ export function HasilCari() {
   const kata = (cari.get("q") ?? "").trim().toLowerCase();
   const [min, maks] = rentang(cari.get("budget"));
 
-  /* Pencarian menjangkau nama pedagang sekaligus nama menunya, karena
-     warga lebih sering mencari "bakso" daripada nama gerobaknya. */
+  /* Pencarian menjangkau nama pedagang sekaligus nama menunya, karena warga lebih sering mencari "bakso" daripada nama gerobaknya. */
   const hasil: { pedagang: Pedagang; menu: Menu[] }[] = daftarPedagang
     .map((p) => {
-      const cocokNama = !kata || p.nama.toLowerCase().includes(kata) || p.jenis.toLowerCase().includes(kata);
+      const cocokNama =
+        !kata ||
+        p.nama.toLowerCase().includes(kata) ||
+        p.jenis.toLowerCase().includes(kata);
       const menu = p.menu.filter((m) => {
-        const cocokKata = !kata || cocokNama || m.nama.toLowerCase().includes(kata);
+        const cocokKata =
+          !kata || cocokNama || m.nama.toLowerCase().includes(kata);
         return cocokKata && m.harga >= min && m.harga <= maks;
       });
       return { pedagang: p, menu };
@@ -49,7 +52,9 @@ export function HasilCari() {
             <span className="grid size-16 place-items-center rounded-full bg-hijau-lembut text-hijau">
               <SearchX size={26} strokeWidth={1.9} />
             </span>
-            <p className="mt-4 text-[15px] font-bold text-tinta">Tidak ada yang cocok</p>
+            <p className="mt-4 text-[15px] font-bold text-tinta">
+              Tidak ada yang cocok
+            </p>
             <p className="mt-1.5 text-[12.5px] leading-relaxed text-tinta-4">
               Coba kata lain, atau longgarkan estimasi harganya.
             </p>
@@ -92,7 +97,9 @@ export function HasilCari() {
                   </span>
                   <span
                     className={`shrink-0 rounded-pil px-2 py-1 text-[10px] font-bold ${
-                      pedagang.buka ? "bg-hijau-lembut text-hijau" : "bg-tinta-5/20 text-tinta-3"
+                      pedagang.buka
+                        ? "bg-hijau-lembut text-hijau"
+                        : "bg-tinta-5/20 text-tinta-3"
                     }`}
                   >
                     {pedagang.buka ? "BUKA" : "TUTUP"}
@@ -105,7 +112,9 @@ export function HasilCari() {
                       key={m.id}
                       className="flex items-baseline justify-between gap-3 py-1 text-[12px]"
                     >
-                      <span className="min-w-0 truncate text-tinta-2">{m.nama}</span>
+                      <span className="min-w-0 truncate text-tinta-2">
+                        {m.nama}
+                      </span>
                       <span className="shrink-0 font-bold tabular-nums text-hijau">
                         {rp(m.harga)}
                       </span>

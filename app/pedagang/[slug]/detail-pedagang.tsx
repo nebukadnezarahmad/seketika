@@ -8,18 +8,7 @@ import { IsiPedagang } from "@/komponen/pedagang/isi-pedagang";
 import { daftarPedagang } from "@/lib/data/pedagang";
 import type { Pedagang } from "@/lib/tipe";
 
-/**
- * Halaman pedagang untuk tautan langsung.
- *
- * Dari dalam aplikasi, mengetuk kartu pedagang di beranda tidak lagi
- * sampai ke sini; di sana isinya naik sebagai lembar di atas peta yang
- * sudah tergambar, tanpa memuat ulang peta baru. Halaman ini tetap ada
- * untuk orang yang membuka alamatnya langsung, misalnya dari tautan yang
- * dibagikan, dan karena itu ia menyediakan sendiri petanya sebagai latar.
- *
- * Isi kartunya dipinjam dari komponen yang sama dengan yang dipakai
- * lembar di beranda, jadi keduanya tidak bisa berbeda isi.
- */
+/** Halaman pedagang untuk tautan langsung. */
 export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
   const router = useRouter();
 
@@ -31,7 +20,11 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
           utama
           skala={false}
           saya={{ x: 50.11, y: 42.72 }}
-          tanda={daftarPedagang.map((p) => ({ id: p.id, x: p.posisi.x, y: p.posisi.y }))}
+          tanda={daftarPedagang.map((p) => ({
+            id: p.id,
+            x: p.posisi.x,
+            y: p.posisi.y,
+          }))}
         />
         <div aria-hidden className="absolute inset-0 bg-black/25" />
 
@@ -45,7 +38,10 @@ export function DetailPedagang({ pedagang }: { pedagang: Pedagang }) {
         </button>
 
         <div className="bayang-lembar absolute inset-x-0 bottom-0 rounded-t-[24px] bg-krem px-4 pb-5 pt-2.5">
-          <span aria-hidden className="mx-auto mb-4 block h-1 w-9 rounded-pil bg-tinta-5/60" />
+          <span
+            aria-hidden
+            className="mx-auto mb-4 block h-1 w-9 rounded-pil bg-tinta-5/60"
+          />
           <IsiPedagang pedagang={pedagang} />
         </div>
       </div>
