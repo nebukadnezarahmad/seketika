@@ -9,6 +9,7 @@ import {
 import { Layar } from "@/komponen/ui/layar";
 import { Kolom, LembarUbah } from "@/komponen/ui/lembar-ubah";
 import { BarisMenu } from "@/komponen/ui/baris-menu";
+import { bersihkanSalinan, muatUlangKeAwal } from "@/lib/setel-ulang";
 import { useToko } from "@/lib/toko";
 
 export function ProfilPembeli() {
@@ -279,9 +280,14 @@ export function ProfilPembeli() {
             nada="merah"
             judul="Setel Ulang Data"
             isi="Kembalikan ke keadaan contoh"
-            onClick={() => {
+            onClick={async () => {
+              /* Muat ulang penuh, bukan pindah lewat router: di aplikasi
+                 terpasang tidak ada tombol muat ulang, dan tanpa itu
+                 tombol ini mengembalikan data contoh dari berkas yang
+                 sudah terlanjur berjalan, bukan dari yang sedang tayang. */
               setelUlang();
-              router.push("/");
+              await bersihkanSalinan();
+              muatUlangKeAwal();
             }}
             akhir
           />

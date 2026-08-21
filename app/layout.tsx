@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Inter, Poppins } from "next/font/google";
 import { PemulihData } from "@/komponen/pemulih-data";
+import { PendaftarSW } from "@/komponen/pendaftar-sw";
 import "./globals.css";
 
 /* Inter, huruf yang dipakai di seluruh berkas desain. Bobot 400 sampai
@@ -74,6 +75,7 @@ export default function TataLetakAkar({
         <div className="mx-auto flex min-h-[100dvh] w-full max-w-[390px] flex-col bg-krem sm:min-h-[100dvh] sm:border-x sm:border-garis">
           <PemulihData>{children}</PemulihData>
         </div>
+        <PendaftarSW />
       </body>
     </html>
   );

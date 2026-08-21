@@ -58,6 +58,7 @@ harus berjalan.
 | Beri penilaian | Bintang untuk pesanan selesai, sekali kirim, tampil di riwayat |
 | Kelola akun | Ubah nama, telepon, alamat, dan patokan lewat lembar di profil |
 | Pusat notifikasi | Kabar pesanan dan titik kumpul, dengan lencana belum dibaca |
+| Bisa dipasang | Punya manifest, ikon, dan service worker; terpasang seperti aplikasi biasa |
 
 ### Sisi pedagang
 
@@ -129,7 +130,43 @@ Pedagang** (atau sebaliknya). Alur paling menarik untuk dicoba:
 4. Terima pesanan yang masuk, lalu ikuti layar navigasinya.
 
 Tombol **Setel Ulang Data** di halaman profil mengembalikan semuanya ke keadaan
-contoh.
+contoh. Data tersimpan di peramban perangkat itu sendiri, jadi ponsel yang sudah
+pernah membuka versi lama akan tetap memegang data lamanya sampai tombol ini
+ditekan. Tekan sekali sebelum memperagakan aplikasinya.
+
+## Memasang sebagai aplikasi
+
+SEKETIKA adalah PWA. Dari Chrome di Android, menu tiga titik memuat **Instal
+aplikasi**; setelah dipasang ia punya ikon sendiri di layar utama dan terbuka
+tanpa bilah alamat. Di iOS lewat Safari, **Bagikan → Tambahkan ke Layar Utama**.
+
+Isinya tetap dimuat dari server, jadi setiap kali kode ini di-deploy, aplikasi
+yang sudah terpasang ikut memakai versi baru saat dibuka berikutnya. Yang tidak
+ikut berubah hanya ikon, nama, dan splash screen, karena ketiganya dibaca dari
+manifest saat pemasangan.
+
+### Membungkusnya jadi APK
+
+Untuk berkas `.apk`, bungkus alamat produksinya sebagai Trusted Web Activity:
+
+1. Buka <https://www.pwabuilder.com>, masukkan <https://seketika-puce.vercel.app>.
+2. Unduh paket Android yang dihasilkan.
+3. PWABuilder ikut memberi berkas `assetlinks.json`. Taruh isinya di
+   `public/.well-known/assetlinks.json`, lalu deploy ulang.
+
+Langkah ketiga tidak boleh dilewat: berkas itu yang membuktikan APK dan domainnya
+milik pihak yang sama. Tanpa itu Android tetap menampilkan bilah alamat tipis di
+atas aplikasi. Isinya memuat sidik jari kunci penanda tangan APK, jadi ia baru
+bisa dibuat setelah paketnya jadi.
+
+### Service worker
+
+`public/sw.js` sengaja memakai aturan **jaringan dulu**, bukan salinan dulu.
+Aplikasi terpasang tidak punya bilah alamat dan tidak punya tombol muat ulang,
+jadi salinan yang salah simpan akan mengurung penggunanya di versi lama tanpa
+jalan keluar. Yang dilayani dari salinan lebih dulu hanya berkas di
+`/_next/static/`, yang namanya memuat sidik jari isinya sehingga tidak pernah
+berubah isi untuk nama yang sama.
 
 ## Struktur berkas
 
@@ -149,6 +186,10 @@ lib/
   data/                 data contoh
   toko.ts               keadaan aplikasi
   tipe.ts format.ts
+public/
+  sw.js                 service worker
+  icon/                 ikon aplikasi
+app/manifest.ts         manifest PWA
 uji/                    uji ujung-ke-ujung
 ```
 
